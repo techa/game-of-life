@@ -1,0 +1,51 @@
+:root {
+	--black: #111;
+	--white: #eee;
+	--grey: #346;
+	--red: #de3421;
+	--primary-color: #71aaff;
+}
+
+body,
+html {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: var(--black);
+	color: var(--white);
+
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-family: 'Play', sans-serif;
+	text-align: center;
+	min-width: fit-content;
+}
+
+svg {
+	width: 24px;
+	height: 24px;
+	stroke: currentColor;
+	stroke-width: 2;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	fill: none;
+}
+svg.active{
+	stroke: var(--primary-color);
+}
+svg.mini{
+	width: 12px;
+	height: 12px;
+}
+
+.hidden {
+	visibility: hidden;
+	display: none;
+}

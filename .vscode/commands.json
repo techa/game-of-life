@@ -1,0 +1,31 @@
+{
+	"commands": [
+		{
+			"command": "workbench.action.tasks.runTask",
+			"arguments": ["relativeFile"],
+			"text": "$(triangle-right) RunFile",
+			"color": "#dbf7ff",
+			"filterFileRegex": "\\.ts"
+		},
+		{
+			"command": "workbench.action.tasks.runTask",
+			"arguments": ["fileTest"],
+			"text": "$(beaker) FileTest",
+			"color": "#dbf7ff",
+			"filterFileRegex": "\\.(test|spec)\\.ts"
+		},
+		{
+			"command": "workbench.action.tasks.runTask",
+			"arguments": ["fileTestFromOrigin"],
+			"text": "$(beaker) FileTest",
+			"color": "#dbf7ff",
+			"filterFileRegex": "(?<!\\.test|spec)\\.ts"
+		},
+		{
+			"command": "workbench.action.tasks.runTask",
+			"arguments": ["dev"],
+			"text": "$(play) dev",
+			"color": "#dbf7ff"
+		}
+	]
+}

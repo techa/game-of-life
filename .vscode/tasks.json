@@ -1,0 +1,33 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	// https://code.visualstudio.com/docs/editor/variables-reference
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "relativeFile",
+			"type": "shell",
+			"command": "node --loader ts-node/esm ${relativeFile}"
+		},
+		{
+			"label": "fileTest",
+			"type": "shell",
+			"command": "pnpm exec ava ${relativeFile}"
+		},
+		{
+			"label": "fileTestFromOrigin",
+			"type": "shell",
+			"command": "pnpm exec ava ${relativeFileDirname}/${fileBasenameNoExtension}.test.ts"
+		},
+		{
+			"label": "test",
+			"type": "shell",
+			"command": "pnpm exec ava"
+		},
+		{
+			"label": "coverage",
+			"type": "shell",
+			"command": "pnpm exec nyc ava"
+		},
+	]
+}
