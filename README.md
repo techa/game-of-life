@@ -1,4 +1,5 @@
 # Life Game
+https://techa.github.io/life-game/
 
 ## Feature
 * Rules can be changed.
