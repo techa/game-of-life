@@ -58,6 +58,11 @@
 
 <section>
 	<nav>
+		<a href="https://github.com/techa/life-game">
+			<svg style="stroke: #fff;">
+				<use href="{SVG}#github" />
+			</svg>
+		</a>
 		<label>
 			<input type="color" bind:value={selectedColor} />
 		</label>
