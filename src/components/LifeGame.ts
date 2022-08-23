@@ -91,13 +91,22 @@ export class LifeGame {
 	isRandom = false
 
 	init(table?: Cell[][]) {
+		this.isRandom = false
+		this.stepCount = 0
 		if (table) {
 			this.columns = table[0].length
 			this.rows = table.length
 			this.table = table
 		} else {
-			this.tableInit()
+			this.table = []
+			for (let y = 0; y < this.rows; y++) {
+				if (!this.table[y]) this.table[y] = []
+				for (let x = 0; x < this.columns; x++) {
+					this.table[y][x] = Cell.DEATH
+				}
+			}
 		}
+		this.emit(LifeEvent.TABLE_UPDATE)
 
 		return this
 	}
@@ -110,19 +119,6 @@ export class LifeGame {
 			// eslint-disable-next-line @typescript-eslint/no-extra-semi
 			;[this.born, this.survival] = parser(rule)
 		}
-	}
-
-	tableInit() {
-		this.isRandom = false
-		this.stepCount = 0
-		this.table = []
-		for (let y = 0; y < this.rows; y++) {
-			if (!this.table[y]) this.table[y] = []
-			for (let x = 0; x < this.columns; x++) {
-				this.table[y][x] = Cell.DEATH
-			}
-		}
-		this.emit(LifeEvent.TABLE_UPDATE)
 	}
 
 	#randomCorrection(

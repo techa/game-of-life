@@ -175,7 +175,7 @@
 					life.stop()
 				}
 
-				life.tableInit()
+				life.init()
 			}}
 			>clear
 		</button>
