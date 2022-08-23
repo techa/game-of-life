@@ -55,7 +55,7 @@ export function parser(rule: Rule) {
 export const enum Cell {
 	DEATH,
 	LIVE,
-	SECOND,
+	UNDEAD,
 }
 
 export const enum LifeEvent {
@@ -221,12 +221,19 @@ export class LifeGame {
 		for (let y = 0; y < this.rows; y++) {
 			if (!table[y]) table[y] = []
 			for (let x = 0; x < this.columns; x++) {
+				if (this.table[y][x] === Cell.UNDEAD) {
+					table[y][x] = Cell.UNDEAD
+					continue
+				}
+
 				let count = 0
 				moore: for (let _y = -1; _y <= 1; _y++) {
 					for (let _x = -1; _x <= 1; _x++) {
+						const neighbour = this.at(x + _x, y + _y)
 						if (
 							(_y || _x) &&
-							this.at(x + _x, y + _y) === Cell.LIVE
+							(neighbour === Cell.LIVE ||
+								neighbour === Cell.UNDEAD)
 						) {
 							count++
 							if (countMax < count) {
