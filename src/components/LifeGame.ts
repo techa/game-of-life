@@ -91,6 +91,9 @@ export class LifeGame {
 	speed = 1
 	speeds = [1, 2, 3, 4, 6, 12]
 
+	#tableMemory = ''
+	autoStop = true
+
 	isRandom = false
 
 	init(table?: Cell[][]) {
@@ -109,7 +112,7 @@ export class LifeGame {
 				}
 			}
 		}
-		this.emit(LifeEvent.TABLE_UPDATE)
+		this.update()
 
 		return this
 	}
@@ -133,7 +136,8 @@ export class LifeGame {
 				table[y][x] = this.table[x][y]
 			}
 		}
-		return (this.table = table)
+		this.table = table
+		this.update()
 	}
 
 	insert(table: Cell[][]) {
@@ -158,8 +162,7 @@ export class LifeGame {
 				this.table[y][x] = val ?? Cell.DEATH
 			}
 		}
-		this.emit(LifeEvent.TABLE_UPDATE)
-		return this.table
+		this.update()
 	}
 
 	tableSizing({ columns = this.columns, rows = this.rows }) {
@@ -183,8 +186,7 @@ export class LifeGame {
 			}
 		}
 
-		this.emit(LifeEvent.TABLE_UPDATE)
-		return this.table
+		this.update()
 	}
 
 	get survivalCount() {
@@ -278,8 +280,7 @@ export class LifeGame {
 		this.table = table
 		this.stepCount++
 
-		this.emit(LifeEvent.TABLE_UPDATE)
-		return table
+		this.update()
 	}
 
 	start() {
@@ -295,5 +296,16 @@ export class LifeGame {
 	stop() {
 		this.ticker?.stop()
 		this.emit(LifeEvent.STOP)
+	}
+
+	update() {
+		const tableMemory = this.table.toString()
+		if (this.autoStop && tableMemory === this.#tableMemory) {
+			this.stop()
+			return
+		} else {
+			this.#tableMemory = tableMemory
+			this.emit(LifeEvent.TABLE_UPDATE)
+		}
 	}
 }

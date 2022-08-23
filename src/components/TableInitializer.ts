@@ -1,5 +1,5 @@
 import { randomInt } from '../utils/random.js'
-import { Cell, LifeEvent, type LifeGame } from './LifeGame.js'
+import { Cell, type LifeGame } from './LifeGame.js'
 
 export interface TableInitializer {
 	randomInit(dirX?: 'center' | 'edge', dirY?: 'center' | 'edge'): void
@@ -14,7 +14,7 @@ export function TableInitializer(target: typeof LifeGame) {
 					this.table[y][x] = this.#randomCorrection(dirX, dirY, x, y)
 				}
 			}
-			this.emit(LifeEvent.TABLE_UPDATE)
+			this.init(this.table)
 		}
 
 		#randomCorrection(
@@ -90,7 +90,7 @@ export function TableInitializer(target: typeof LifeGame) {
 					}
 				}
 			}
-			this.emit(LifeEvent.TABLE_UPDATE)
+			this.init(this.table)
 		}
 	}
 }
