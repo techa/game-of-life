@@ -169,6 +169,15 @@
 			}}
 			>randomee
 		</button>
+
+		<button
+			on:click={() => {
+				life.undeadInit()
+				start = JSON.stringify(table)
+			}}
+			>Undead
+		</button>
+
 		<button
 			on:click={() => {
 				if (playing) {
