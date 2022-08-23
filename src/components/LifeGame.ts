@@ -1,5 +1,5 @@
 import { randomInt } from '../utils/random.js'
-import { Ticker } from '../utils/ticker.js'
+import { Ticker } from '../utils/Ticker.js'
 import { EventDispatcher, type EventHandler } from '../utils/EventDispatcher.js'
 import { TableInitializer } from './TableInitializer.js'
 
