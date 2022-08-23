@@ -124,20 +124,6 @@ export class LifeGame {
 		}
 	}
 
-	undeadInit() {
-		for (let y = 0; y < this.rows; y++) {
-			for (let x = 0; x < this.columns; x++) {
-				if (
-					x === ((this.columns / 2) | 0) ||
-					y === ((this.rows / 2) | 0)
-				) {
-					this.table[y][x] = Cell.UNDEAD
-				}
-			}
-		}
-		this.emit(LifeEvent.TABLE_UPDATE)
-	}
-
 	rotate() {
 		const table: Cell[][] = []
 		;[this.rows, this.columns] = [this.columns, this.rows]

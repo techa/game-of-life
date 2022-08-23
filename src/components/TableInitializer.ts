@@ -4,6 +4,7 @@ import { Cell, LifeEvent, type LifeGame } from './LifeGame.js'
 export interface TableInitializer {
 	randomInit(dirX?: 'center' | 'edge', dirY?: 'center' | 'edge'): void
 	fillEdge(): void
+	undeadInit(): void
 }
 export function TableInitializer(target: typeof LifeGame) {
 	return class extends target implements TableInitializer {
@@ -76,6 +77,20 @@ export function TableInitializer(target: typeof LifeGame) {
 			for (let x = this.columns - 1; x > max; x--) {
 				this.table[this.rows - 1][x] = Cell.LIVE
 			}
+		}
+
+		undeadInit() {
+			for (let y = 0; y < this.rows; y++) {
+				for (let x = 0; x < this.columns; x++) {
+					if (
+						x === ((this.columns / 2) | 0) ||
+						y === ((this.rows / 2) | 0)
+					) {
+						this.table[y][x] = Cell.UNDEAD
+					}
+				}
+			}
+			this.emit(LifeEvent.TABLE_UPDATE)
 		}
 	}
 }
