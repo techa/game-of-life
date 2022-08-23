@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type LifeGame, Cell, LifeEvent } from './LifeGame'
+	import { type LifeGame, Cell, LifeEvent } from '../lib/LifeGame'
 
 	const cell_size = 10
 

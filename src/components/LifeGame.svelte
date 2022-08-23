@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { LifeGame, rules, LifeEvent, type Rule, Cell } from './LifeGame'
+	import { rules, type Rule } from '$lib/rules'
+	import { LifeGame, LifeEvent, Cell } from '../lib/LifeGame'
+	import { TableInitializer } from '../lib/TableInitializer'
 
 	import GridTable from './GridTable.svelte'
 
@@ -13,7 +15,9 @@
 
 	const patterns = Patterns as unknown as [string, Cell[][]][]
 
-	const life = new LifeGame().init()
+	const LifeGameEx = TableInitializer(LifeGame)
+
+	const life = new LifeGameEx().init()
 	let table = life.table
 	let columns = life.columns
 	let rows = life.rows
