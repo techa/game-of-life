@@ -1,29 +1,46 @@
-export type TickerCb = (frame_count: number) => void
-export type Canceler = () => void
-/**
- * @link https://developer.mozilla.org/ja/docs/Web/API/Window/requestAnimationFrame
- * @param {TickerCb} cb frame_count==0 count by 16ms
- * @returns {() => void} cancelAnimationFrame
- */
-export function ticker(cb: TickerCb): Canceler {
-	let id: number
-	let frame_count = 0
-	const loop: FrameRequestCallback = () => {
-		// if (!start) start = timestamp
-		// const progress = timestamp - start
+export class Ticker {
+	#running = false
+	#id: number
+	count = 0
+	tick: (count: number) => void
 
-		cb(frame_count)
-		frame_count++
-		// 次のフレーム時の処理の実行を予約
-		id = requestAnimationFrame(loop)
+	constructor(tick: (count: number) => void) {
+		this.tick = tick
 	}
-	// 初回呼び出し
-	loop(0)
-	// console.log('loopAnime', id, frame_count)
 
-	// canceler
-	return (() => {
-		cancelAnimationFrame(id)
-		// console.log('canceler', id, frame_count)
-	}) as Canceler
+	start(): void {
+		if (this.#running) {
+			return
+		}
+		this.#running = true
+		const loop = () => {
+			if (!this.#running) {
+				this.stop()
+				return
+			}
+
+			try {
+				this.#id = requestAnimationFrame(loop)
+				this.update()
+			} catch (error) {
+				cancelAnimationFrame(this.#id)
+				throw error
+			}
+		}
+
+		loop()
+	}
+
+	stop(): void {
+		this.#running = false
+		cancelAnimationFrame(this.#id)
+	}
+
+	update(): void {
+		try {
+			this.tick(this.count++)
+		} catch (error) {
+			this.stop()
+		}
+	}
 }

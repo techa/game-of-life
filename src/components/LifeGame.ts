@@ -1,5 +1,5 @@
 import { randomInt } from '../utils/random.js'
-import { ticker, type Canceler } from '../utils/ticker.js'
+import { Ticker } from '../utils/ticker.js'
 import { EventDispatcher, type EventHandler } from '../utils/EventDispatcher.js'
 import { TableInitializer } from './TableInitializer.js'
 
@@ -87,7 +87,7 @@ export class LifeGame {
 	edgeCell = Cell.DEATH
 
 	stepCount = 0
-	ticker: Canceler
+	ticker: Ticker
 	speed = 1
 	speeds = [1, 2, 3, 4, 6, 12]
 
@@ -283,20 +283,17 @@ export class LifeGame {
 	}
 
 	start() {
-		const cb = (count: number) => {
+		this.ticker ??= new Ticker((count: number) => {
 			if (!((count * this.speed) % 12 | 0)) {
 				this.step()
 			}
-		}
-		this.ticker = ticker(cb)
+		})
+		this.ticker.start()
 		this.emit(LifeEvent.START)
 	}
 
 	stop() {
-		if (this.ticker) {
-			this.ticker()
-			this.ticker = null
-		}
+		this.ticker?.stop()
 		this.emit(LifeEvent.STOP)
 	}
 }
