@@ -26,9 +26,15 @@
 		'gray',
 		'darkgray',
 	]
-	function randomColor() {
-		const color = '#' + Math.random().toString(16).slice(-6)
-		colors.push(color)
+
+	function cellColor(celltype: number) {
+		let color =
+			celltype < 0 // if cell is UNDEAD
+				? selectedColor
+				: colors[celltype]
+		if (!color) {
+			colors.push((color = '#' + Math.random().toString(16).slice(-6)))
+		}
 		return color
 	}
 
@@ -89,8 +95,7 @@
 						class="tile"
 						style:width={cell_size + 'px'}
 						style:height={cell_size + 'px'}
-						style:background-color={colors[celltype] ||
-							randomColor()}
+						style:background-color={cellColor(celltype)}
 					/>
 				{/each}
 			</tr>
