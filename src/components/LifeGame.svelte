@@ -67,6 +67,12 @@
 		<label>
 			<input type="color" bind:value={selectedColor} />
 		</label>
+		<label>
+			<svg class:active={gridView}>
+				<use href="{SVG}#grid" />
+			</svg>
+			<input type="checkbox" class="hidden" bind:checked={gridView} />
+		</label>
 		<label
 			>W:
 			<input
@@ -97,13 +103,6 @@
 				<input type="checkbox" class="hidden" bind:checked={edgeCell} />
 			</label>
 		{/if}
-
-		<label>
-			<svg class:active={gridView}>
-				<use href="{SVG}#grid" />
-			</svg>
-			<input type="checkbox" class="hidden" bind:checked={gridView} />
-		</label>
 
 		<button
 			on:click={() => {
