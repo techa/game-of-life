@@ -33,10 +33,7 @@ export type EventHandler = (event?: unknown) => void
 export class EventDispatcher {
 	#handlers: Record<EventKey, EventHandler[]> = {}
 
-	emit(eventName: EventKey, event?: unknown): void {
-		if (!event) {
-			event = {}
-		}
+	emit(eventName: EventKey, event: unknown = {}): void {
 		const handlers = this.#handlers[eventName]
 
 		if (handlers) {

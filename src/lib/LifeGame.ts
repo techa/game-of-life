@@ -251,7 +251,6 @@ export class LifeGame {
 		const tableMemory = this.table.toString()
 		if (this.autoStop && tableMemory === this.#tableMemory) {
 			this.stop()
-			return
 		} else {
 			this.#tableMemory = tableMemory
 			this.emit(LifeEvent.TABLE_UPDATE)

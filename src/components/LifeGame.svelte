@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { rules, type Rule } from '$lib/rules'
-	import { LifeGame, LifeEvent, Cell } from '../lib/LifeGame'
-	import { TableInitializer } from '../lib/TableInitializer'
+	import { LifeGame, LifeEvent, Cell } from '$lib/LifeGame'
+	import { TableInitializer } from '$lib/TableInitializer'
 
 	import GridTable from './GridTable.svelte'
 
@@ -44,9 +44,6 @@
 		table = life.table
 		stepCount = life.stepCount
 		survivalCount = life.survivalCount
-		if (!stepCount) {
-			life.stop()
-		}
 	})
 	life.on(LifeEvent.START, () => {
 		playing = true
