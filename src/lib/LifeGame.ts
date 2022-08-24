@@ -111,11 +111,9 @@ export class LifeGame {
 	}
 
 	setRule(rule: Rule) {
-		if (/^\d+\/\d+/.test(rule)) {
-			// eslint-disable-next-line @typescript-eslint/no-extra-semi
+		if (/^\d*\/\d*/.test(rule)) {
 			;[this.survival, this.born, this.cycle] = ruleParser(rule)
-		} else if (/^B\d+\/S\d+/.test(rule)) {
-			// eslint-disable-next-line @typescript-eslint/no-extra-semi
+		} else if (/^B\d*\/S\d*/.test(rule)) {
 			;[this.born, this.survival, this.cycle] = ruleParser(rule)
 		}
 	}
