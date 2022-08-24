@@ -1,18 +1,31 @@
+export interface TickerArgs {
+	tick?: () => void
+	tpf?: number
+	speeds?: number[]
+}
+
 export class Ticker {
 	#running = false
-	#id: number
-	count = 0
-	tick: (count: number) => void
+	#id = 0
 
-	constructor(tick: (count: number) => void) {
-		this.tick = tick
+	tick: () => void
+	// tpf: tick/frame
+	tpf = 1
+	count = 0
+
+	constructor(opts?: TickerArgs) {
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+		this.tick = opts?.tick || (() => {})
+		this.tpf = opts?.tpf || 1
 	}
 
 	start(): void {
 		if (this.#running) {
 			return
 		}
+
 		this.#running = true
+
 		const loop = () => {
 			if (!this.#running) {
 				this.stop()
@@ -21,7 +34,9 @@ export class Ticker {
 
 			try {
 				this.#id = requestAnimationFrame(loop)
-				this.update()
+				if (!(this.count++ % this.tpf | 0)) {
+					this.update()
+				}
 			} catch (error) {
 				cancelAnimationFrame(this.#id)
 				throw error
@@ -38,7 +53,7 @@ export class Ticker {
 
 	update(): void {
 		try {
-			this.tick(this.count++)
+			this.tick()
 		} catch (error) {
 			this.stop()
 		}

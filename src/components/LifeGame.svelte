@@ -32,7 +32,7 @@
 	let playing = false
 	let rule: Rule = 'B3/S23'
 	let gridView = true
-	let speedindex = 0
+	let speed = life.speed
 
 	let selectedColor = '#db4dff'
 
@@ -126,10 +126,10 @@
 		{#if playing}
 			<button
 				on:click={() => {
-					speedindex = (speedindex + 1) % life.speeds.length
-					life.speed = life.speeds[speedindex]
+					life.tpfsIndex++
+					speed = life.speed
 				}}
-				>x{life.speeds[speedindex]}
+				>x{speed}
 			</button>
 		{:else}
 			<button

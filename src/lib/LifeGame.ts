@@ -37,8 +37,30 @@ export class LifeGame {
 
 	stepCount = 0
 	ticker: Ticker
-	speed = 1
-	speeds = [1, 2, 3, 4, 6, 12]
+
+	#tpfsIndex = 1
+	tpfs = [48, 12, 4, 1]
+	get tpf() {
+		return this.tpfs[this.#tpfsIndex]
+	}
+	get speed() {
+		const tpf = this.ticker?.tpf || this.tpf
+		// .at(-2) is meant to invert the initial value of #tpfsIndex.
+		return this.tpfs[0] / tpf / this.tpfs.at(-2)
+	}
+	get tpfsIndex() {
+		return this.#tpfsIndex
+	}
+	set tpfsIndex(val: number) {
+		const len = this.tpfs.length
+		while (val < 0) val += len // positive number
+		if (val >= len) val %= len // loop
+
+		this.#tpfsIndex = val
+		if (this.ticker) {
+			this.ticker.tpf = this.tpf
+		}
+	}
 
 	#tableMemory = ''
 	autoStop = true
@@ -233,10 +255,9 @@ export class LifeGame {
 	}
 
 	start() {
-		this.ticker ??= new Ticker((count: number) => {
-			if (!((count * this.speed) % 12 | 0)) {
-				this.step()
-			}
+		this.ticker ??= new Ticker({
+			tick: () => this.step(),
+			tpf: this.tpf,
 		})
 		this.ticker.start()
 		this.emit(LifeEvent.START)
