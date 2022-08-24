@@ -4,9 +4,9 @@ import { EventDispatcher, type EventHandler } from '../utils/EventDispatcher.js'
 import { ruleParser, type Rule } from '$lib/rules.js'
 
 export const enum Cell {
+	UNDEAD = -1,
 	DEATH,
 	LIVE,
-	UNDEAD,
 }
 
 export const enum LifeEvent {
@@ -30,7 +30,7 @@ export class LifeGame {
 
 	born: number[] = [3]
 	survival: number[] = [2, 3]
-	generation = 3
+	cycle = 2
 
 	edgeLoop = true
 	edgeCell = Cell.DEATH
@@ -89,12 +89,12 @@ export class LifeGame {
 	}
 
 	setRule(rule: Rule) {
-		if (/\d+\/\d+/.test(rule)) {
+		if (/^\d+\/\d+/.test(rule)) {
 			// eslint-disable-next-line @typescript-eslint/no-extra-semi
-			;[this.survival, this.born] = ruleParser(rule)
-		} else if (/B\d+\/S\d+/.test(rule)) {
+			;[this.survival, this.born, this.cycle] = ruleParser(rule)
+		} else if (/^B\d+\/S\d+/.test(rule)) {
 			// eslint-disable-next-line @typescript-eslint/no-extra-semi
-			;[this.born, this.survival] = ruleParser(rule)
+			;[this.born, this.survival, this.cycle] = ruleParser(rule)
 		}
 	}
 
@@ -218,31 +218,18 @@ export class LifeGame {
 
 				const center = this.table[y][x]
 
-				// if (center === Cell.DEATH && this.born.includes(count)) {
-				// 	table[y][x] = Cell.LIVE
-				// 	continue
-				// }
-				// if (center === Cell.LIVE) {
-				// 	if (this.survival.includes(count)) {
-				// 		table[y][x] = Cell.LIVE
-				// 	} else {
-				// 		// generation
-				// 		table[y][x] = center + 1
-				// 	}
-				// 	continue
-				// }
-				// if (center >= 2) {
-				// 	table[y][x] = (center + 1) % this.generation
-				// 	if (table[y][x] >= this.generation) {
-				// 		table[y][x] = Cell.DEATH
-				// 	}
-				// }
-
-				if (
-					(center === Cell.DEATH && this.born.includes(count)) ||
-					(center === Cell.LIVE && this.survival.includes(count))
-				) {
+				// Generations
+				// https://conwaylife.com/wiki/Generations
+				if (center === Cell.DEATH && this.born.includes(count)) {
 					table[y][x] = Cell.LIVE
+				} else if (center === Cell.LIVE) {
+					if (this.survival.includes(count)) {
+						table[y][x] = Cell.LIVE
+					} else {
+						table[y][x] = (center + 1) % this.cycle
+					}
+				} else if (center >= 2) {
+					table[y][x] = (center + 1) % this.cycle
 				} else {
 					table[y][x] = Cell.DEATH
 				}

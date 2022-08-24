@@ -11,6 +11,27 @@
 	export let drawMode = Cell.LIVE
 	export let selectedColor = 'transparent'
 
+	const colors = [
+		'transparent',
+		selectedColor,
+		'red',
+		'orange',
+		'yellow',
+		'lime',
+		'cyan',
+		'blue',
+		'magenta',
+		'white',
+		'lightgray',
+		'gray',
+		'darkgray',
+	]
+	function randomColor() {
+		const color = '#' + Math.random().toString(16).slice(-6)
+		colors.push(color)
+		return color
+	}
+
 	let isPress = false
 
 	function draw(e, mousedown?: (x: number, y: number) => void) {
@@ -63,14 +84,13 @@
 	>
 		{#each table as row}
 			<tr>
-				{#each row as tileid}
+				{#each row as celltype}
 					<td
 						class="tile"
 						style:width={cell_size + 'px'}
 						style:height={cell_size + 'px'}
-						style:background-color={tileid
-							? selectedColor
-							: 'transparent'}
+						style:background-color={colors[celltype] ||
+							randomColor()}
 					/>
 				{/each}
 			</tr>

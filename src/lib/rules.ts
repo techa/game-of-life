@@ -1,5 +1,10 @@
 type Numbers = number | ''
-export type Rule = `${Numbers}/${Numbers}` | `B${Numbers}/S${Numbers}`
+export type Rule =
+	| `${Numbers}/${Numbers}`
+	| `B${Numbers}/S${Numbers}`
+	| `${Numbers}/${Numbers}/${Numbers}`
+	| `B${Numbers}/S${Numbers}/C${Numbers}`
+	| `B${Numbers}/S${Numbers}/G${Numbers}`
 
 // https://conwaylife.com/wiki/List_of_Life-like_cellular_automata
 export const rules: Map<string, Rule> = new Map([
@@ -38,11 +43,28 @@ export const rules: Map<string, Rule> = new Map([
 	['cave', 'B5678/S345678'], //randomCorrection(5)系と相性よし
 	['kaku', 'B478/S45678'], //randomCorrection(5)系と相性よし、step30で直線的
 	['craggy', 'B4678/S45678'], //randomCorrection(5)系と相性よし、生成が速い。step10
+	// Generation
+	['Banners', 'B3457/S2367/C5'],
+	['Bloomerang', 'B34678/S234/C24'],
+	["Brian's Brain", 'B2/S/C3'],
+	['Caterpillars', 'B378/S124567/C4 	'],
+	['Cooties', 'B2/S23/C8'],
+	['Fireworks', 'B13/S2/C21'],
+	['Frogs', 'B34/S12/C3'],
+	['Lava', 'B45678/S12345/C8'],
+	['Lines', 'B458/S012345/C3'],
+	['Star Wars', 'B2/S345/C4'],
+	['Sticks', 'B2/S3456/C6'],
+	['Transers', 'B26/S345/C5'],
+	['Xtasy', 'B2356/S1456/C16'],
 ])
 
-export function ruleParser(rule: Rule) {
-	return rule
+export function ruleParser(rule: Rule): [number[], number[], number] {
+	const rules: (number[] | number)[] = rule
 		.replace(/[^\d/]*/g, '')
 		.split('/')
-		.map((v) => v.split('').map((n) => +n))
+		.map((v, i) => (i < 2 ? v.split('').map((n) => +n) : Math.max(+v, 2)))
+
+	rules[2] ??= 2
+	return rules as [number[], number[], number]
 }
