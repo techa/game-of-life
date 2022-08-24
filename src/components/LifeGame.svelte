@@ -28,7 +28,6 @@
 	let generation = life.generation
 	let population = 0
 
-	let start = JSON.stringify(table)
 	let playing = false
 	let rule: Rule = 'B3/S23'
 	let gridView = true
@@ -109,10 +108,10 @@
 				if (playing) {
 					life.stop()
 				} else {
-					if (generation === 0 && population !== 0) {
-						start = JSON.stringify(table)
+					if (generation === 0 && population) {
+						life.memory()
 					}
-					if (population !== 0) {
+					if (population) {
 						life.start()
 					}
 				}
@@ -144,28 +143,24 @@
 		<button
 			on:click={() => {
 				life.randomInit()
-				start = JSON.stringify(table)
 			}}
-			>random
+			>Random
 		</button>
 		<button
 			on:click={() => {
 				life.randomInit(null, 'edge')
-				start = JSON.stringify(table)
 			}}
 			>randomne
 		</button>
 		<button
 			on:click={() => {
 				life.randomInit('edge', null)
-				start = JSON.stringify(table)
 			}}
 			>randomen
 		</button>
 		<button
 			on:click={() => {
 				life.randomInit('edge', 'edge')
-				start = JSON.stringify(table)
 			}}
 			>randomee
 		</button>
@@ -173,7 +168,6 @@
 		<button
 			on:click={() => {
 				life.undeadInit()
-				start = JSON.stringify(table)
 			}}
 			>Undead
 		</button>
@@ -186,22 +180,22 @@
 
 				life.init()
 			}}
-			>clear
+			>Clear
 		</button>
 		<button
 			on:click={() => {
 				if (playing) {
 					life.stop()
 				}
-				life.insert(JSON.parse(start))
+				life.reset()
 			}}
-			>reset
+			>Reset
 		</button>
 		<button
 			on:click={() => {
-				navigator.clipboard.writeText(JSON.stringify(life.table))
+				navigator.clipboard.writeText(life.memory())
 			}}
-			>copy
+			>Copy
 		</button>
 		<label>
 			<select class="pulldown">
@@ -212,7 +206,7 @@
 							columns = life.columns
 							rows = life.rows
 							life.insert(lexicon[i])
-							start = JSON.stringify(table)
+							life.memory()
 						}}>{i}</option
 					>
 				{/each}
@@ -227,7 +221,7 @@
 							columns = life.columns
 							rows = life.rows
 							life.insert(_rule)
-							start = JSON.stringify(table)
+							life.memory()
 						}}>{name}</option
 					>
 				{/each}

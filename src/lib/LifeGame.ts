@@ -51,6 +51,8 @@ export class LifeGame {
 		return population
 	}
 
+	#memory = '[[0]]'
+
 	ticker: Ticker
 
 	#tpfsIndex = 1
@@ -98,6 +100,11 @@ export class LifeGame {
 				}
 			}
 		}
+
+		if (this.population) {
+			this.memory()
+		}
+
 		this.update()
 
 		return this
@@ -124,6 +131,14 @@ export class LifeGame {
 		}
 		this.table = table
 		this.update()
+	}
+
+	memory() {
+		return (this.#memory = JSON.stringify(this.table))
+	}
+
+	reset() {
+		this.insert(JSON.parse(this.#memory))
 	}
 
 	insert(table: Cell[][]) {
