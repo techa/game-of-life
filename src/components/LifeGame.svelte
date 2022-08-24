@@ -25,8 +25,8 @@
 	let edgeLoop = true
 	let edgeCell = !!life.edgeCell
 
-	let stepCount = life.stepCount
-	let survivalCount = 0
+	let generation = life.generation
+	let population = 0
 
 	let start = JSON.stringify(table)
 	let playing = false
@@ -42,8 +42,8 @@
 
 	life.on(LifeEvent.TABLE_UPDATE, () => {
 		table = life.table
-		stepCount = life.stepCount
-		survivalCount = life.survivalCount
+		generation = life.generation
+		population = life.population
 	})
 	life.on(LifeEvent.START, () => {
 		playing = true
@@ -109,10 +109,10 @@
 				if (playing) {
 					life.stop()
 				} else {
-					if (stepCount === 0 && survivalCount !== 0) {
+					if (generation === 0 && population !== 0) {
 						start = JSON.stringify(table)
 					}
-					if (survivalCount !== 0) {
+					if (population !== 0) {
 						life.start()
 					}
 				}
@@ -247,8 +247,8 @@
 				{/each}
 			</select>
 		</label>
-		<span>Step: {stepCount}</span>
-		<span>Survival: {survivalCount}/{rows * columns}</span>
+		<span>Generation: {generation}</span>
+		<span>Population: {population}/{rows * columns}</span>
 	</nav>
 
 	<GridTable {life} {table} {columns} {rows} {gridView} {selectedColor} />

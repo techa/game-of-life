@@ -35,7 +35,22 @@ export class LifeGame {
 	edgeLoop = true
 	edgeCell = Cell.DEATH
 
-	stepCount = 0
+	generation = 0
+	get population() {
+		let population = 0
+		for (let y = 0; y < this.rows; y++) {
+			for (let x = 0; x < this.columns; x++) {
+				if (this.table[y][x]) {
+					population++
+				}
+			}
+		}
+		if (population < 1) {
+			this.stop()
+		}
+		return population
+	}
+
 	ticker: Ticker
 
 	#tpfsIndex = 1
@@ -69,7 +84,7 @@ export class LifeGame {
 
 	init(table?: Cell[][]) {
 		this.isRandom = false
-		this.stepCount = 0
+		this.generation = 0
 		if (table) {
 			this.columns = table[0].length
 			this.rows = table.length
@@ -114,7 +129,7 @@ export class LifeGame {
 	insert(table: Cell[][]) {
 		this.isRandom = false
 		this.table = []
-		this.stepCount = 0
+		this.generation = 0
 		const rows = Math.max(table.length, this.rows)
 		const columns = Math.max(table[0].length, this.columns)
 		let sw = 0
@@ -158,19 +173,6 @@ export class LifeGame {
 		}
 
 		this.update()
-	}
-
-	get survivalCount() {
-		let count = 0
-		for (let y = 0; y < this.rows; y++) {
-			for (let x = 0; x < this.columns; x++) {
-				if (this.table[y][x]) count++
-			}
-		}
-		if (count < 1) {
-			this.stop()
-		}
-		return count
 	}
 
 	at(x: number, y: number): Cell {
@@ -236,7 +238,7 @@ export class LifeGame {
 			}
 		}
 		this.table = table
-		this.stepCount++
+		this.generation++
 
 		this.update()
 	}
