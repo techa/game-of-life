@@ -249,7 +249,7 @@
 			</select>
 		</label>
 		<span>Step: {stepCount}</span>
-		<span>Survival: {survivalCount}/{life.rows * life.columns}</span>
+		<span>Survival: {survivalCount}/{rows * columns}</span>
 	</nav>
 
 	<GridTable {life} {table} {columns} {rows} {gridView} {selectedColor} />
