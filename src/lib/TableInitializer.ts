@@ -6,7 +6,9 @@ export interface TableInitializer {
 	fillEdge(): void
 	undeadInit(): void
 }
-export function TableInitializer(target: typeof LifeGame) {
+export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
+	target: T,
+) {
 	return class extends target implements TableInitializer {
 		randomInit(dirX?: 'center' | 'edge', dirY?: 'center' | 'edge') {
 			for (let y = 0; y < this.rows; y++) {

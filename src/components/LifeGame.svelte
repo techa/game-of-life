@@ -2,6 +2,7 @@
 	import { rules, type Rule } from '$lib/rules'
 	import { LifeGame, LifeEvent, Cell } from '$lib/LifeGame'
 	import { TableInitializer } from '$lib/TableInitializer'
+	import { TableTransform } from '$lib/TableTransform'
 
 	import GridTable from './GridTable.svelte'
 
@@ -15,7 +16,10 @@
 
 	const patterns = Patterns as unknown as [string, Cell[][]][]
 
-	const LifeGameEx = TableInitializer(LifeGame)
+	interface LifeGameEx extends TableTransform, TableInitializer {}
+	@TableTransform
+	@TableInitializer
+	class LifeGameEx extends LifeGame {}
 
 	const life = new LifeGameEx().init()
 	let table = life.table
@@ -197,6 +201,21 @@
 			}}
 			>Copy
 		</button>
+
+		<button
+			on:click={() => {
+				life.rotate()
+			}}
+			>Rotate
+		</button>
+
+		<button
+			on:click={() => {
+				life.reverse()
+			}}
+			>Reverse
+		</button>
+
 		<label>
 			<select class="pulldown">
 				{#each lexicon as lexico, i}

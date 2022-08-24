@@ -120,19 +120,6 @@ export class LifeGame {
 		}
 	}
 
-	rotate() {
-		const table: Cell[][] = []
-		;[this.rows, this.columns] = [this.columns, this.rows]
-		for (let y = 0; y < this.rows; y++) {
-			if (!table[y]) table[y] = []
-			for (let x = 0; x < this.columns; x++) {
-				table[y][x] = this.table[x][y]
-			}
-		}
-		this.table = table
-		this.update()
-	}
-
 	memory() {
 		return (this.#memory = JSON.stringify(this.table))
 	}

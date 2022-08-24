@@ -11,6 +11,11 @@ module.exports = {
 				allowSingleExtends: true,
 			},
 		],
+		'@typescript-eslint/no-explicit-any': [
+			'warn',
+			{ ignoreRestArgs: true },
+		],
+		'no-redeclare': ['error', { ignoreDeclarationMerge: true }],
 	},
 	overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],
 	settings: {
