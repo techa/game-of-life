@@ -84,6 +84,9 @@ export class LifeGame {
 
 	#tableMemory = ''
 	autoStop = true
+	isRunning() {
+		return this.ticker?.running
+	}
 
 	isRandom = false
 
