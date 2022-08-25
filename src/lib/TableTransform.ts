@@ -21,6 +21,10 @@ export function TableTransform<T extends { new (...args: any[]): LifeGame }>(
 			this.update()
 		}
 
+		/**
+		 * DEATH <--> LIVE
+		 * TOMB <--> UNDEAD
+		 */
 		reverse(): void {
 			for (let y = 0; y < this.rows; y++) {
 				for (let x = 0; x < this.columns; x++) {
@@ -30,9 +34,11 @@ export function TableTransform<T extends { new (...args: any[]): LifeGame }>(
 							? Cell.LIVE
 							: cell === Cell.LIVE
 							? Cell.DEATH
-							: cell > Cell.LIVE
-							? cell // age
-							: Cell.UNDEAD
+							: cell === Cell.UNDEAD
+							? Cell.TOMB
+							: cell === Cell.TOMB
+							? Cell.UNDEAD
+							: cell // age
 				}
 			}
 			this.update()
