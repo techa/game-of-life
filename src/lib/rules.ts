@@ -35,11 +35,11 @@ export const rules: Map<string, Rule> = new Map([
 	// 塗りに対して使うと幅１マスの線になる
 	['Walled cities', 'B45678/S2345'], //規則的な外形になろうとする
 	['Vote 4/5', 'B4678/S35678'], //step30:地形データ!!
-	['Vote1', 'B5678/S45678'], //step40:最強地形データ複雑
-	['Vote2', 'B578/S45678'], //step20:最強地形データ複雑隙間多め
-	['Vote3', 'B678/S45678'], //step40:最強地形データ隙間多め
+	['Vote', 'B5678/S45678'], //step40:地形データ複雑
+	['Vote2', 'B678/S45678'], //step40:地形データ隙間多め
+	['Vote3', 'B578/S45678'], //step20:地形データ複雑隙間多め
 	['Vote4', 'B678/S345678'],
-	['g', 'B368/S245'],
+	// ['g', 'B368/S245'],
 	['cave', 'B5678/S345678'], //randomCorrection(5)系と相性よし
 	['kaku', 'B478/S45678'], //randomCorrection(5)系と相性よし、step30で直線的
 	['craggy', 'B4678/S45678'], //randomCorrection(5)系と相性よし、生成が速い。step10
@@ -57,6 +57,23 @@ export const rules: Map<string, Rule> = new Map([
 	['Sticks', 'B2/S3456/C6'],
 	['Transers', 'B26/S345/C5'],
 	['Xtasy', 'B2356/S1456/C16'],
+	// https://conwaylife.com/wiki/List_of_Generations_rules
+	['Meteor Guns', 'B3/S01245678/C8'], //step:地形データに使えそう
+	['Nova', 'B2478/S45678/C25'], //step:地形データに使えそう。かなり面白い
+	['Prairie on fire', 'B34/S345/C6'], //step:地形データに使えそう。
+	['RainZha', 'B23/S2/C8'], //step:地形と言うよりは模様
+	['Spirals', 'B234/S2/C5'], //step:地形と言うよりは模様
+	['Swirl', 'B34/S23/C8'], //step:
+	['Thrill Grill', 'B34/S1234/C48'], //step:地形データに使えそう
+
+	['', 'B23678/S145678/C8'], //step:地形データに使えそう
+	['Burst', 'B3468/S0235678/C9'], //step:地形データに使えそう
+	['Burst2', 'B3468/S235678/C9'], //step:地形データに使えそう。２のほうが地形向き
+
+	['Circuit Genesis', 'B1234/S2345/C8'], //step5:地形データに使えそう
+
+	['Ebb and Flow', 'B36/S012478/C18'], //step5:地形データに使えそう
+	['Ebb and Flow2', 'B37/S012468/C18'], //step5:地形データに使えそう
 ])
 
 export function ruleParser(rule: Rule): [number[], number[], number] {
