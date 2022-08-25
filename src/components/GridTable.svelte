@@ -12,8 +12,8 @@
 	export let selectedColor = 'transparent'
 
 	const colors = [
-		'transparent',
-		selectedColor,
+		'transparent', // DEATH, TOMB
+		selectedColor, // LIVE, UNDEAD
 		'red',
 		'orange',
 		'yellow',
@@ -32,10 +32,10 @@
 	}
 
 	function cellColor(celltype: number) {
-		let color =
-			celltype < 0 // if cell is UNDEAD
-				? selectedColor
-				: colors[celltype]
+		if (celltype < 0) {
+			celltype += 2
+		}
+		let color = colors[celltype]
 		if (!color) {
 			colors.push((color = '#' + Math.random().toString(16).slice(-6)))
 		}
@@ -97,6 +97,8 @@
 				{#each row as celltype}
 					<td
 						class="tile"
+						class:undead={celltype === -1}
+						class:tomb={celltype === -2}
 						style:width={cell_size + 'px'}
 						style:height={cell_size + 'px'}
 						style:background-color={cellColor(celltype)}
@@ -126,6 +128,42 @@
 		margin: 0;
 		line-height: 0;
 		box-sizing: border-box;
+	}
+	td.undead {
+		background-image: linear-gradient(
+				to top right,
+				transparent 45%,
+				black 45%,
+				black 55%,
+				transparent 55%,
+				transparent
+			),
+			linear-gradient(
+				to top left,
+				transparent 45%,
+				black 45%,
+				black 55%,
+				transparent 55%,
+				transparent
+			);
+	}
+	td.tomb {
+		background-image: linear-gradient(
+				to top right,
+				transparent 45%,
+				#888 45%,
+				#888 55%,
+				transparent 55%,
+				transparent
+			),
+			linear-gradient(
+				to top left,
+				transparent 45%,
+				#888 45%,
+				#888 55%,
+				transparent 55%,
+				transparent
+			);
 	}
 	table {
 		width: 100%;

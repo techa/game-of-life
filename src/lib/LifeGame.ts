@@ -4,7 +4,8 @@ import { EventDispatcher, type EventHandler } from '../utils/EventDispatcher.js'
 import { ruleParser, type Rule } from '$lib/rules.js'
 
 export const enum Cell {
-	UNDEAD = -1,
+	TOMB = -2,
+	UNDEAD,
 	DEATH,
 	LIVE,
 }
@@ -198,6 +199,10 @@ export class LifeGame {
 			for (let x = 0; x < this.columns; x++) {
 				if (this.table[y][x] === Cell.UNDEAD) {
 					table[y][x] = Cell.UNDEAD
+					continue
+				}
+				if (this.table[y][x] === Cell.TOMB) {
+					table[y][x] = Cell.TOMB
 					continue
 				}
 
