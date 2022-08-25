@@ -27,6 +27,10 @@
 		'darkgray',
 	]
 
+	$: {
+		colors[1] = selectedColor
+	}
+
 	function cellColor(celltype: number) {
 		let color =
 			celltype < 0 // if cell is UNDEAD
