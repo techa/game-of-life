@@ -59,7 +59,7 @@ export class LifeGame {
 	ticker: Ticker
 
 	#tpfsIndex = 1
-	tpfs = [48, 12, 4, 1]
+	readonly tpfs = [48, 12, 4, 1]
 	get tpf() {
 		return this.tpfs[this.#tpfsIndex]
 	}
