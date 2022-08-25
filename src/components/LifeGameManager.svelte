@@ -33,7 +33,7 @@
 	<label>
 		<select bind:value={rule}>
 			{#each [...rules.entries()] as [name, _rule]}
-				<option value={_rule}>{name}</option>
+				<option value={_rule} title={_rule}>{name}</option>
 			{/each}
 		</select>
 	</label>
