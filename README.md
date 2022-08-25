@@ -4,7 +4,7 @@
 ## Feature
 * [Rules](https://conwaylife.com/wiki/Rulestring) can be changed.
 * Equipped with [Generations rule](https://conwaylife.com/wiki/Generations).
-* Undead cell type supported.
+* UNDEAD and TOMB cell types implemented.
 * Terrain generation using cellular automata.
 * Create a random initial state.
 
