@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { gradColor, hueGradColor } from '../utils/color'
 	import { Cell, LifeEvent } from '$lib/LifeGame'
 	import {
 		life,
@@ -13,24 +14,30 @@
 
 	export let drawMode = Cell.LIVE
 
-	const colors = [
+	let colors = [
 		'transparent', // DEATH, TOMB
 		$selectedColor, // LIVE, UNDEAD
-		'red',
-		'orange',
-		'yellow',
-		'lime',
-		'cyan',
-		'blue',
-		'magenta',
-		'white',
-		'lightgray',
-		'gray',
-		'darkgray',
+		// 'red',
+		// 'orange',
+		// 'yellow',
+		// '#60ff00', // lime
+		// 'cyan',
+		// '#0060ff', // blue
+		// 'magenta',
+		// 'white',
+		// 'lightgray',
+		// 'gray',
+		// 'darkgray',
 	]
 
 	$: {
-		colors[1] = $selectedColor
+		colors = [
+			'transparent', // DEATH, TOMB
+			$selectedColor, // LIVE, UNDEAD
+		]
+		for (let i = 2; i < life.cycle; i++) {
+			cellColor(i)
+		}
 	}
 
 	function cellColor(celltype: number) {
@@ -39,7 +46,10 @@
 		}
 		let color = colors[celltype]
 		if (!color) {
-			colors.push((color = '#' + Math.random().toString(16).slice(-6)))
+			colors.push(
+				(color = gradColor(colors[celltype - 1] || $selectedColor, 31)),
+			)
+			// console.log(`%c${color}`, `color:${color};font-weight:bold;`)
 		}
 		return color
 	}
