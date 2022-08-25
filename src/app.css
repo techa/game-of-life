@@ -37,10 +37,10 @@ svg {
 	stroke-linejoin: round;
 	fill: none;
 }
-svg.active{
+svg.active {
 	stroke: var(--primary-color);
 }
-svg.mini{
+button > svg {
 	width: 12px;
 	height: 12px;
 }

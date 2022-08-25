@@ -26,8 +26,7 @@
 	let columns = life.columns
 	let rows = life.rows
 
-	let edgeLoop = true
-	let edgeCell = !!life.edgeCell
+	let edgeCell = life.edgeCell
 
 	let generation = life.generation
 	let population = 0
@@ -40,8 +39,7 @@
 	let selectedColor = '#db4dff'
 
 	$: life.setRule(rule)
-	$: life.edgeLoop = edgeLoop
-	$: life.edgeCell = +edgeCell
+	$: life.edgeCell = edgeCell
 
 	life.on(LifeEvent.TABLE_UPDATE, () => {
 		table = life.table
@@ -93,19 +91,22 @@
 			/>
 		</label>
 
-		<label>
-			<svg class:active={edgeLoop}>
+		<button
+			on:click={() => {
+				edgeCell = edgeCell + 1 > 0 ? -2 : edgeCell + 1
+			}}
+		>
+			<svg>
 				<use href="{SVG}#repeat" />
 			</svg>
-			<input type="checkbox" class="hidden" bind:checked={edgeLoop} />
-		</label>
-
-		{#if !edgeLoop}
-			<label>
-				{edgeCell ? 'L' : 'D'}
-				<input type="checkbox" class="hidden" bind:checked={edgeCell} />
-			</label>
-		{/if}
+			{#if edgeCell === -2}
+				Tomb
+			{:else if edgeCell === -1}
+				Uudead
+			{:else}
+				Loop
+			{/if}
+		</button>
 
 		<button
 			on:click={() => {
@@ -121,7 +122,7 @@
 				}
 			}}
 		>
-			<svg class="mini" class:active={playing} style:stroke={'black'}>
+			<svg class:active={playing} style:stroke={'black'}>
 				<use href="{SVG}#{playing ? 'pause' : 'play'}" />
 			</svg>{playing ? 'Stop' : 'Start'}</button
 		>

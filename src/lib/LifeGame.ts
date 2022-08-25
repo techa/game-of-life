@@ -33,8 +33,10 @@ export class LifeGame {
 	survival: number[] = [2, 3]
 	cycle = 2
 
-	edgeLoop = true
-	edgeCell = Cell.DEATH
+	/**
+	 * DEATH is loop
+	 */
+	edgeCell: Cell.TOMB | Cell.UNDEAD | Cell.DEATH = Cell.DEATH
 
 	generation = 0
 	get population() {
@@ -179,11 +181,13 @@ export class LifeGame {
 	at(x: number, y: number): Cell {
 		const xl = this.columns
 		const yl = this.rows
-		if (this.edgeLoop) {
+		// edge loop
+		if (!this.edgeCell) {
 			x = x < 0 ? xl + x : x >= xl ? x % xl : x
 			y = y < 0 ? yl + y : y >= yl ? y % yl : y
 			return this.table[y][x]
 		}
+		// edge TOMB or UNDEAD
 		if (x < 0 || y < 0 || x >= xl || y >= yl) {
 			return this.edgeCell
 		}
