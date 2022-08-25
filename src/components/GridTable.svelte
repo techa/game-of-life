@@ -1,19 +1,21 @@
 <script lang="ts">
-	import { type LifeGame, Cell, LifeEvent } from '$lib/LifeGame'
+	import { Cell, LifeEvent } from '$lib/LifeGame'
+	import {
+		life,
+		table,
+		columns,
+		rows,
+		selectedColor,
+		gridView,
+	} from './store'
 
 	const cell_size = 10
 
-	export let life: LifeGame
-	export let table: Cell[][]
-	export let columns: number
-	export let rows: number
-	export let gridView = false
 	export let drawMode = Cell.LIVE
-	export let selectedColor = 'transparent'
 
 	const colors = [
 		'transparent', // DEATH, TOMB
-		selectedColor, // LIVE, UNDEAD
+		$selectedColor, // LIVE, UNDEAD
 		'red',
 		'orange',
 		'yellow',
@@ -28,7 +30,7 @@
 	]
 
 	$: {
-		colors[1] = selectedColor
+		colors[1] = $selectedColor
 	}
 
 	function cellColor(celltype: number) {
@@ -52,12 +54,8 @@
 			height,
 		} = e.currentTarget.getBoundingClientRect()
 
-		// cursor.style.top =
-		// 	(((e.clientY * life.rows) / height) | 0) * cell_size + 'px'
-		// cursor.style.left =
-		// 	(((e.clientX * life.columns) / width) | 0) * cell_size + 'px'
-		const x = (((e.clientX - boxx) * columns) / width) | 0
-		const y = (((e.clientY - boxy) * rows) / height) | 0
+		const x = (((e.clientX - boxx) * $columns) / width) | 0
+		const y = (((e.clientY - boxy) * $rows) / height) | 0
 		if (mousedown) {
 			mousedown(x, y)
 		}
@@ -73,13 +71,14 @@
 />
 
 <div class="table">
+	<!-- svelte-ignore component-name-lowercase -->
 	<table
-		class:gridView
-		style:width={columns * cell_size + 'px'}
-		style:height={rows * cell_size + 'px'}
+		class:gridView={$gridView}
+		style:width={$columns * cell_size + 'px'}
+		style:height={$rows * cell_size + 'px'}
 		on:mousedown|preventDefault={(e) => {
 			draw(e, (x, y) => {
-				drawMode = +!table[y][x]
+				drawMode = +!$table[y][x]
 			})
 			isPress = true
 		}}
@@ -92,7 +91,7 @@
 			}
 		}}
 	>
-		{#each table as row}
+		{#each $table as row}
 			<tr>
 				{#each row as celltype}
 					<td
@@ -106,11 +105,6 @@
 				{/each}
 			</tr>
 		{/each}
-		<!-- <div
-				class="cursor"
-				style:background-color={selectedColor}
-				bind:this={cursor}
-			/> -->
 	</table>
 </div>
 

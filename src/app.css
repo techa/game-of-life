@@ -28,6 +28,22 @@ body {
 	min-width: fit-content;
 }
 
+nav {
+	width: 100%;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+}
+
+input {
+	width: 7rem;
+	text-align: center;
+}
+
+label {
+	position: relative;
+}
+
 svg {
 	width: 24px;
 	height: 24px;

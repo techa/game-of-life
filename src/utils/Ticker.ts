@@ -5,8 +5,11 @@ export interface TickerArgs {
 }
 
 export class Ticker {
-	#running = false
 	#id = 0
+	#running = false
+	get running() {
+		return this.#running
+	}
 
 	tick: () => void
 	// tpf: tick/frame
