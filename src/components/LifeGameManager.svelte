@@ -3,10 +3,14 @@
 	import { LifeEvent } from '$lib/LifeGame'
 
 	import { life, table, columns, rows, generation, population } from './store'
+	import DropDown from './DropDown.svelte'
 
 	import SVG from '../resource/sprite.svg'
 
+	let rulelistOpen = false
+
 	let rule: RuleString = 'B3/S23'
+	let ruleName: string = "Conway's Life"
 	$: life.setRule(rule)
 
 	let playing = false
@@ -27,16 +31,34 @@
 </script>
 
 <nav>
-	<label>
-		<input bind:value={rule} placeholder="Born/Survival" />
-	</label>
-	<label>
-		<select bind:value={rule}>
+	<DropDown bind:open={rulelistOpen}>
+		<div slot="trigger">
+			<input placeholder="Born/Survival" bind:value={rule} />
+			<button class="btn-right">
+				{ruleName}
+				<svg>
+					<use href="{SVG}#chevron-down" />
+				</svg>
+			</button>
+		</div>
+		<!-- svelte-ignore component-name-lowercase -->
+		<table class="rule_list">
 			{#each [...rules.entries()] as [name, _rule]}
-				<option value={_rule} title={_rule}>{name}</option>
+				<tr
+					class="rule_list-item"
+					class:selected={rule === _rule}
+					on:click={() => {
+						rule = _rule
+						ruleName = name
+						rulelistOpen = false
+					}}
+				>
+					<td>{_rule}</td>
+					<td>{name}</td>
+				</tr>
 			{/each}
-		</select>
-	</label>
+		</table>
+	</DropDown>
 
 	<button
 		on:click={() => {
@@ -68,16 +90,41 @@
 		<button on:click={() => life.step()}>Step</button>
 	{/if}
 
-	<span>Generation: {$generation}</span>
-	<span>Population: {$population}/{$rows * $columns}</span>
+	<span>Generation: <span class="numbers">{$generation}</span></span>
+	<span
+		>Population: <span class="numbers">{$population}</span>/ {$rows *
+			$columns}</span
+	>
 </nav>
 
 <style>
-	label {
-		position: relative;
-	}
-
 	span {
 		padding: 0 4px;
+	}
+	input {
+		width: 8rem;
+		text-align: center;
+	}
+	div {
+		display: flex;
+	}
+	.btn-right {
+		width: 8rem;
+	}
+	.rule_list {
+		background-color: var(--black);
+		font-size: 0.9rem;
+	}
+	.rule_list-item:hover {
+		background-color: #333;
+	}
+	.rule_list .selected {
+		background-color: #444;
+	}
+
+	.numbers {
+		display: inline-block;
+		text-align: right;
+		width: 2rem;
 	}
 </style>

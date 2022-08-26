@@ -28,20 +28,15 @@ body {
 	min-width: fit-content;
 }
 
+td {
+	white-space: nowrap;
+}
+
 nav {
 	width: 100%;
 	text-align: center;
 	display: flex;
 	justify-content: center;
-}
-
-input {
-	width: 7rem;
-	text-align: center;
-}
-
-label {
-	position: relative;
 }
 
 svg {
@@ -64,4 +59,17 @@ button > svg {
 .hidden {
 	visibility: hidden;
 	display: none;
+}
+
+button{
+	border-radius: 4px;
+}
+
+.btn-left{
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+.btn-right{
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
 }
