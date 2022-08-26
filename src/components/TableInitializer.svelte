@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Cell } from '$lib/LifeGame'
 
-	import { life, columns, rows } from './store'
+	import { life, columns, rows, initSettingsOpen } from './store'
 
 	import lexicon from '../resource/lexicon.json'
 	import Patterns from '../resource/patterns.json'
@@ -16,6 +16,12 @@
 			life.randomInit()
 		}}
 		>Random
+	</button>
+
+	<button on:click={() => ($initSettingsOpen = true)}>
+		<svg>
+			<use href="{SVG}#settings" />
+		</svg>
 	</button>
 
 	<button

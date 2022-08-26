@@ -3,6 +3,7 @@
 	import TableManager from './TableManager.svelte'
 	import TableInitializer from './TableInitializer.svelte'
 	import LifeGameManager from './LifeGameManager.svelte'
+	import InitailizeSettings from './InitailizerSettings.svelte'
 </script>
 
 <svelte:head>
@@ -15,6 +16,8 @@
 	<LifeGameManager />
 	<GridTable />
 </section>
+
+<InitailizeSettings />
 
 <style>
 	section {

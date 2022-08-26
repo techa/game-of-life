@@ -53,3 +53,6 @@ export const population = writable(life.population)
 
 export const selectedColor = writable('#F469E4')
 export const gridView = writable(true)
+
+// Modal
+export const initSettingsOpen = writable(false)
