@@ -77,36 +77,59 @@ export function colorStringToHsl(hexOrHsl: string): number[] {
 		: hslStringParse(hexOrHsl)
 }
 
-/**
- * Hex or HSLstring to HSLstring
- * @param hexOrHsl
- * @param hue
- * @return HSLstring
- */
-export function hueGradColor(hexOrHsl: string, hue: number): string {
-	const [h, s, l] = colorStringToHsl(hexOrHsl)
-	return `hsl(${(h + hue) % 360},${s}%,${l}%)`
-}
+export type NextColorType = 'hue' | 'random'
+export type NextColorGenerater = (str: string, n?: number) => string
 
+let hueIncr = 1
 /**
- * Hex to hex only
- * @param hex
- * @param n
- * @return Hex
+ * Next gradient color generaters.
  */
-export function gradColor(hex: string, n: number = 40): string {
-	return hex
-		.slice(1)
-		.match(/^(..)(..)(..)/)
-		.slice(1, 4)
-		.map(
-			(v) =>
-				(parseInt(v, 16) + (Math.random() * n * 2 - n)).clamp(10, 245) |
-				0,
-		)
-		.reduce(
-			(str: string, val: number) =>
-				str + val.toString(16).padStart(2, '0'),
-			'#',
-		)
+export const NextColor: Record<NextColorType, NextColorGenerater> = {
+	/**
+	 * Hex or HSLstring to HSLstring
+	 * @param hexOrHsl
+	 * @param hue
+	 * @return HSLstring
+	 */
+	hue(hexOrHsl: string, hue: number = 36): string {
+		let [h, s, l] = colorStringToHsl(hexOrHsl)
+		if (!(hueIncr++ % 10)) {
+			l -= 10
+		}
+		return `hsl(${(h + hue) % 360},${s}%,${l}%)`
+	},
+
+	/**
+	 * Hex to hex only
+	 * @param hex
+	 * @param difference RGB-value total difference
+	 * @return Hex
+	 */
+	random(hex: string, difference: number = 50): string {
+		return hex
+			.slice(1)
+			.match(/^(..)(..)(..)/)
+			.slice(1, 4)
+			.map((val) => {
+				const rgbvalue = parseInt(val, 16)
+				let del = (Math.random() * difference) | 0
+				difference -= del
+				if (difference > 0) {
+					// Color should not be too light.
+					if (rgbvalue + del > 240) {
+						del *= -1
+						// Color should not be too dark.
+					} else if (rgbvalue - del > 20) {
+						del *= (Math.random() * 2) | 0 ? -1 : 1
+					}
+				}
+
+				return (rgbvalue + del) | 0
+			})
+			.reduce(
+				(str: string, val: number) =>
+					str + val.toString(16).padStart(2, '0'),
+				'#',
+			)
+	},
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { gradColor, hueGradColor } from '../utils/color'
+	import { NextColor, type NextColorType } from '../utils/color'
 	import { Cell, LifeEvent } from '$lib/LifeGame'
 	import {
 		life,
@@ -30,6 +30,9 @@
 		// 'darkgray',
 	]
 
+	let nextColorType: NextColorType = 'random'
+	let nextColor = NextColor[nextColorType]
+
 	$: {
 		colors = [
 			'transparent', // DEATH, TOMB
@@ -47,7 +50,7 @@
 		let color = colors[celltype]
 		if (!color) {
 			colors.push(
-				(color = gradColor(colors[celltype - 1] || $selectedColor, 31)),
+				(color = nextColor(colors[celltype - 1] || $selectedColor)),
 			)
 			// console.log(`%c${color}`, `color:${color};font-weight:bold;`)
 		}
