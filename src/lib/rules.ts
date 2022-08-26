@@ -1,5 +1,5 @@
 type Numbers = number | ''
-export type Rule =
+export type RuleString =
 	| `${Numbers}/${Numbers}`
 	| `B${Numbers}/S${Numbers}`
 	| `${Numbers}/${Numbers}/${Numbers}`
@@ -7,7 +7,7 @@ export type Rule =
 	| `B${Numbers}/S${Numbers}/G${Numbers}`
 
 // https://conwaylife.com/wiki/List_of_Life-like_cellular_automata
-export const rules: Map<string, Rule> = new Map([
+export const rules: Map<string, RuleString> = new Map([
 	["Conway's Life", 'B3/S23'],
 	['HighLife', 'B36/S23'],
 	['3-4 Life', 'B34/S34'],
@@ -74,9 +74,10 @@ export const rules: Map<string, Rule> = new Map([
 
 	['Ebb and Flow', 'B36/S012478/C18'], //step5:地形データに使えそう
 	['Ebb and Flow2', 'B37/S012468/C18'], //step5:地形データに使えそう
+	// B34678/S234/C34
 ])
 
-export function ruleParser(rule: Rule): [number[], number[], number] {
+export function ruleParser(rule: RuleString): [number[], number[], number] {
 	const rules: (number[] | number)[] = rule
 		.replace(/[^\d/]*/g, '')
 		.split('/')

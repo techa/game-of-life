@@ -1,7 +1,7 @@
 import { randomInt } from '../utils/random.js'
 import { Ticker } from '../utils/Ticker.js'
 import { EventDispatcher, type EventHandler } from '../utils/EventDispatcher.js'
-import { ruleParser, type Rule } from '$lib/rules.js'
+import { ruleParser, type RuleString } from '$lib/rules.js'
 
 export const enum Cell {
 	TOMB = -2,
@@ -116,7 +116,7 @@ export class LifeGame {
 		return this
 	}
 
-	setRule(rule: Rule) {
+	setRule(rule: RuleString) {
 		if (/^\d*\/\d*/.test(rule)) {
 			;[this.survival, this.born, this.cycle] = ruleParser(rule)
 		} else if (/^B\d*\/S\d*/.test(rule)) {
