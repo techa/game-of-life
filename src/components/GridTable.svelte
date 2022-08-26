@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte'
 	import { NextColor, type NextColorType } from '../utils/color'
 	import { Cell, LifeEvent } from '$lib/LifeGame'
 	import {
@@ -11,6 +12,8 @@
 	} from './store'
 
 	const cell_size = 10
+	$: width = $columns * cell_size
+	$: height = $rows * cell_size
 
 	export let drawMode = Cell.LIVE
 
@@ -57,6 +60,22 @@
 		return color
 	}
 
+	let canvas: HTMLCanvasElement
+	let ctx: CanvasRenderingContext2D
+	onMount(() => {
+		ctx = canvas.getContext('2d')
+	})
+
+	$: if (ctx) {
+		ctx.clearRect(0, 0, $columns, $rows)
+		for (let y = 0; y < $rows; y++) {
+			for (let x = 0; x < $columns; x++) {
+				ctx.fillStyle = cellColor($table[y][x])
+				ctx.fillRect(x, y, 1, 1)
+			}
+		}
+	}
+
 	let isPress = false
 
 	function draw(e, mousedown?: (x: number, y: number) => void) {
@@ -84,11 +103,18 @@
 />
 
 <div class="table">
+	<canvas
+		bind:this={canvas}
+		width={$columns}
+		height={$rows}
+		style:width={width + 'px'}
+		style:height={height + 'px'}
+	/>
 	<!-- svelte-ignore component-name-lowercase -->
 	<table
 		class:gridView={$gridView}
-		style:width={$columns * cell_size + 'px'}
-		style:height={$rows * cell_size + 'px'}
+		style:width={width + 'px'}
+		style:height={height + 'px'}
 		on:mousedown|preventDefault={(e) => {
 			draw(e, (x, y) => {
 				drawMode = +!$table[y][x]
@@ -113,7 +139,6 @@
 						class:tomb={celltype === -2}
 						style:width={cell_size + 'px'}
 						style:height={cell_size + 'px'}
-						style:background-color={cellColor(celltype)}
 					/>
 				{/each}
 			</tr>
@@ -123,10 +148,21 @@
 
 <style>
 	.table {
+		position: relative;
 		width: 100%;
 		text-align: center;
 		display: flex;
 		justify-content: center;
+		overflow: auto;
+	}
+	canvas {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+
+		image-rendering: pixelated;
+
+		z-index: -1;
 	}
 	table,
 	tr,
