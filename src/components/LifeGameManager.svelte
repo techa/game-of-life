@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { rules, type Rule } from '$lib/rules'
+	import { rules, type RuleString } from '$lib/rules'
 	import { LifeEvent } from '$lib/LifeGame'
 
 	import { life, table, columns, rows, generation, population } from './store'
 
 	import SVG from '../resource/sprite.svg'
 
-	let rule: Rule = 'B3/S23'
+	let rule: RuleString = 'B3/S23'
 	$: life.setRule(rule)
 
 	let playing = false
