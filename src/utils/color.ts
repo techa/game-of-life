@@ -91,12 +91,11 @@ export const NextColor: Record<NextColorType, NextColorGenerater> = {
 	 * @param hue
 	 * @return HSLstring
 	 */
-	hue(hexOrHsl: string, hue: number = 36): string {
-		let [h, s, l] = colorStringToHsl(hexOrHsl)
-		if (!(hueIncr++ % 10)) {
-			l -= 10
-		}
-		return `hsl(${(h + hue) % 360},${s}%,${l}%)`
+	hue(hexOrHsl: string, hue = 36): string {
+		const [h, s, l] = colorStringToHsl(hexOrHsl)
+		return `hsl(${(h + hue) % 360},${s}%,${
+			!(hueIncr++ % 10) ? l - 10 : l
+		}%)`
 	},
 
 	/**
@@ -105,7 +104,7 @@ export const NextColor: Record<NextColorType, NextColorGenerater> = {
 	 * @param difference RGB-value total difference
 	 * @return Hex
 	 */
-	random(hex: string, difference: number = 50): string {
+	random(hex: string, difference = 50): string {
 		return hex
 			.slice(1)
 			.match(/^(..)(..)(..)/)

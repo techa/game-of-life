@@ -6,6 +6,7 @@ export interface TableInitializer {
 	fillEdge(): void
 	undeadInit(): void
 }
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 	target: T,
 ) {

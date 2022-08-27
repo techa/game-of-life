@@ -4,6 +4,7 @@ export interface TableTransform {
 	rotate(): void
 	reverse(): void
 }
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export function TableTransform<T extends { new (...args: any[]): LifeGame }>(
 	target: T,
 ) {

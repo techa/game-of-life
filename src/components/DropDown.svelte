@@ -7,13 +7,13 @@
 	let contentEl: HTMLDivElement
 
 	export let label = ''
-	export let open: boolean = false
+	export let open = false
 
 	export let trigger: 'hover' | 'click' = 'click'
 	$: clickable = trigger === 'click'
 
 	// managment of the race condition between focusin and click events
-	let _blocked: boolean = false
+	let _blocked = false
 	const block = () => (
 		(_blocked = true), setTimeout(() => (_blocked = false), 500)
 	)
@@ -22,7 +22,7 @@
 		open = ev.type === 'click' && !_blocked ? !open : true
 	}
 
-	const hideHandler = (ev) => {
+	const hideHandler = () => {
 		setTimeout(
 			() => contentEl.contains(document.activeElement) || (open = false),
 			100,

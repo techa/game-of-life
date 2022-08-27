@@ -1,4 +1,3 @@
-import { randomInt } from '../utils/random.js'
 import { Ticker } from '../utils/Ticker.js'
 import { EventDispatcher, type EventHandler } from '../utils/EventDispatcher.js'
 import { ruleParser, type RuleString } from '$lib/rules.js'

@@ -10,7 +10,7 @@
 	let rulelistOpen = false
 
 	let rule: RuleString = 'B3/S23'
-	let ruleName: string = "Conway's Life"
+	let ruleName = "Conway's Life"
 	$: life.rule = rule
 
 	let playing = false
