@@ -38,16 +38,6 @@
 	let nextColorType: NextColorType = 'random'
 	let nextColor = NextColor[nextColorType]
 
-	$: {
-		colors = [
-			'transparent', // DEATH, TOMB
-			$selectedColor, // LIVE, UNDEAD
-		]
-		for (let i = 2; i < life.cycle; i++) {
-			cellColor(i)
-		}
-	}
-
 	function cellColor(celltype: number) {
 		if (celltype < 0) {
 			celltype += 2
@@ -67,18 +57,6 @@
 	onMount(() => {
 		ctx = canvas.getContext('2d')
 	})
-
-	$: if (ctx) {
-		ctx.clearRect(0, 0, $columns, $rows)
-		for (let y = 0; y < $rows; y++) {
-			for (let x = 0; x < $columns; x++) {
-				if ($table[y]) {
-					ctx.fillStyle = cellColor($table[y][x])
-					ctx.fillRect(x, y, 1, 1)
-				} else break
-			}
-		}
-	}
 
 	let isPress = false
 
@@ -103,12 +81,43 @@
 		$table = life.table
 		$generation = life.generation
 		$population = life.population
+		// console.log('UPDATE')
 	})
 
 	life.on(LifeEvent.TABLE_UPDATE, () => {
 		$columns = life.columns
 		$rows = life.rows
 		life.emit(LifeEvent.UPDATE)
+		// console.log('TABLE_UPDATE')
+	})
+
+	const redraw = () => {
+		if (ctx) {
+			ctx.clearRect(0, 0, $columns, $rows)
+			for (let y = 0; y < $rows; y++) {
+				for (let x = 0; x < $columns; x++) {
+					if ($table[y]) {
+						ctx.fillStyle = cellColor($table[y][x])
+						ctx.fillRect(x, y, 1, 1)
+					} else break
+				}
+			}
+			// console.log('canvas redraw')
+		}
+	}
+
+	table.subscribe(redraw)
+
+	selectedColor.subscribe(() => {
+		// Reload colors
+		colors = [
+			'transparent', // DEATH, TOMB
+			$selectedColor, // LIVE, UNDEAD
+		]
+		for (let i = 2; i < life.cycle; i++) {
+			cellColor(i)
+		}
+		redraw()
 	})
 </script>
 
