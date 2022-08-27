@@ -31,7 +31,7 @@
 </script>
 
 <nav>
-	<DropDown bind:open={rulelistOpen}>
+	<DropDown bind:open={rulelistOpen} style="background-color:var(--black);">
 		<div slot="trigger">
 			<input
 				placeholder="Born/Survival"
@@ -62,6 +62,22 @@
 				</tr>
 			{/each}
 		</table>
+		<p class="list-footer">
+			and
+			<a
+				href="https://conwaylife.com/wiki/List_of_Life-like_cellular_automata"
+				target="_blocked"
+			>
+				more
+			</a>
+			and
+			<a
+				href="https://conwaylife.com/wiki/List_of_Generations_rules"
+				target="_blocked"
+			>
+				more.</a
+			>
+		</p>
 	</DropDown>
 
 	<button

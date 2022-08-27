@@ -30,7 +30,7 @@
 	}
 </script>
 
-<div class={'dropdown-wapper ' + ($$props.class || '')}>
+<div class="dropdown-wapper">
 	<div
 		on:focusin={showHandler}
 		on:focusout={hideHandler}
@@ -45,8 +45,9 @@
 		</slot>
 	</div>
 	<div
-		class="dropdown"
+		class={'dropdown ' + ($$props.class || '')}
 		class:hidden={!open}
+		style={$$props.style}
 		role="tooltip"
 		tabindex={-1}
 		bind:this={contentEl}
