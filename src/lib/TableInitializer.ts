@@ -21,7 +21,7 @@ export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 
 		insert(table: Cell[][]) {
 			this.isRandom = false
-			super.init(table)
+			super.insert(table)
 		}
 
 		randomInit(dirX?: 'center' | 'edge', dirY?: 'center' | 'edge') {
