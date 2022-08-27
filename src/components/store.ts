@@ -17,8 +17,7 @@ export const columns: Writable<typeof life.columns> = (() => {
 		subscribe,
 		update,
 		set: (columns: typeof life.columns) => {
-			life.tableSizing({ columns })
-			set(columns)
+			set((life.columns = columns))
 		},
 	}
 })()
@@ -29,8 +28,7 @@ export const rows: Writable<typeof life.rows> = (() => {
 		subscribe,
 		update,
 		set: (rows: typeof life.rows) => {
-			life.tableSizing({ rows })
-			set(rows)
+			set((life.rows = rows))
 		},
 	}
 })()

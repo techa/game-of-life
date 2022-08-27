@@ -9,6 +9,10 @@
 	} from './store'
 
 	import SVG from '../resource/sprite.svg'
+
+	function resize() {
+		life.tableSizing({})
+	}
 </script>
 
 <nav>
@@ -28,11 +32,11 @@
 	</label>
 	<label
 		>W:
-		<input type="number" bind:value={$columns} />
+		<input type="number" bind:value={$columns} on:input={resize} />
 	</label>
 	<label
 		>H:
-		<input type="number" bind:value={$rows} />
+		<input type="number" bind:value={$rows} on:input={resize} />
 	</label>
 
 	<button on:click={() => ($edgeCell += 1)}>
