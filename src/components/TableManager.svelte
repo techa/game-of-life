@@ -9,6 +9,7 @@
 	} from './store'
 
 	import SVG from '../resource/sprite.svg'
+	import { LifeEvent } from '$lib/LifeGame'
 
 	function resize() {
 		life.tableSizing({})
@@ -62,6 +63,7 @@
 	<button
 		on:click={() => {
 			life.rotate()
+			setTimeout(() => life.emit(LifeEvent.UPDATE), 100)
 		}}
 		>Rotate
 	</button>
