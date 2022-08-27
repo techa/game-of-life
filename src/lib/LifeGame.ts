@@ -29,16 +29,35 @@ export class LifeGame {
 	columns = 70
 	rows = 70
 
-	born: number[] = [3]
-	survival: number[] = [2, 3]
-	cycle = 2
-
 	/**
 	 * DEATH is loop
 	 */
 	edgeCell: Cell.TOMB | Cell.UNDEAD | Cell.DEATH = Cell.DEATH
 
-	generation = 0
+	#born: number[] = [3]
+	#survival: number[] = [2, 3]
+	#cycle = 2
+
+	get rule() {
+		let str = `B${this.#born.join('')}/S${this.#survival.join('')}`
+		if (this.#cycle > 2) {
+			str += `C${this.#cycle}`
+		}
+		return str as RuleString
+	}
+
+	set rule(rule: RuleString) {
+		if (/^\d*\/\d*/.test(rule)) {
+			;[this.#survival, this.#born, this.#cycle] = ruleParser(rule)
+		} else if (/^B\d*\/S\d*/.test(rule)) {
+			;[this.#born, this.#survival, this.#cycle] = ruleParser(rule)
+		}
+	}
+
+	#generation = 0
+	get generation() {
+		return this.#generation
+	}
 	get population() {
 		let population = 0
 		for (let y = 0; y < this.rows; y++) {
@@ -59,20 +78,20 @@ export class LifeGame {
 	ticker: Ticker
 
 	#tpfsIndex = 1
-	readonly tpfs = [48, 12, 4, 1]
+	#tpfs = [48, 12, 4, 1]
 	get tpf() {
-		return this.tpfs[this.#tpfsIndex]
+		return this.#tpfs[this.#tpfsIndex]
 	}
 	get speed() {
 		const tpf = this.ticker?.tpf || this.tpf
 		// .at(-2) is meant to invert the initial value of #tpfsIndex.
-		return this.tpfs[0] / tpf / this.tpfs.at(-2)
+		return this.#tpfs[0] / tpf / this.#tpfs.at(-2)
 	}
 	get tpfsIndex() {
 		return this.#tpfsIndex
 	}
 	set tpfsIndex(val: number) {
-		const len = this.tpfs.length
+		const len = this.#tpfs.length
 		while (val < 0) val += len // positive number
 		if (val >= len) val %= len // loop
 
@@ -84,15 +103,12 @@ export class LifeGame {
 
 	#tableMemory = ''
 	autoStop = true
-	isRunning() {
+	get isRunning() {
 		return this.ticker?.running
 	}
 
-	isRandom = false
-
 	init(table?: Cell[][]) {
-		this.isRandom = false
-		this.generation = 0
+		this.#generation = 0
 		if (table) {
 			this.columns = table[0].length
 			this.rows = table.length
@@ -116,14 +132,6 @@ export class LifeGame {
 		return this
 	}
 
-	setRule(rule: RuleString) {
-		if (/^\d*\/\d*/.test(rule)) {
-			;[this.survival, this.born, this.cycle] = ruleParser(rule)
-		} else if (/^B\d*\/S\d*/.test(rule)) {
-			;[this.born, this.survival, this.cycle] = ruleParser(rule)
-		}
-	}
-
 	memory() {
 		return (this.#memory = JSON.stringify(this.table))
 	}
@@ -133,9 +141,8 @@ export class LifeGame {
 	}
 
 	insert(table: Cell[][]) {
-		this.isRandom = false
 		this.table = []
-		this.generation = 0
+		this.#generation = 0
 		const rows = Math.max(table.length, this.rows)
 		const columns = Math.max(table[0].length, this.columns)
 		let sw = 0
@@ -170,9 +177,7 @@ export class LifeGame {
 					this.table[y].length = this.columns
 				} else {
 					for (let x = 0; x < this.columns; x++) {
-						this.table[y][x] ??= this.isRandom
-							? randomInt(2)
-							: Cell.DEATH
+						this.table[y][x] ??= Cell.DEATH
 					}
 				}
 			}
@@ -199,7 +204,7 @@ export class LifeGame {
 
 	step() {
 		const table: Cell[][] = []
-		const countMax = Math.max(...this.born, ...this.survival)
+		const countMax = Math.max(...this.#born, ...this.#survival)
 
 		for (let y = 0; y < this.rows; y++) {
 			if (!table[y]) table[y] = []
@@ -234,23 +239,23 @@ export class LifeGame {
 
 				// Generations
 				// https://conwaylife.com/wiki/Generations
-				if (center === Cell.DEATH && this.born.includes(count)) {
+				if (center === Cell.DEATH && this.#born.includes(count)) {
 					table[y][x] = Cell.LIVE
 				} else if (center === Cell.LIVE) {
-					if (this.survival.includes(count)) {
+					if (this.#survival.includes(count)) {
 						table[y][x] = Cell.LIVE
 					} else {
-						table[y][x] = (center + 1) % this.cycle
+						table[y][x] = (center + 1) % this.#cycle
 					}
 				} else if (center >= 2) {
-					table[y][x] = (center + 1) % this.cycle
+					table[y][x] = (center + 1) % this.#cycle
 				} else {
 					table[y][x] = Cell.DEATH
 				}
 			}
 		}
 		this.table = table
-		this.generation++
+		this.#generation++
 
 		this.update()
 	}

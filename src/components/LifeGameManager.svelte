@@ -11,7 +11,7 @@
 
 	let rule: RuleString = 'B3/S23'
 	let ruleName: string = "Conway's Life"
-	$: life.setRule(rule)
+	$: life.rule = rule
 
 	let playing = false
 	let speed = life.speed
@@ -33,7 +33,11 @@
 <nav>
 	<DropDown bind:open={rulelistOpen}>
 		<div slot="trigger">
-			<input placeholder="Born/Survival" bind:value={rule} />
+			<input
+				placeholder="Born/Survival"
+				bind:value={rule}
+				on:focusout={() => ''}
+			/>
 			<button class="btn-right">
 				{ruleName}
 				<svg>
