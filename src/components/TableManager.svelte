@@ -32,11 +32,11 @@
 	</label>
 	<label
 		>W:
-		<input type="number" bind:value={$columns} on:input={resize} />
+		<input type="number" bind:value={$columns} on:input={resize} min="1" />
 	</label>
 	<label
 		>H:
-		<input type="number" bind:value={$rows} on:input={resize} />
+		<input type="number" bind:value={$rows} on:input={resize} min="1" />
 	</label>
 
 	<button on:click={() => ($edgeCell += 1)}>
