@@ -72,8 +72,10 @@
 		ctx.clearRect(0, 0, $columns, $rows)
 		for (let y = 0; y < $rows; y++) {
 			for (let x = 0; x < $columns; x++) {
-				ctx.fillStyle = cellColor($table[y][x])
-				ctx.fillRect(x, y, 1, 1)
+				if ($table[y]) {
+					ctx.fillStyle = cellColor($table[y][x])
+					ctx.fillRect(x, y, 1, 1)
+				} else break
 			}
 		}
 	}
@@ -154,6 +156,9 @@
 						style:width={cell_size + 'px'}
 						style:height={cell_size + 'px'}
 					/>
+					<!-- without canvas
+						style:background-color={cellColor(celltype)}
+					-->
 				{/each}
 			</tr>
 		{/each}
