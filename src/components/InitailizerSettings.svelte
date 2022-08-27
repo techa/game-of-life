@@ -1,11 +1,11 @@
 <script lang="ts">
 	import Modal from './Modal.svelte'
 
-	import { initSettings } from './store'
+	import { initSettingsOpen } from './store'
 </script>
 
-{#if $initSettings}
-	<Modal on:close={() => ($initSettings = false)}>
+{#if $initSettingsOpen}
+	<Modal on:close={() => ($initSettingsOpen = false)}>
 		<h3 slot="header">Random settings</h3>
 		<div class="map">
 			<div class="left-column">
