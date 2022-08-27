@@ -48,7 +48,7 @@ export class LifeGame {
 	set rule(rule: RuleString) {
 		if (/^\d*\/\d*(\/\d*)?$/.test(rule))
 			[this.#survival, this.#born, this.cycle] = ruleParser(rule)
-		else if (/^B\d*\/S\d*([CG]\/\d*)?$/.test(rule))
+		else if (/^B\d*\/S\d*(\/[CG]\d*)?$/.test(rule))
 			[this.#born, this.#survival, this.cycle] = ruleParser(rule)
 	}
 
