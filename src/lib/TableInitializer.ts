@@ -10,6 +10,19 @@ export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 	target: T,
 ) {
 	return class extends target implements TableInitializer {
+		isRandom = false
+
+		init(table?: Cell[][]) {
+			this.isRandom = false
+			super.init(table)
+			return this
+		}
+
+		insert(table: Cell[][]) {
+			this.isRandom = false
+			super.init(table)
+		}
+
 		randomInit(dirX?: 'center' | 'edge', dirY?: 'center' | 'edge') {
 			for (let y = 0; y < this.rows; y++) {
 				for (let x = 0; x < this.columns; x++) {
@@ -17,6 +30,7 @@ export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 				}
 			}
 			this.init(this.table)
+			this.isRandom = true
 		}
 
 		#randomCorrection(

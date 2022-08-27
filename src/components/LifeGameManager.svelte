@@ -11,7 +11,7 @@
 
 	let rule: RuleString = 'B3/S23'
 	let ruleName: string = "Conway's Life"
-	$: life.setRule(rule)
+	$: life.rule = rule
 
 	let playing = false
 	let speed = life.speed
@@ -31,9 +31,13 @@
 </script>
 
 <nav>
-	<DropDown bind:open={rulelistOpen}>
+	<DropDown bind:open={rulelistOpen} style="background-color:var(--black);">
 		<div slot="trigger">
-			<input placeholder="Born/Survival" bind:value={rule} />
+			<input
+				placeholder="Born/Survival"
+				bind:value={rule}
+				on:focusout={() => ''}
+			/>
 			<button class="btn-right">
 				{ruleName}
 				<svg>
@@ -58,6 +62,22 @@
 				</tr>
 			{/each}
 		</table>
+		<p class="list-footer">
+			and
+			<a
+				href="https://conwaylife.com/wiki/List_of_Life-like_cellular_automata"
+				target="_blocked"
+			>
+				more
+			</a>
+			and
+			<a
+				href="https://conwaylife.com/wiki/List_of_Generations_rules"
+				target="_blocked"
+			>
+				more.</a
+			>
+		</p>
 	</DropDown>
 
 	<button

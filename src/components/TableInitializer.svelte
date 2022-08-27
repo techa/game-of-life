@@ -26,7 +26,7 @@
 
 	<button
 		on:click={() => {
-			if (life.isRunning()) {
+			if (life.isRunning) {
 				life.stop()
 			}
 
@@ -36,7 +36,7 @@
 	</button>
 	<button
 		on:click={() => {
-			if (life.isRunning()) {
+			if (life.isRunning) {
 				life.stop()
 			}
 			life.reset()
