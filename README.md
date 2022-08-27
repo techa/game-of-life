@@ -8,6 +8,16 @@
 * Terrain generation using cellular automata.
 * Create a random initial state.
 
+## ToDo
+- [ ] ColorPicker
+	- [ ] HUE slider
+	- [ ] Reload Gradation
+- [ ] Tools: Pen, FillPaint
+	- [ ] LIVE & DEATH <--> UNDEAD & TOMB
+- [ ] InitializerSettings
+	- [ ] Save sttings localStrage
+- [ ] Save Rule to localStrage
+
 ## Terrain generation
 
 ## Links
