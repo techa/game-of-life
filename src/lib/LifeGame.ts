@@ -273,7 +273,7 @@ export class LifeGame {
 	}
 
 	update() {
-		const tableMemory = this.table.toString()
+		const tableMemory = JSON.stringify(this.table)
 		if (this.autoStop && tableMemory === this.#tableMemory) {
 			this.stop()
 		} else {
