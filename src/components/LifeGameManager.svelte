@@ -2,7 +2,7 @@
 	import { rules, type RuleString } from '$lib/rules'
 	import { LifeEvent } from '$lib/LifeGame'
 
-	import { life, table, columns, rows, generation, population } from './store'
+	import { life, columns, rows, generation, population } from './store'
 	import DropDown from './DropDown.svelte'
 
 	import SVG from '../resource/sprite.svg'
@@ -21,12 +21,6 @@
 	})
 	life.on(LifeEvent.STOP, () => {
 		playing = false
-	})
-
-	life.on(LifeEvent.TABLE_UPDATE, () => {
-		$table = life.table
-		$generation = life.generation
-		$population = life.population
 	})
 </script>
 

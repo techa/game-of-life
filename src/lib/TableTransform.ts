@@ -1,4 +1,4 @@
-import { Cell, type LifeGame } from './LifeGame.js'
+import { Cell, LifeEvent, type LifeGame } from './LifeGame.js'
 
 export interface TableTransform {
 	rotate(): void
@@ -19,7 +19,7 @@ export function TableTransform<T extends { new (...args: any[]): LifeGame }>(
 				}
 			}
 			this.table = table
-			this.update()
+			this.emit(LifeEvent.TABLE_UPDATE)
 		}
 
 		/**

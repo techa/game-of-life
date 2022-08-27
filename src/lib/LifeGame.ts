@@ -11,6 +11,7 @@ export const enum Cell {
 
 export const enum LifeEvent {
 	TABLE_UPDATE,
+	UPDATE,
 	START,
 	STOP,
 }
@@ -180,8 +181,7 @@ export class LifeGame {
 				}
 			}
 		}
-
-		this.update()
+		this.emit(LifeEvent.TABLE_UPDATE)
 	}
 
 	at(x: number, y: number): Cell {
@@ -278,7 +278,7 @@ export class LifeGame {
 			this.stop()
 		} else {
 			this.#tableMemory = tableMemory
-			this.emit(LifeEvent.TABLE_UPDATE)
+			this.emit(LifeEvent.UPDATE)
 		}
 	}
 }

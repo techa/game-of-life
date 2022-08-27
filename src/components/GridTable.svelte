@@ -9,6 +9,8 @@
 		rows,
 		selectedColor,
 		gridView,
+		generation,
+		population,
 	} from './store'
 
 	const cell_size = 10
@@ -92,8 +94,20 @@
 			mousedown(x, y)
 		}
 		life.table[y][x] = drawMode
-		life.emit(LifeEvent.TABLE_UPDATE)
+		life.emit(LifeEvent.UPDATE)
 	}
+
+	life.on(LifeEvent.UPDATE, () => {
+		$table = life.table
+		$generation = life.generation
+		$population = life.population
+	})
+
+	life.on(LifeEvent.TABLE_UPDATE, () => {
+		$columns = life.columns
+		$rows = life.rows
+		life.emit(LifeEvent.UPDATE)
+	})
 </script>
 
 <svelte:window
