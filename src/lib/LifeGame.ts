@@ -36,22 +36,21 @@ export class LifeGame {
 
 	#born: number[] = [3]
 	#survival: number[] = [2, 3]
-	#cycle = 2
+	cycle = 2
 
 	get rule() {
 		let str = `B${this.#born.join('')}/S${this.#survival.join('')}`
-		if (this.#cycle > 2) {
-			str += `C${this.#cycle}`
+		if (this.cycle > 2) {
+			str += `C${this.cycle}`
 		}
 		return str as RuleString
 	}
 
 	set rule(rule: RuleString) {
-		if (/^\d*\/\d*/.test(rule)) {
-			;[this.#survival, this.#born, this.#cycle] = ruleParser(rule)
-		} else if (/^B\d*\/S\d*/.test(rule)) {
-			;[this.#born, this.#survival, this.#cycle] = ruleParser(rule)
-		}
+		if (/^\d*\/\d*(\/\d*)?$/.test(rule))
+			[this.#survival, this.#born, this.cycle] = ruleParser(rule)
+		else if (/^B\d*\/S\d*([CG]\/\d*)?$/.test(rule))
+			[this.#born, this.#survival, this.cycle] = ruleParser(rule)
 	}
 
 	#generation = 0
@@ -245,10 +244,10 @@ export class LifeGame {
 					if (this.#survival.includes(count)) {
 						table[y][x] = Cell.LIVE
 					} else {
-						table[y][x] = (center + 1) % this.#cycle
+						table[y][x] = (center + 1) % this.cycle
 					}
 				} else if (center >= 2) {
-					table[y][x] = (center + 1) % this.#cycle
+					table[y][x] = (center + 1) % this.cycle
 				} else {
 					table[y][x] = Cell.DEATH
 				}
