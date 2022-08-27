@@ -61,7 +61,8 @@ export class LifeGame {
 		let population = 0
 		for (let y = 0; y < this.rows; y++) {
 			for (let x = 0; x < this.columns; x++) {
-				if (this.table[y][x]) {
+				const cell = this.table[y][x]
+				if (cell && cell !== Cell.TOMB) {
 					population++
 				}
 			}
