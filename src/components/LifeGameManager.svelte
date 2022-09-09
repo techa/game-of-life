@@ -3,7 +3,7 @@
 	import { LifeEvent } from '$lib/LifeGame'
 
 	import { life, columns, rows, generation, population } from './store'
-	import DropDown from './DropDown.svelte'
+	import DropDown from './generic/DropDown.svelte'
 
 	import SVG from '../resource/sprite.svg'
 
