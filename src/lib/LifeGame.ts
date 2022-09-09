@@ -244,15 +244,12 @@ export class LifeGame {
 
 				// Generations
 				// https://conwaylife.com/wiki/Generations
-				if (center === Cell.DEATH && this.#born.includes(count)) {
+				if (
+					(center === Cell.DEATH && this.#born.includes(count)) ||
+					(center === Cell.LIVE && this.#survival.includes(count))
+				) {
 					table[y][x] = Cell.LIVE
-				} else if (center === Cell.LIVE) {
-					if (this.#survival.includes(count)) {
-						table[y][x] = Cell.LIVE
-					} else {
-						table[y][x] = (center + 1) % this.#cycle
-					}
-				} else if (center >= 2) {
+				} else if (center >= 1) {
 					table[y][x] = (center + 1) % this.#cycle
 				} else {
 					table[y][x] = Cell.DEATH
