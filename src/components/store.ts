@@ -51,3 +51,14 @@ export const population = writable(life.population)
 
 export const selectedColor = writable('#F469E4')
 export const gridView = writable(true)
+
+export const penMode: Writable<number> = (() => {
+	const { subscribe, set, update } = writable(0)
+	return {
+		subscribe,
+		update,
+		set: (penMode) => {
+			set(penMode % 3)
+		},
+	}
+})()

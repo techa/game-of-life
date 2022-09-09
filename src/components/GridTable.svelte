@@ -11,6 +11,7 @@
 		gridView,
 		generation,
 		population,
+		penMode,
 	} from './store'
 
 	const cell_size = 10
@@ -142,7 +143,7 @@
 		style:height={height + 'px'}
 		on:mousedown|preventDefault={(e) => {
 			draw(e, (x, y) => {
-				drawMode = +!$table[y][x]
+				drawMode = $table[y][x] ? Cell.DEATH : -$penMode || 1
 			})
 			isPress = true
 		}}

@@ -6,6 +6,7 @@
 		edgeCell,
 		selectedColor,
 		gridView,
+		penMode,
 	} from './store'
 
 	import SVG from '../resource/sprite.svg'
@@ -55,18 +56,28 @@
 
 	<button
 		on:click={() => {
-			life.undeadInit()
-		}}
-		>Undead
-	</button>
-
-	<button
-		on:click={() => {
 			life.rotate()
 			setTimeout(() => life.emit(LifeEvent.UPDATE), 100)
 		}}
 		>Rotate
 	</button>
+
+	<svg
+		style:stroke={$penMode < 2 ? $selectedColor : 'currentColor'}
+		on:click={() => console.log(($penMode += 1))}
+	>
+		<use href="{SVG}#pen" />
+		{#if $penMode}
+			<use
+				href="{SVG}#x"
+				x="14px"
+				y="14px"
+				width="10px"
+				height="10px"
+				stroke-width="4px"
+			/>
+		{/if}
+	</svg>
 
 	<button
 		on:click={() => {
