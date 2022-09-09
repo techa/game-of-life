@@ -78,13 +78,6 @@
 			/>
 		{/if}
 	</svg>
-
-	<button
-		on:click={() => {
-			life.reverse()
-		}}
-		>Reverse
-	</button>
 </nav>
 
 <style>

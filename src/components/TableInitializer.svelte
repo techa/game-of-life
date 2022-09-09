@@ -27,6 +27,14 @@
 		}}
 		>Clear
 	</button>
+
+	<button
+		on:click={() => {
+			life.reverse()
+		}}
+		>Reverse
+	</button>
+
 	<button
 		on:click={() => {
 			if (life.isRunning) {
