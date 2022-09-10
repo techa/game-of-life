@@ -3,11 +3,11 @@ export function randomHex(): string {
 }
 
 export function hexToRgb(hex: string): number[] {
-	return hex
-		.slice(1)
-		.match(/^(..)(..)(..)/)
-		.slice(1, 4)
-		.map((v) => parseInt(v, 16))
+	const m = hex.slice(1).match(/^(..)(..)(..)/)
+	if (!m) {
+		throw new TypeError(`Invaild-value(hex): '${hex}'`)
+	}
+	return m.slice(1, 4).map((v) => parseInt(v, 16))
 }
 
 export function rgbToHsl(rgb: number[]): number[] {
@@ -60,10 +60,11 @@ export function hexToHsl(hex: string): number[] {
  * @return HSL
  */
 export function hslStringParse(hslString: string): number[] {
-	return hslString
-		.match(/^hsl\((\d+),(\d+)%,(\d+)%\)/)
-		.slice(1)
-		.map((v) => +v)
+	const m = hslString.match(/^hsl\((\d+),(\d+)%,(\d+)%\)/)
+	if (!m) {
+		throw new TypeError(`Invaild-value(hslString): '${hslString}'`)
+	}
+	return m.slice(1).map((v) => +v)
 }
 
 /**
@@ -104,10 +105,12 @@ export const NextColor: Record<NextColorType, NextColorGenerater> = {
 	 * @param difference RGB-value total difference
 	 * @return Hex
 	 */
-	random(hex: string, difference = 50): string {
-		return hex
-			.slice(1)
-			.match(/^(..)(..)(..)/)
+	random(hex: string, difference = 60): string {
+		const m = hex.slice(1).match(/^(..)(..)(..)/)
+		if (!m) {
+			throw new TypeError(`Invaild-value(hex): '${hex}'`)
+		}
+		return m
 			.slice(1, 4)
 			.map((val) => {
 				const rgbvalue = parseInt(val, 16)
