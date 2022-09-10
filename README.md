@@ -19,6 +19,7 @@
 - [ ] Save Rule to localStrage
 
 ## Terrain generation
+![vote](./images/vote.gif)
 
 ## Links
 * Rules: https://conwaylife.com/wiki/List_of_Life-like_cellular_automata
