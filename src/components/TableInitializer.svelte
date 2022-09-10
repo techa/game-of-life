@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { Cell } from '$lib/LifeGame'
+	// import type { Cell } from '$lib/LifeGame'
 
 	import { life, columns, rows } from './store'
 
 	import lexicon from '../resource/lexicon.json'
-	import Patterns from '../resource/patterns.json'
+	// import Patterns from '../resource/patterns.json'
 
-	const patterns = Patterns as unknown as [string, Cell[][]][]
+	// const patterns = Patterns as unknown as [string, Cell[][]][]
 </script>
 
 <nav>
@@ -53,7 +53,7 @@
 
 	<label>
 		<select class="pulldown">
-			{#each lexicon as lexico, i}
+			{#each Object.entries(lexicon) as [name, lexico], i}
 				<option
 					value={i}
 					on:click={() => {
@@ -61,13 +61,13 @@
 						$rows = life.rows
 						life.insert(lexico)
 						life.memory()
-					}}>{i}</option
+					}}>{i}: {name}</option
 				>
 			{/each}
 		</select>
 	</label>
 
-	<label>
+	<!-- <label>
 		<select class="pulldown">
 			{#each patterns as [name, _rule], i}
 				<option
@@ -81,5 +81,5 @@
 				>
 			{/each}
 		</select>
-	</label>
+	</label> -->
 </nav>

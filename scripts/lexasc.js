@@ -1,14 +1,39 @@
-import { readFile, writeFile } from 'fs/promises';
-readFile('./lex_asc/lexicon.txt', 'utf-8').then(function (txt) {
-    var arr = [];
-    txt.replace(/(\t[.*]+\n)+/gm, function (cap) {
-        arr.push(cap
-            .replace(/[^.*\n]/g, '')
-            .split('\n')
-            .filter(function (str) { return str; })
-            .map(function (str) { return str.split('').map(function (v) { return (v === '*' ? 1 : 0); }); }));
-        return '';
-    });
-    var arr2 = arr.filter(function (cells) { return cells.length + cells[0].length >= 60; });
-    writeFile('./src/resource/lexicon.json', JSON.stringify(arr2, null, 4));
-});
+import { readFile, writeFile } from 'fs/promises'
+
+// const val = [0, 6, 10, 21, 23, 25, 34, 36, 53]
+
+readFile('./lex_asc/lexicon.txt', 'utf-8').then((txt) => {
+	const lines = txt.split(/\r?\n/g)
+	let title = ''
+	/**
+	 * @type {(0 | 1)[][]}
+	 */
+	let pattern = []
+	/**
+	 * @type {Record<string, (0 | 1)[][]>}
+	 */
+	const data = {}
+
+	for (const line of lines) {
+		if (/\t[*.]+$/.test(line)) {
+			pattern.push(
+				line
+					.replace(/[^.*]/g, '')
+					.split('')
+					.map((v) => (v === '*' ? 1 : 0)),
+			)
+		} else {
+			title = /^:(.+?):/.exec(line)?.[1] || title
+		}
+
+		if (pattern.length && /^[^\t.*]*$/.test(line)) {
+			// if (pattern.length + pattern[0].length >= 60) {
+			// 	data[title] = pattern
+			// }
+			data[title] = pattern
+			pattern = []
+		}
+	}
+
+	writeFile('./src/resource/lexicon.json', JSON.stringify(data, null, 4))
+})
