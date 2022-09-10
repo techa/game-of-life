@@ -8,12 +8,12 @@ export function drag(node: Element, dragging: Writable<Element | null>) {
 	let rect = node.getBoundingClientRect()
 	dragging.set(null)
 
-	function clamp(x, max = Infinity, min = 0) {
+	function clamp(x: number, max = Infinity, min = 0) {
 		if (max < min) [min, max] = [max, min]
 		return Math.min(Math.max(min, x), max)
 	}
 
-	function mousemove(event) {
+	function mousemove(event: MouseEvent) {
 		x = event.clientX - rect.left
 		y = event.clientY - rect.top
 
@@ -24,7 +24,7 @@ export function drag(node: Element, dragging: Writable<Element | null>) {
 		)
 	}
 
-	function mouseup(event) {
+	function mouseup(event: MouseEvent) {
 		x = event.clientX - rect.left
 		y = event.clientY - rect.top
 
@@ -35,13 +35,11 @@ export function drag(node: Element, dragging: Writable<Element | null>) {
 			}),
 		)
 
-		window.removeEventListener('mousemove', mousemove, false)
-		window.removeEventListener('mouseup', mouseup, false)
+		window.removeEventListener('mousemove', mousemove)
+		window.removeEventListener('mouseup', mouseup)
 	}
 
-	function mousedown(event) {
-		if (event.which !== 1) return
-
+	function mousedown(event: any) {
 		event.preventDefault()
 
 		rect = node.getBoundingClientRect()
@@ -63,15 +61,15 @@ export function drag(node: Element, dragging: Writable<Element | null>) {
 			}),
 		)
 
-		window.addEventListener('mousemove', mousemove, false)
-		window.addEventListener('mouseup', mouseup, false)
+		window.addEventListener('mousemove', mousemove)
+		window.addEventListener('mouseup', mouseup)
 	}
 
-	node.addEventListener('mousedown', mousedown, false)
+	node.addEventListener('mousedown', mousedown)
 
 	return {
 		destroy() {
-			node.removeEventListener('mousedown', mousedown, false)
+			node.removeEventListener('mousedown', mousedown)
 		},
 	}
 }

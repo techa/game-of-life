@@ -3,12 +3,12 @@ declare global {
 	// interface String {
 	// 	format(...str: string[]): string
 	// }
-	interface Number {
-		clamp(val1: number, val2: number): number
-		// round(digit: number): number
+	// interface Number {
+	// 	clamp(val1: number, val2: number): number
+	// 	// round(digit: number): number
 
-		// abs(): number
-	}
+	// 	// abs(): number
+	// }
 	// interface Array<T> {
 	// 	pick(): T
 	// }
@@ -39,15 +39,15 @@ declare global {
  * @param {number} max - The upper boundary.
  * @returns {number} A number in the range (min, max).
  */
-Number.prototype.clamp = function (
-	this: number,
-	val1: number,
-	val2 = 0,
-): number {
-	const min = val1 < val2 ? val1 : val2
-	const max = val1 < val2 ? val2 : val1
-	return this > max ? max : this > min ? this : min
-}
+// Number.prototype.clamp = function (
+// 	this: number,
+// 	val1: number,
+// 	val2 = 0,
+// ): number {
+// 	const min = val1 < val2 ? val1 : val2
+// 	const max = val1 < val2 ? val2 : val1
+// 	return this > max ? max : this > min ? this : min
+// }
 
 /**
  *

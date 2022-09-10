@@ -8,7 +8,7 @@
 
 	let modal: HTMLDivElement
 
-	const handle_keydown = (e) => {
+	const handle_keydown = (e: KeyboardEvent) => {
 		if (e.key === 'Escape') {
 			close()
 			return
