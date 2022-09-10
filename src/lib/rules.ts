@@ -11,10 +11,10 @@ export const rules: Map<string, RuleString> = new Map([
 	["Conway's Life", 'B3/S23'],
 	['HighLife', 'B36/S23'],
 	['3-4 Life', 'B34/S34'],
-	['B34/S45', 'B34/S45'], // step75:地形データ
-	['B34/S458', 'B34/S458'],
+	['', 'B34/S45'], // step75:地形データ
+	['', 'B34/S458'],
 	// https://en.wikipedia.org/wiki/Day_and_Night_(cellular_automaton)
-	// ['Day & Night', 'B3678/S34678'],
+	['Day & Night', 'B3678/S34678'],
 	// ['Iceballs', 'B25678/S5678'], //大きな塊ができる
 	// ['Life without death', 'B3/S012345678'], //インクのシミが広がっていくような
 	// ['Mazectric', 'B3/S1234'], //迷路
@@ -40,14 +40,14 @@ export const rules: Map<string, RuleString> = new Map([
 	['Vote3', 'B578/S45678'], //step20:地形データ複雑隙間多め
 	['Vote4', 'B678/S345678'],
 	// ['g', 'B368/S245'],
-	['cave', 'B5678/S345678'], //randomCorrection(5)系と相性よし
-	['kaku', 'B478/S45678'], //randomCorrection(5)系と相性よし、step30で直線的
+	['Island', 'B5678/S345678'], //randomCorrection(5)系と相性よし
+	['Factory', 'B478/S45678'], //randomCorrection(5)系と相性よし、step30で直線的
 	['craggy', 'B4678/S45678'], //randomCorrection(5)系と相性よし、生成が速い。step10
 	// Generation
 	['Banners', 'B3457/S2367/C5'],
 	['Bloomerang', 'B34678/S234/C24'],
 	["Brian's Brain", 'B2/S/C3'],
-	['Caterpillars', 'B378/S124567/C4 	'],
+	['Caterpillars', 'B378/S124567/C4'],
 	['Cooties', 'B2/S23/C8'],
 	['Fireworks', 'B13/S2/C21'],
 	['Frogs', 'B34/S12/C3'],
