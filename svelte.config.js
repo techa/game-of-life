@@ -16,11 +16,12 @@ const config = {
 	kit: {
 		// https://github.com/sveltejs/kit/tree/master/packages/adapter-static
 		adapter: adapter({
-			fallback: '200.html',
+			fallback: 'index.html',
 		}),
 		paths: {
 			base: dev ? '' : `/${pkg.name}`,
 		},
+		prerender: { entries: [] },
 		appDir: 'internal',
 	},
 }
