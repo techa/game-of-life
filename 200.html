@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/game-of-life/favicon.png" />
+		<meta name="viewport" content="width=device-width" />
+		<meta http-equiv="content-security-policy" content="">
+	<link rel="modulepreload" href="/game-of-life/internal/immutable/start-5c5fc825.js">
+	<link rel="modulepreload" href="/game-of-life/internal/immutable/chunks/index-0056eacf.js">
+	<link rel="modulepreload" href="/game-of-life/internal/immutable/chunks/singletons-bc56d440.js">
+	<link rel="modulepreload" href="/game-of-life/internal/immutable/chunks/index-9581fee3.js">
+	</head>
+	<body>
+		
+		<script type="module" data-sveltekit-hydrate="45h">
+		import { start } from "/game-of-life/internal/immutable/start-5c5fc825.js";
+
+		start({
+			env: {},
+			hydrate: null,
+			paths: {"base":"/game-of-life","assets":"/game-of-life"},
+			target: document.querySelector('[data-sveltekit-hydrate="45h"]').parentNode,
+			trailing_slash: "never"
+		});
+	</script>
+	</body>
+</html>
