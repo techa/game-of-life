@@ -4,5 +4,7 @@ export function randomRange(num: number, num2: number): number {
 	return min + Math.random() * (max - min)
 }
 export function randomInt(num: number, num2 = 0): number {
-	return randomRange(num, num2) | 0
+	const max = num > num2 ? num : num2
+	const min = num > num2 ? num2 : num
+	return Math.floor(min + Math.random() * (max - min + 1))
 }
