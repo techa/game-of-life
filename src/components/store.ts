@@ -49,7 +49,7 @@ export const population = writable(life.population)
 
 // Not LifeGame menbers -------------------------
 
-export const selectedColor = writable('#F469E4')
+export const selectedColor = writable('#F469E4') // hsl(307,86%,68%)
 export const gridView = writable(true)
 
 export const penMode: Writable<number> = (() => {

@@ -17,7 +17,7 @@
 	const block = () => (
 		(_blocked = true), setTimeout(() => (_blocked = false), 500)
 	)
-	const showHandler = (ev) => {
+	const showHandler = (ev: Event) => {
 		if (clickable && ev.type === 'focusin' && !open) block()
 		open = ev.type === 'click' && !_blocked ? !open : true
 	}
@@ -32,6 +32,7 @@
 
 <div class="dropdown-wapper">
 	<div
+		class="label-wapper"
 		on:focusin={showHandler}
 		on:focusout={hideHandler}
 		on:mouseenter={clickable ? undefined : showHandler}
@@ -64,12 +65,16 @@
 	.dropdown-wapper {
 		position: relative;
 	}
+	.label-wapper {
+		display: flex;
+	}
 	.dropdown {
 		display: block;
 		position: absolute;
 		top: 100%;
 		max-height: 50vh;
-		overflow-y: scroll;
+		overflow-x: hidden;
+		overflow-y: auto;
 
 		transition-duration: 0.3s;
 		transition-property: opacity;

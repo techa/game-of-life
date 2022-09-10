@@ -36,7 +36,7 @@
 		// 'darkgray',
 	]
 
-	let nextColorType: NextColorType = 'random'
+	let nextColorType: NextColorType = 'hue'
 	let nextColor = NextColor[nextColorType]
 
 	function cellColor(celltype: number) {
@@ -45,9 +45,11 @@
 		}
 		let color = colors[celltype]
 		if (!color) {
-			colors.push(
-				(color = nextColor(colors[celltype - 1] || $selectedColor)),
+			color = nextColor(
+				colors[celltype - 1] || $selectedColor,
+				Math.max(35, 360 / (life.cycle + 1)),
 			)
+			colors.push(color)
 			// console.log(`%c${color}`, `color:${color};font-weight:bold;`)
 		}
 		return color

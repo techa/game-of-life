@@ -60,7 +60,7 @@ export function hexToHsl(hex: string): number[] {
  * @return HSL
  */
 export function hslStringParse(hslString: string): number[] {
-	const m = hslString.match(/^hsl\((\d+),(\d+)%,(\d+)%\)/)
+	const m = hslString.replace(/\s*/g, '').match(/^hsl\((\d+),(\d+)%,(\d+)%\)/)
 	if (!m) {
 		throw new TypeError(`Invaild-value(hslString): '${hslString}'`)
 	}
