@@ -14,17 +14,12 @@ const config = {
 	preprocess: preprocess(),
 
 	kit: {
-		adapter: adapter({
-			// https://github.com/sveltejs/kit/tree/master/packages/adapter-static
-			// pages: 'build',
-			// assets: 'build',
-			// fallback: '404.html',
-		}),
+		// https://github.com/sveltejs/kit/tree/master/packages/adapter-static
+		adapter: adapter(),
 		paths: {
 			base: dev ? '' : `/${pkg.name}`,
 		},
 		appDir: 'internal',
-		prerender: { default: true },
 	},
 }
 
