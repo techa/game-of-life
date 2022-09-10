@@ -25,7 +25,7 @@ export class LifeGame {
 		this.#events.on(eventName, handler)
 	}
 
-	table: Cell[][]
+	table!: Cell[][]
 	columns = 70
 	rows = 70
 
@@ -81,7 +81,7 @@ export class LifeGame {
 
 	#memory = '[[0]]'
 
-	ticker: Ticker
+	ticker!: Ticker
 
 	#tpfsIndex = 1
 	#tpfs = [48, 12, 4, 1]
@@ -91,7 +91,7 @@ export class LifeGame {
 	get speed() {
 		const tpf = this.ticker?.tpf || this.tpf
 		// .at(-2) is meant to invert the initial value of #tpfsIndex.
-		return this.#tpfs[0] / tpf / this.#tpfs.at(-2)
+		return this.#tpfs[0] / tpf / (this.#tpfs.at(-2) || 4)
 	}
 	get tpfsIndex() {
 		return this.#tpfsIndex

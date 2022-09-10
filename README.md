@@ -1,5 +1,5 @@
-# [Life Game](https://techa.github.io/life-game/)
-> Life game playground
+# [Game of Life](https://techa.github.io/game-of-life/)
+> Game of Life playground
 
 ## Feature
 * [Rules](https://conwaylife.com/wiki/Rulestring) can be changed.
@@ -10,7 +10,7 @@
 
 ## ToDo
 - [ ] ColorPicker
-	- [ ] HUE slider
+	- [x] HUE slider
 	- [ ] Reload Gradation
 - [ ] Tools: Pen, FillPaint
 	- [ ] LIVE & DEATH <--> UNDEAD & TOMB

@@ -56,12 +56,16 @@
 	let canvas: HTMLCanvasElement
 	let ctx: CanvasRenderingContext2D
 	onMount(() => {
-		ctx = canvas.getContext('2d')
+		ctx = canvas.getContext('2d') as CanvasRenderingContext2D
 	})
 
 	let isPress = false
 
-	function draw(e, mousedown?: (x: number, y: number) => void) {
+	type DrawEvent = MouseEvent & {
+		currentTarget: EventTarget & HTMLTableElement
+	}
+
+	function draw(e: DrawEvent, mousedown?: (x: number, y: number) => void) {
 		const {
 			x: boxx,
 			y: boxy,
