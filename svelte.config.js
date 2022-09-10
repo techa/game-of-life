@@ -15,7 +15,9 @@ const config = {
 
 	kit: {
 		// https://github.com/sveltejs/kit/tree/master/packages/adapter-static
-		adapter: adapter(),
+		adapter: adapter({
+			fallback: '200.html',
+		}),
 		paths: {
 			base: dev ? '' : `/${pkg.name}`,
 		},
