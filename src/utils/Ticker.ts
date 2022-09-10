@@ -1,5 +1,5 @@
 export interface TickerArgs {
-	tick?: () => void
+	tick?: (count?: number) => void
 	tpf?: number
 	speeds?: number[]
 }
@@ -11,7 +11,7 @@ export class Ticker {
 		return this.#running
 	}
 
-	tick: () => void
+	tick: (count?: number) => void
 	// tpf: tick/frame
 	tpf = 1
 	count = 0
@@ -56,7 +56,7 @@ export class Ticker {
 
 	update(): void {
 		try {
-			this.tick()
+			this.tick(this.count)
 		} catch (error) {
 			this.stop()
 		}
