@@ -17,8 +17,7 @@ export const columns: Writable<typeof life.columns> = (() => {
 		subscribe,
 		update,
 		set: (columns: typeof life.columns) => {
-			life.tableSizing({ columns })
-			set(columns)
+			set((life.columns = columns))
 		},
 	}
 })()
@@ -29,8 +28,7 @@ export const rows: Writable<typeof life.rows> = (() => {
 		subscribe,
 		update,
 		set: (rows: typeof life.rows) => {
-			life.tableSizing({ rows })
-			set(rows)
+			set((life.rows = rows))
 		},
 	}
 })()
@@ -51,8 +49,19 @@ export const population = writable(life.population)
 
 // Not LifeGame menbers -------------------------
 
-export const selectedColor = writable('#F469E4')
+export const selectedColor = writable('#F469E4') // hsl(307,86%,68%)
 export const gridView = writable(true)
 
 // Modal
 export const initSettingsOpen = writable(false)
+
+export const penMode: Writable<number> = (() => {
+	const { subscribe, set, update } = writable(0)
+	return {
+		subscribe,
+		update,
+		set: (penMode) => {
+			set(penMode % 3)
+		},
+	}
+})()

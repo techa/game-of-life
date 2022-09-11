@@ -5,7 +5,7 @@ import preprocess from 'svelte-preprocess'
 import { readFileSync } from 'fs'
 const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'))
 
-const dev = process.env.NODE_ENV === 'development'
+const dev = process.env.NODE_ENV !== 'production'
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -14,17 +14,15 @@ const config = {
 	preprocess: preprocess(),
 
 	kit: {
+		// https://github.com/sveltejs/kit/tree/master/packages/adapter-static
 		adapter: adapter({
-			// https://github.com/sveltejs/kit/tree/master/packages/adapter-static
-			// pages: 'build',
-			// assets: 'build',
-			// fallback: '404.html',
+			fallback: 'index.html',
 		}),
 		paths: {
 			base: dev ? '' : `/${pkg.name}`,
 		},
+		prerender: { entries: [] },
 		appDir: 'internal',
-		prerender: { default: true },
 	},
 }
 

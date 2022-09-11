@@ -2,16 +2,16 @@
 	import { rules, type RuleString } from '$lib/rules'
 	import { LifeEvent } from '$lib/LifeGame'
 
-	import { life, table, columns, rows, generation, population } from './store'
-	import DropDown from './DropDown.svelte'
+	import { life, columns, rows, generation, population } from './store'
+	import DropDown from './generic/DropDown.svelte'
 
 	import SVG from '../resource/sprite.svg'
 
 	let rulelistOpen = false
 
 	let rule: RuleString = 'B3/S23'
-	let ruleName: string = "Conway's Life"
-	$: life.rule = rule
+	let ruleName = "Conway's Life"
+	let ruleReverse = false
 
 	let playing = false
 	let speed = life.speed
@@ -22,15 +22,20 @@
 	life.on(LifeEvent.STOP, () => {
 		playing = false
 	})
-
-	life.on(LifeEvent.TABLE_UPDATE, () => {
-		$table = life.table
-		$generation = life.generation
-		$population = life.population
-	})
 </script>
 
 <nav>
+	<button
+		on:click={() => {
+			rule = life.setRule(rule, true)
+			ruleReverse = !ruleReverse
+		}}
+	>
+		<svg class:active={ruleReverse}>
+			<use href="{SVG}#refresh-cw" />
+		</svg>
+	</button>
+
 	<DropDown bind:open={rulelistOpen} style="background-color:var(--black);">
 		<div slot="trigger">
 			<input
@@ -52,7 +57,7 @@
 					class="rule_list-item"
 					class:selected={rule === _rule}
 					on:click={() => {
-						rule = _rule
+						rule = life.setRule(_rule, ruleReverse)
 						ruleName = name
 						rulelistOpen = false
 					}}

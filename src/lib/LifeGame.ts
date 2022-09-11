@@ -1,7 +1,6 @@
-import { randomInt } from '../utils/random.js'
 import { Ticker } from '../utils/Ticker.js'
 import { EventDispatcher, type EventHandler } from '../utils/EventDispatcher.js'
-import { ruleParser, type RuleString } from '$lib/rules.js'
+import { ruleParser, ruleReversal, type RuleString } from '$lib/rules.js'
 
 export const enum Cell {
 	TOMB = -2,
@@ -12,6 +11,7 @@ export const enum Cell {
 
 export const enum LifeEvent {
 	TABLE_UPDATE,
+	UPDATE,
 	START,
 	STOP,
 }
@@ -25,7 +25,7 @@ export class LifeGame {
 		this.#events.on(eventName, handler)
 	}
 
-	table: Cell[][]
+	table!: Cell[][]
 	columns = 70
 	rows = 70
 
@@ -37,6 +37,9 @@ export class LifeGame {
 	#born: number[] = [3]
 	#survival: number[] = [2, 3]
 	#cycle = 2
+	get cycle() {
+		return this.#cycle
+	}
 
 	get rule() {
 		let str = `B${this.#born.join('')}/S${this.#survival.join('')}`
@@ -46,12 +49,19 @@ export class LifeGame {
 		return str as RuleString
 	}
 
-	set rule(rule: RuleString) {
-		if (/^\d*\/\d*/.test(rule)) {
-			;[this.#survival, this.#born, this.#cycle] = ruleParser(rule)
-		} else if (/^B\d*\/S\d*/.test(rule)) {
-			;[this.#born, this.#survival, this.#cycle] = ruleParser(rule)
+	setRule(rule: RuleString, reversal = false) {
+		let rules: [number[], number[], number] | null = ruleParser(rule)
+		if (!rules) {
+			return this.rule
 		}
+
+		if (reversal) {
+			rules = ruleReversal(...rules)
+		}
+
+		// eslint-disable-next-line @typescript-eslint/no-extra-semi
+		;[this.#born, this.#survival, this.#cycle] = rules
+		return this.rule
 	}
 
 	#generation = 0
@@ -62,7 +72,8 @@ export class LifeGame {
 		let population = 0
 		for (let y = 0; y < this.rows; y++) {
 			for (let x = 0; x < this.columns; x++) {
-				if (this.table[y][x]) {
+				const cell = this.table[y][x]
+				if (cell && cell !== Cell.TOMB) {
 					population++
 				}
 			}
@@ -75,7 +86,7 @@ export class LifeGame {
 
 	#memory = '[[0]]'
 
-	ticker: Ticker
+	ticker!: Ticker
 
 	#tpfsIndex = 1
 	#tpfs = [48, 12, 4, 1]
@@ -85,7 +96,7 @@ export class LifeGame {
 	get speed() {
 		const tpf = this.ticker?.tpf || this.tpf
 		// .at(-2) is meant to invert the initial value of #tpfsIndex.
-		return this.#tpfs[0] / tpf / this.#tpfs.at(-2)
+		return this.#tpfs[0] / tpf / (this.#tpfs.at(-2) || 4)
 	}
 	get tpfsIndex() {
 		return this.#tpfsIndex
@@ -182,8 +193,7 @@ export class LifeGame {
 				}
 			}
 		}
-
-		this.update()
+		this.emit(LifeEvent.TABLE_UPDATE)
 	}
 
 	at(x: number, y: number): Cell {
@@ -239,15 +249,12 @@ export class LifeGame {
 
 				// Generations
 				// https://conwaylife.com/wiki/Generations
-				if (center === Cell.DEATH && this.#born.includes(count)) {
+				if (
+					(center === Cell.DEATH && this.#born.includes(count)) ||
+					(center === Cell.LIVE && this.#survival.includes(count))
+				) {
 					table[y][x] = Cell.LIVE
-				} else if (center === Cell.LIVE) {
-					if (this.#survival.includes(count)) {
-						table[y][x] = Cell.LIVE
-					} else {
-						table[y][x] = (center + 1) % this.#cycle
-					}
-				} else if (center >= 2) {
+				} else if (center >= 1) {
 					table[y][x] = (center + 1) % this.#cycle
 				} else {
 					table[y][x] = Cell.DEATH
@@ -275,12 +282,12 @@ export class LifeGame {
 	}
 
 	update() {
-		const tableMemory = this.table.toString()
+		const tableMemory = JSON.stringify(this.table)
 		if (this.autoStop && tableMemory === this.#tableMemory) {
 			this.stop()
 		} else {
 			this.#tableMemory = tableMemory
-			this.emit(LifeEvent.TABLE_UPDATE)
+			this.emit(LifeEvent.UPDATE)
 		}
 	}
 }

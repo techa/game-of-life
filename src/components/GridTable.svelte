@@ -9,6 +9,9 @@
 		rows,
 		selectedColor,
 		gridView,
+		generation,
+		population,
+		penMode,
 	} from './store'
 
 	const cell_size = 10
@@ -33,18 +36,8 @@
 		// 'darkgray',
 	]
 
-	let nextColorType: NextColorType = 'random'
+	let nextColorType: NextColorType = 'hue'
 	let nextColor = NextColor[nextColorType]
-
-	$: {
-		colors = [
-			'transparent', // DEATH, TOMB
-			$selectedColor, // LIVE, UNDEAD
-		]
-		for (let i = 2; i < life.cycle; i++) {
-			cellColor(i)
-		}
-	}
 
 	function cellColor(celltype: number) {
 		if (celltype < 0) {
@@ -52,9 +45,11 @@
 		}
 		let color = colors[celltype]
 		if (!color) {
-			colors.push(
-				(color = nextColor(colors[celltype - 1] || $selectedColor)),
+			color = nextColor(
+				colors[celltype - 1] || $selectedColor,
+				Math.max(35, 360 / (life.cycle + 1)),
 			)
+			colors.push(color)
 			// console.log(`%c${color}`, `color:${color};font-weight:bold;`)
 		}
 		return color
@@ -63,22 +58,16 @@
 	let canvas: HTMLCanvasElement
 	let ctx: CanvasRenderingContext2D
 	onMount(() => {
-		ctx = canvas.getContext('2d')
+		ctx = canvas.getContext('2d') as CanvasRenderingContext2D
 	})
-
-	$: if (ctx) {
-		ctx.clearRect(0, 0, $columns, $rows)
-		for (let y = 0; y < $rows; y++) {
-			for (let x = 0; x < $columns; x++) {
-				ctx.fillStyle = cellColor($table[y][x])
-				ctx.fillRect(x, y, 1, 1)
-			}
-		}
-	}
 
 	let isPress = false
 
-	function draw(e, mousedown?: (x: number, y: number) => void) {
+	type DrawEvent = MouseEvent & {
+		currentTarget: EventTarget & HTMLTableElement
+	}
+
+	function draw(e: DrawEvent, mousedown?: (x: number, y: number) => void) {
 		const {
 			x: boxx,
 			y: boxy,
@@ -92,8 +81,51 @@
 			mousedown(x, y)
 		}
 		life.table[y][x] = drawMode
-		life.emit(LifeEvent.TABLE_UPDATE)
+		life.emit(LifeEvent.UPDATE)
 	}
+
+	life.on(LifeEvent.UPDATE, () => {
+		$table = life.table
+		$generation = life.generation
+		$population = life.population
+		// console.log('UPDATE')
+	})
+
+	life.on(LifeEvent.TABLE_UPDATE, () => {
+		$columns = life.columns
+		$rows = life.rows
+		life.emit(LifeEvent.UPDATE)
+		// console.log('TABLE_UPDATE')
+	})
+
+	const redraw = () => {
+		if (ctx) {
+			ctx.clearRect(0, 0, $columns, $rows)
+			for (let y = 0; y < $rows; y++) {
+				for (let x = 0; x < $columns; x++) {
+					if ($table[y]) {
+						ctx.fillStyle = cellColor($table[y][x])
+						ctx.fillRect(x, y, 1, 1)
+					} else break
+				}
+			}
+			// console.log('canvas redraw')
+		}
+	}
+
+	table.subscribe(redraw)
+
+	selectedColor.subscribe(() => {
+		// Reload colors
+		colors = [
+			'transparent', // DEATH, TOMB
+			$selectedColor, // LIVE, UNDEAD
+		]
+		for (let i = 2; i < life.cycle; i++) {
+			cellColor(i)
+		}
+		redraw()
+	})
 </script>
 
 <svelte:window
@@ -117,7 +149,7 @@
 		style:height={height + 'px'}
 		on:mousedown|preventDefault={(e) => {
 			draw(e, (x, y) => {
-				drawMode = +!$table[y][x]
+				drawMode = $table[y][x] ? Cell.DEATH : -$penMode || 1
 			})
 			isPress = true
 		}}
@@ -140,6 +172,9 @@
 						style:width={cell_size + 'px'}
 						style:height={cell_size + 'px'}
 					/>
+					<!-- without canvas
+						style:background-color={cellColor(celltype)}
+					-->
 				{/each}
 			</tr>
 		{/each}

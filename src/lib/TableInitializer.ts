@@ -6,6 +6,7 @@ export interface TableInitializer {
 	fillEdge(): void
 	undeadInit(): void
 }
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 	target: T,
 ) {
@@ -20,13 +21,20 @@ export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 
 		insert(table: Cell[][]) {
 			this.isRandom = false
-			super.init(table)
+			super.insert(table)
 		}
 
 		randomInit(dirX?: 'center' | 'edge', dirY?: 'center' | 'edge') {
 			for (let y = 0; y < this.rows; y++) {
 				for (let x = 0; x < this.columns; x++) {
-					this.table[y][x] = this.#randomCorrection(dirX, dirY, x, y)
+					if (this.table[y][x] >= 0) {
+						this.table[y][x] = this.#randomCorrection(
+							x,
+							y,
+							dirX,
+							dirY,
+						)
+					}
 				}
 			}
 			this.init(this.table)
@@ -34,10 +42,10 @@ export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 		}
 
 		#randomCorrection(
-			dirX: 'center' | 'edge',
-			dirY: 'center' | 'edge',
 			x: number,
 			y: number,
+			dirX?: 'center' | 'edge',
+			dirY?: 'center' | 'edge',
 		) {
 			let sinxy = 0
 			const { PI, sin, random } = Math
@@ -57,8 +65,8 @@ export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 
 		fillEdge() {
 			const dev = 5
-			const minX = this.rows / dev / 3
-			const minY = this.rows / dev / 3
+			const minX = this.rows / dev / 3 - 1
+			const minY = this.rows / dev / 3 - 1
 			let max = randomInt(this.rows / dev, minY)
 			for (let y = 0; y < max; y++) {
 				this.table[y][0] = Cell.LIVE

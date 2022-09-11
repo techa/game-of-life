@@ -1,5 +1,5 @@
-# [Life Game](https://techa.github.io/life-game/)
-> Life game playground
+# [Game of Life](https://techa.github.io/game-of-life/)
+> Game of Life playground. Not only Conway's Life.
 
 ## Feature
 * [Rules](https://conwaylife.com/wiki/Rulestring) can be changed.
@@ -10,7 +10,7 @@
 
 ## ToDo
 - [ ] ColorPicker
-	- [ ] HUE slider
+	- [x] HUE slider
 	- [ ] Reload Gradation
 - [ ] Tools: Pen, FillPaint
 	- [ ] LIVE & DEATH <--> UNDEAD & TOMB
@@ -19,6 +19,19 @@
 - [ ] Save Rule to localStrage
 
 ## Terrain generation
+### Vote
+![vote](./images/vote.gif)
+
+## Operates persistently in one dimension
+* Conway's Life
+* HighLife
+* 3-4 Life
+* Generations rule
+	* Frogs
+	* Thrill Girl
+	* Ebb and flow
+	* Ebb and flow2
+
 
 ## Links
 * Rules: https://conwaylife.com/wiki/List_of_Life-like_cellular_automata

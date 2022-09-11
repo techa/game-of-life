@@ -15,7 +15,10 @@ module.exports = {
 			'warn',
 			{ ignoreRestArgs: true },
 		],
-		'no-redeclare': ['error', { ignoreDeclarationMerge: true }],
+		'@typescript-eslint/no-redeclare': [
+			'error',
+			{ ignoreDeclarationMerge: true },
+		],
 	},
 	overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],
 	settings: {
