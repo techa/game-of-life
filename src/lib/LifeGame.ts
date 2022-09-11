@@ -1,6 +1,6 @@
 import { Ticker } from '../utils/Ticker.js'
 import { EventDispatcher, type EventHandler } from '../utils/EventDispatcher.js'
-import { ruleParser, type RuleString } from '$lib/rules.js'
+import { ruleParser, ruleReversal, type RuleString } from '$lib/rules.js'
 
 export const enum Cell {
 	TOMB = -2,
@@ -49,14 +49,19 @@ export class LifeGame {
 		return str as RuleString
 	}
 
-	set rule(rule: RuleString) {
-		if (/^\d*\/\d*(\/\d*)?$/.test(rule)) {
-			// eslint-disable-next-line @typescript-eslint/no-extra-semi
-			;[this.#survival, this.#born, this.#cycle] = ruleParser(rule)
-		} else if (/^B\d*\/S\d*(\/[CG]\d*)?$/.test(rule)) {
-			// eslint-disable-next-line @typescript-eslint/no-extra-semi
-			;[this.#born, this.#survival, this.#cycle] = ruleParser(rule)
+	setRule(rule: RuleString, reversal = false) {
+		let rules: [number[], number[], number] | null = ruleParser(rule)
+		if (!rules) {
+			return this.rule
 		}
+
+		if (reversal) {
+			rules = ruleReversal(...rules)
+		}
+
+		// eslint-disable-next-line @typescript-eslint/no-extra-semi
+		;[this.#born, this.#survival, this.#cycle] = rules
+		return this.rule
 	}
 
 	#generation = 0

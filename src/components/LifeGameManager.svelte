@@ -11,7 +11,7 @@
 
 	let rule: RuleString = 'B3/S23'
 	let ruleName = "Conway's Life"
-	$: life.rule = rule
+	let ruleReverse = false
 
 	let playing = false
 	let speed = life.speed
@@ -25,6 +25,17 @@
 </script>
 
 <nav>
+	<button
+		on:click={() => {
+			rule = life.setRule(rule, true)
+			ruleReverse = !ruleReverse
+		}}
+	>
+		<svg class:active={ruleReverse}>
+			<use href="{SVG}#refresh-cw" />
+		</svg>
+	</button>
+
 	<DropDown bind:open={rulelistOpen} style="background-color:var(--black);">
 		<div slot="trigger">
 			<input
@@ -46,7 +57,7 @@
 					class="rule_list-item"
 					class:selected={rule === _rule}
 					on:click={() => {
-						rule = _rule
+						rule = life.setRule(_rule, ruleReverse)
 						ruleName = name
 						rulelistOpen = false
 					}}

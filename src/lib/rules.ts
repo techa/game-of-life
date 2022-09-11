@@ -77,12 +77,48 @@ export const rules: Map<string, RuleString> = new Map([
 	// B34678/S234/C34
 ])
 
-export function ruleParser(rule: RuleString): [number[], number[], number] {
+export function ruleParser(
+	rule: RuleString,
+): [number[], number[], number] | null {
 	const rules: (number[] | number)[] = rule
 		.replace(/[^\d/]*/g, '')
 		.split('/')
 		.map((v, i) => (i < 2 ? v.split('').map((n) => +n) : Math.max(+v, 2)))
 
 	rules[2] ??= 2
-	return rules as [number[], number[], number]
+
+	if (/^\d*\/\d*(\/\d*)?$/.test(rule)) {
+		return [rules[1], rules[0], rules[2]] as [number[], number[], number]
+	}
+	if (/^B\d*\/S\d*(\/[CG]\d*)?$/.test(rule)) {
+		return rules as [number[], number[], number]
+	}
+	return null
+}
+
+/**
+ * Black/white reversal
+ * @see https://conwaylife.com/wiki/Black/white_reversal
+ * @param b born
+ * @param s survival
+ * @param c cycle
+ */
+export function ruleReversal(
+	b: number[],
+	s: number[],
+	c: number,
+): [number[], number[], number] {
+	b = Array(9)
+		.fill(0)
+		.map((_, i) => i)
+		.filter((v) => !b.includes(v))
+		.map((v) => 8 - v)
+		.reverse()
+	s = Array(9)
+		.fill(0)
+		.map((_, i) => i)
+		.filter((v) => !s.includes(v))
+		.map((v) => 8 - v)
+		.reverse()
+	return [s, b, c]
 }
