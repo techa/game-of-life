@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Modal from './Modal.svelte'
+	import Modal from './generic/Modal.svelte'
 
 	import { initSettingsOpen } from './store'
 </script>

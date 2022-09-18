@@ -1,7 +1,7 @@
 <!-- Copy from: https://svelte.dev/examples/modal -->
 <script lang="ts">
 	import { createEventDispatcher, onDestroy } from 'svelte'
-	import SVG from '../resource/sprite.svg'
+	import SVG from '../../resource/sprite.svg'
 
 	const dispatch = createEventDispatcher()
 	const close = () => dispatch('close')
