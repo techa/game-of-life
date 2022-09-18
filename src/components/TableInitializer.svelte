@@ -6,6 +6,8 @@
 	import lexicon from '../resource/lexicon.json'
 	// import Patterns from '../resource/patterns.json'
 
+	import SVG from '../resource/sprite.svg'
+
 	// const patterns = Patterns as unknown as [string, Cell[][]][]
 </script>
 
