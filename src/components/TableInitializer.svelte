@@ -1,7 +1,7 @@
 <script lang="ts">
 	// import type { Cell } from '$lib/LifeGame'
 
-	import { life, columns, rows, initSettingsOpen } from './store'
+	import { life, columns, rows, modal, ModalsHeader } from './store'
 
 	import lexicon from '../resource/lexicon.json'
 	// import Patterns from '../resource/patterns.json'
@@ -19,7 +19,7 @@
 		>Random
 	</button>
 
-	<button on:click={() => ($initSettingsOpen = true)}>
+	<button on:click={() => ($modal = ModalsHeader.Random)}>
 		<svg>
 			<use href="{SVG}#settings" />
 		</svg>

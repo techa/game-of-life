@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { colorStringToHsl } from '../utils/color.js'
-	import { beforeUpdate } from 'svelte'
-	import Modal from './generic/Modal.svelte'
+	import { getContext, onMount } from 'svelte'
+	import type { Writable } from 'svelte/store'
 
 	import {
 		life,
@@ -9,10 +9,12 @@
 		columns,
 		rows,
 		selectedColor,
-		initSettingsOpen,
 		randomAreaColumns,
 		randomPoints,
 	} from './store'
+
+	const header = getContext<Writable<string>>('ModalHeader')
+	$header = 'Random initializer'
 
 	let canvas: HTMLCanvasElement
 	let ctx: CanvasRenderingContext2D
@@ -34,7 +36,7 @@
 			// console.log('canvas redraw')
 		}
 	}
-	beforeUpdate(() => {
+	onMount(() => {
 		if (canvas && !ctx) {
 			ctx = canvas.getContext('2d') as CanvasRenderingContext2D
 		}
@@ -44,111 +46,106 @@
 	randomPoints.subscribe(redraw)
 </script>
 
-{#if $initSettingsOpen}
-	<Modal on:close={() => ($initSettingsOpen = false)}>
-		<h3 slot="header">Random settings</h3>
-		<div class="map">
-			<div class="left-column">
-				<button>Random</button>
-				<button>Random</button>
-				<button>Random</button>
-			</div>
-			<div class="canvas-wrapper">
-				<canvas bind:this={canvas} width={$columns} height={$rows} />
-				<div class="areas">
-					{#each Array(life.area).fill(0) as point}
-						<div />
-					{/each}
-				</div>
-				<div
-					class="points"
-					style:grid-template-columns={`repeat(${
-						$randomAreaColumns + 1
-					}, 1fr)`}
-				>
-					{#each $randomPoints as point, i (i)}
-						<div
-							class="point {life.pointDirectionClass(i)}"
-							class:harf={life.isPointEdge(i)}
-						>
-							<input
-								type="number"
-								min="0"
-								max="100"
-								placeholder="%"
-								bind:value={point}
-							/>
-						</div>
-					{/each}
-				</div>
-			</div>
-			<div class="y_area">
-				<button
-					on:click={() => {
-						randomPoints.addRows(0)
-					}}
-				>
-					+
-				</button>
-				<button
-					on:click={() => {
-						randomPoints.removeRows(0)
-					}}
-				>
-					-
-				</button>
-				<button
-					on:click={() => {
-						randomPoints.removeRows()
-					}}
-				>
-					-
-				</button>
-				<button
-					on:click={() => {
-						randomPoints.addRows()
-					}}
-				>
-					+
-				</button>
-			</div>
-			<div class="x_area">
-				<button
-					on:click={() => {
-						randomPoints.addColumns(0)
-					}}
-				>
-					+
-				</button>
-				<button
-					on:click={() => {
-						randomPoints.removeColumns(0)
-					}}
-				>
-					-
-				</button>
-				<button
-					on:click={() => {
-						randomPoints.removeColumns()
-					}}
-				>
-					-
-				</button>
-				<button
-					on:click={() => {
-						randomPoints.addColumns()
-					}}
-				>
-					+
-				</button>
-			</div>
-
-			<div class="other">
-				<button>FillEdge</button>
-			</div>
+<div class="map">
+	<div class="left-column">
+		<button>Random</button>
+		<button>Random</button>
+		<button>Random</button>
+	</div>
+	<div class="canvas-wrapper">
+		<canvas bind:this={canvas} width={$columns} height={$rows} />
+		<div class="areas">
+			{#each Array(life.area).fill(0) as point}
+				<div />
+			{/each}
 		</div>
-	</Modal>
-{/if}
+		<div
+			class="points"
+			style:grid-template-columns={`repeat(${
+				$randomAreaColumns + 1
+			}, 1fr)`}
+		>
+			{#each $randomPoints as point, i (i)}
+				<div
+					class="point {life.pointDirectionClass(i)}"
+					class:harf={life.isPointEdge(i)}
+				>
+					<input
+						type="number"
+						min="0"
+						max="100"
+						placeholder="%"
+						bind:value={point}
+					/>
+				</div>
+			{/each}
+		</div>
+	</div>
+	<div class="y_area">
+		<button
+			on:click={() => {
+				randomPoints.addRows(0)
+			}}
+		>
+			+
+		</button>
+		<button
+			on:click={() => {
+				randomPoints.removeRows(0)
+			}}
+		>
+			-
+		</button>
+		<button
+			on:click={() => {
+				randomPoints.removeRows()
+			}}
+		>
+			-
+		</button>
+		<button
+			on:click={() => {
+				randomPoints.addRows()
+			}}
+		>
+			+
+		</button>
+	</div>
+	<div class="x_area">
+		<button
+			on:click={() => {
+				randomPoints.addColumns(0)
+			}}
+		>
+			+
+		</button>
+		<button
+			on:click={() => {
+				randomPoints.removeColumns(0)
+			}}
+		>
+			-
+		</button>
+		<button
+			on:click={() => {
+				randomPoints.removeColumns()
+			}}
+		>
+			-
+		</button>
+		<button
+			on:click={() => {
+				randomPoints.addColumns()
+			}}
+		>
+			+
+		</button>
+	</div>
+
+	<div class="other">
+		<button>FillEdge</button>
+	</div>
+</div>
 
 <style>
 	.map {

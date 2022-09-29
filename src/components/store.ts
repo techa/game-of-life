@@ -53,6 +53,10 @@ export const selectedColor = writable('#F469E4') // hsl(307,86%,68%)
 export const gridView = writable(true)
 
 // Modal
+export const enum ModalsHeader {
+	Random = 1,
+}
+export const modal = writable<ModalsHeader | null>(null)
 export const initSettingsOpen = writable(false)
 
 export const randomAreaColumns = writable(life.randomAreaColumns)

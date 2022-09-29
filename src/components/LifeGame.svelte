@@ -1,9 +1,18 @@
 <script lang="ts">
+	import type { SvelteComponent } from 'svelte'
+
 	import GridTable from './GridTable.svelte'
 	import TableManager from './TableManager.svelte'
 	import TableInitializer from './TableInitializer.svelte'
 	import LifeGameManager from './LifeGameManager.svelte'
 	import InitailizeSettings from './InitailizerSettings.svelte'
+
+	import Modal from './generic/Modal.svelte'
+	import { modal, ModalsHeader } from './store'
+
+	const _modal: Record<ModalsHeader, typeof SvelteComponent> = {
+		[ModalsHeader.Random]: InitailizeSettings,
+	}
 </script>
 
 <svelte:head>
@@ -17,7 +26,11 @@
 	<GridTable />
 </section>
 
-<InitailizeSettings />
+{#if $modal}
+	<Modal on:close={() => ($modal = null)}>
+		<svelte:component this={_modal[$modal]} />
+	</Modal>
+{/if}
 
 <style>
 	section {
