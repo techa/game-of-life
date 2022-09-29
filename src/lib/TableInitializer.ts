@@ -1,11 +1,31 @@
+import { Array2d } from '../utils/Array2d.js'
 import { randomInt } from '../utils/random.js'
 import { Cell, type LifeGame } from './LifeGame.js'
 
+export enum AreaPoint {
+	topLeft,
+	topRight,
+	bottomLeft,
+	bottomRight,
+}
+
 export interface TableInitializer {
+	randomAreaColumns: number
+	randomAreaRows: number
+	area: number
+	points: Array2d<number>
+	areaInit(): void
+	isPointEdge(i: number): boolean
+	pointDirectionClass(i: number): string
+
+	randomValue(x: number, y: number): number
+	random(x: number, y: number): number
+
 	randomInit(dirX?: 'center' | 'edge', dirY?: 'center' | 'edge'): void
 	fillEdge(): void
 	undeadInit(): void
 }
+
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 	target: T,
@@ -16,12 +36,123 @@ export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 		init(table?: Cell[][]) {
 			this.isRandom = false
 			super.init(table)
+			this.areaInit()
 			return this
 		}
 
 		insert(table: Cell[][]) {
 			this.isRandom = false
 			super.insert(table)
+		}
+
+		randomAreaColumns = 1
+		randomAreaRows = 1
+		get area() {
+			return this.randomAreaColumns * this.randomAreaRows
+		}
+
+		/**
+		 * #=inputPoint,
+		 * ## randomAreaColumns=1, randomAreaRows=1
+		 * ```
+		 * #-------#
+		 * |   |   |
+		 * |---|---|
+		 * |   |   |
+		 * #-------#
+		 * ```
+		 * ## randomAreaColumns=2, randomAreaRows=2
+		 * ```
+		 * #------#------#
+		 * |   |  |  |   |
+		 * |---|--|--|---|
+		 * |   |  |  |   |
+		 * #---|--#--|---#
+		 * |   |  |  |   |
+		 * |---|--|--|---|
+		 * |   |  |  |   |
+		 * #------#------#
+		 * ```
+		 */
+		points = new Array2d(
+			this.randomAreaColumns + 1,
+			this.randomAreaRows + 1,
+			50,
+		)
+		areaInit() {
+			this.points = new Array2d(
+				this.randomAreaColumns + 1,
+				this.randomAreaRows + 1,
+				50,
+			)
+		}
+		isPointEdge(i: number): boolean {
+			const x = this.points.getX(i)
+			const y = this.points.getY(i)
+			return (
+				!x ||
+				!y ||
+				x === this.randomAreaColumns ||
+				y === this.randomAreaRows
+			)
+		}
+		pointDirectionClass(i: number) {
+			const x = this.points.getX(i)
+			const y = this.points.getY(i)
+			let cls = ''
+			if (x === 0) {
+				cls += 'justify-start '
+			} else if (x === this.randomAreaColumns) {
+				cls += 'justify-end '
+			} else {
+				cls += 'justify-center '
+			}
+
+			if (y === 0) {
+				cls += 'items-start '
+			} else if (y === this.randomAreaRows) {
+				cls += 'items-end '
+			} else {
+				cls += 'items-center '
+			}
+
+			return cls
+		}
+
+		getPointByArea(x: number, y: number, areaPoint: AreaPoint) {
+			x -=
+				areaPoint === AreaPoint.bottomRight ||
+				areaPoint === AreaPoint.topRight
+					? 1
+					: 0
+			y -=
+				areaPoint === AreaPoint.bottomLeft ||
+				areaPoint === AreaPoint.bottomRight
+					? 1
+					: 0
+			return this.points.getValue({ x, y })
+		}
+
+		randomValue(x: number, y: number): number {
+			const { floor, ceil } = Math
+			const dx = (x / this.columns) * this.randomAreaColumns
+			const dy = (y / this.rows) * this.randomAreaRows
+
+			const ap = this.points
+			const x0y0 = ap.getValue({ x: floor(dx), y: floor(dy) }) as number
+			const x1y0 = ap.getValue({ x: ceil(dx), y: floor(dy) }) as number
+			const x0y1 = ap.getValue({ x: floor(dx), y: ceil(dy) }) as number
+			const x1y1 = ap.getValue({ x: ceil(dx), y: ceil(dy) }) as number
+			const xy0 = x0y0 + (x1y0 - x0y0) * (dx % 1)
+			const xy1 = x0y1 + (x1y1 - x0y1) * (dx % 1)
+
+			const xy = xy0 + (xy1 - xy0) * (dy % 1)
+
+			return +xy.toFixed(2) / 100
+		}
+
+		random(x: number, y: number): number {
+			return +(Math.random() < this.randomValue(x, y))
 		}
 
 		randomInit(dirX?: 'center' | 'edge', dirY?: 'center' | 'edge') {

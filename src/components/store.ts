@@ -55,6 +55,53 @@ export const gridView = writable(true)
 // Modal
 export const initSettingsOpen = writable(false)
 
+export const randomAreaColumns = writable(life.randomAreaColumns)
+randomAreaColumns.subscribe((randomAreaColumns: number) => {
+	life.randomAreaColumns = randomAreaColumns
+})
+
+export const randomAreaRows = writable(life.randomAreaRows)
+randomAreaRows.subscribe((randomAreaRows: number) => {
+	life.randomAreaRows = randomAreaRows
+})
+
+export const randomPoints = (() => {
+	const { subscribe, set, update } = writable(life.points.values)
+	return {
+		subscribe,
+		update,
+		set: (points: number[]) => {
+			set((life.points.values = points))
+		},
+		addColumns(n?: number) {
+			life.points.addColumns(n)
+			set(life.points.values)
+			randomAreaColumns.update((n) => n + 1)
+		},
+		removeColumns(n?: number) {
+			if (life.randomAreaColumns < 2) {
+				return
+			}
+			life.points.removeColumns(n)
+			set(life.points.values)
+			randomAreaColumns.update((n) => n - 1)
+		},
+		addRows(n?: number) {
+			life.points.addRows(n)
+			set(life.points.values)
+			randomAreaRows.update((n) => n + 1)
+		},
+		removeRows(n?: number) {
+			if (life.randomAreaRows < 2) {
+				return
+			}
+			life.points.removeRows(n)
+			set(life.points.values)
+			randomAreaRows.update((n) => n - 1)
+		},
+	}
+})()
+
 export const penMode: Writable<number> = (() => {
 	const { subscribe, set, update } = writable(0)
 	return {
