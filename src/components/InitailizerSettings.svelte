@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { colorStringToHsl } from '../utils/color.js'
-	import { getContext, onMount } from 'svelte'
+	import { afterUpdate, getContext, onMount } from 'svelte'
 	import type { Writable } from 'svelte/store'
 
 	import {
@@ -42,8 +42,11 @@
 		}
 		redraw()
 	})
+	afterUpdate(() => {
+		redraw()
+	})
 
-	randomPoints.subscribe(redraw)
+	// randomPoints.subscribe(redraw)
 </script>
 
 <div class="map">
