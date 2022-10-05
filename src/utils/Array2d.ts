@@ -476,7 +476,7 @@ export class Array2d<T> {
 
 		this.#fills = new Array2d(this.columns, this.rows, 0)
 
-		let cell: { x: number; y: number } | undefined  = {
+		let cell: { x: number; y: number } | undefined = {
 			x: target % this.columns,
 			y: (target / this.columns) | 0,
 		}
@@ -523,7 +523,7 @@ export class Array2d<T> {
 		}
 		this.rows += 1
 	}
-	removeRows(row = this.rows - 1) {
+	removeRows(row = -1) {
 		if (row < 0) {
 			row += this.rows
 		}
@@ -542,7 +542,7 @@ export class Array2d<T> {
 
 		this.columns += 1
 	}
-	removeColumns(columns = this.columns - 1) {
+	removeColumns(columns = -1) {
 		if (columns < 0) {
 			columns += this.columns
 		}
