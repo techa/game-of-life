@@ -14,14 +14,22 @@ export interface TableInitializer {
 	randomAreaRows: number
 	area: number
 	points: Array2d<number>
+	edgeRow: Cell[]
+	edgeColumn: Cell[]
 	areaInit(): void
 	isPointEdge(i: number): boolean
+	/**
+	 *
+	 * @param i
+	 * @returns `justify-${'start'|'end'|'center'} items-${'start'|'end'|'center'}`
+	 */
 	pointDirectionClass(i: number): string
+	isEdgeLoop(i: number): boolean
 
+	getRandomPoint(target: number | { x: number; y: number }): number
 	randomValue(x: number, y: number): number
-	random(x: number, y: number): number
 
-	randomInit(dirX?: 'center' | 'edge', dirY?: 'center' | 'edge'): void
+	randomInit(): void
 	fillEdge(): void
 	undeadInit(): void
 }
@@ -36,7 +44,9 @@ export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 		init(table?: Cell[][]) {
 			this.isRandom = false
 			super.init(table)
-			this.areaInit()
+			if (!this.points) {
+				this.areaInit()
+			}
 			return this
 		}
 
@@ -74,17 +84,17 @@ export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 		 * #------#------#
 		 * ```
 		 */
-		points = new Array2d(
-			this.randomAreaColumns + 1,
-			this.randomAreaRows + 1,
-			50,
-		)
+		points!: Array2d<number>
+		edgeRow: Cell[] = []
+		edgeColumn: Cell[] = []
 		areaInit() {
 			this.points = new Array2d(
 				this.randomAreaColumns + 1,
 				this.randomAreaRows + 1,
 				50,
 			)
+			this.edgeRow = Array(this.randomAreaRows).fill(this.edgeCell)
+			this.edgeColumn = Array(this.randomAreaColumns).fill(this.edgeCell)
 		}
 		isPointEdge(i: number): boolean {
 			const x = this.points.getX(i)
@@ -119,6 +129,33 @@ export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 			return cls
 		}
 
+		#isEdgeLoopX(x: number, y: number): boolean {
+			return (
+				x === this.randomAreaColumns && this.edgeRow[y] === Cell.DEATH
+			)
+		}
+		#isEdgeLoopY(x: number, y: number): boolean {
+			return (
+				y === this.randomAreaRows && this.edgeColumn[x] === Cell.DEATH
+			)
+		}
+		isEdgeLoop(i: number): boolean {
+			const x = this.points.getX(i)
+			const y = this.points.getY(i)
+			return this.#isEdgeLoopX(x, y) || this.#isEdgeLoopY(x, y)
+		}
+
+		getRandomPoint(target: number | { x: number; y: number }): number {
+			const indexmode = typeof target === 'number'
+			const x = indexmode ? this.points.getX(target) : target.x
+			const y = indexmode ? this.points.getY(target) : target.y
+
+			return this.points.getValue({
+				x: this.#isEdgeLoopX(x, y) ? 0 : x,
+				y: this.#isEdgeLoopY(x, y) ? 0 : y,
+			}) as number
+		}
+
 		getPointByArea(x: number, y: number, areaPoint: AreaPoint) {
 			x -=
 				areaPoint === AreaPoint.bottomRight ||
@@ -138,11 +175,22 @@ export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 			const dx = (x / this.columns) * this.randomAreaColumns
 			const dy = (y / this.rows) * this.randomAreaRows
 
-			const ap = this.points
-			const x0y0 = ap.getValue({ x: floor(dx), y: floor(dy) }) as number
-			const x1y0 = ap.getValue({ x: ceil(dx), y: floor(dy) }) as number
-			const x0y1 = ap.getValue({ x: floor(dx), y: ceil(dy) }) as number
-			const x1y1 = ap.getValue({ x: ceil(dx), y: ceil(dy) }) as number
+			/**
+			 *
+			 * ```
+			 *      xy0
+			 * x0y0--+---x1y0
+			 * |     |   |
+			 * |-----xy--|
+			 * |     |   |
+			 * x0y1--+---x1y1
+			 *      xy1
+			 * ```
+			 */
+			const x0y0 = this.getRandomPoint({ x: floor(dx), y: floor(dy) })
+			const x1y0 = this.getRandomPoint({ x: ceil(dx), y: floor(dy) })
+			const x0y1 = this.getRandomPoint({ x: floor(dx), y: ceil(dy) })
+			const x1y1 = this.getRandomPoint({ x: ceil(dx), y: ceil(dy) })
 			const xy0 = x0y0 + (x1y0 - x0y0) * (dx % 1)
 			const xy1 = x0y1 + (x1y1 - x0y1) * (dx % 1)
 
@@ -151,47 +199,18 @@ export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 			return +xy.toFixed(2) / 100
 		}
 
-		random(x: number, y: number): number {
-			return +(Math.random() < this.randomValue(x, y))
-		}
-
-		randomInit(dirX?: 'center' | 'edge', dirY?: 'center' | 'edge') {
+		randomInit() {
 			for (let y = 0; y < this.rows; y++) {
 				for (let x = 0; x < this.columns; x++) {
 					if (this.table[y][x] >= 0) {
-						this.table[y][x] = this.#randomCorrection(
-							x,
-							y,
-							dirX,
-							dirY,
+						this.table[y][x] = +(
+							Math.random() < this.randomValue(x, y)
 						)
 					}
 				}
 			}
 			this.init(this.table)
 			this.isRandom = true
-		}
-
-		#randomCorrection(
-			x: number,
-			y: number,
-			dirX?: 'center' | 'edge',
-			dirY?: 'center' | 'edge',
-		) {
-			let sinxy = 0
-			const { PI, sin, random } = Math
-			if (dirX === 'center') {
-				sinxy += sin((x / this.columns) * PI) - 0.5
-			} else if (dirX === 'edge') {
-				sinxy += 1 - sin((x / this.columns) * PI) - 0.5
-			}
-			if (dirY === 'center') {
-				sinxy += sin((y / this.rows) * PI) - 0.5
-			} else if (dirY === 'edge') {
-				sinxy += 1 - sin((y / this.rows) * PI) - 0.5
-			}
-			const CellLength = 2 as const
-			return ((random() + sinxy / 5) * CellLength) | 0
 		}
 
 		fillEdge() {

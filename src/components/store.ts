@@ -69,6 +69,9 @@ randomAreaRows.subscribe((randomAreaRows: number) => {
 	life.randomAreaRows = randomAreaRows
 })
 
+export const edgeColumn = writable(life.edgeColumn)
+export const edgeRow = writable(life.edgeRow)
+
 export const randomPoints = (() => {
 	const { subscribe, set, update } = writable(life.points.values)
 	return {
@@ -79,32 +82,47 @@ export const randomPoints = (() => {
 		},
 		addColumns(n?: number) {
 			life.points.addColumns(n)
-			set(life.points.values)
 			randomAreaColumns.update((n) => n + 1)
+
+			life.edgeColumn.push(life.edgeCell)
+			edgeColumn.update(() => life.edgeColumn)
 		},
 		removeColumns(n?: number) {
 			if (life.randomAreaColumns < 2) {
 				return
 			}
 			life.points.removeColumns(n)
-			set(life.points.values)
 			randomAreaColumns.update((n) => n - 1)
+
+			life.edgeColumn.pop()
+			edgeColumn.update(() => life.edgeColumn)
 		},
 		addRows(n?: number) {
 			life.points.addRows(n)
-			set(life.points.values)
 			randomAreaRows.update((n) => n + 1)
+
+			life.edgeRow.push(life.edgeCell)
+			edgeRow.update(() => life.edgeRow)
 		},
 		removeRows(n?: number) {
 			if (life.randomAreaRows < 2) {
 				return
 			}
 			life.points.removeRows(n)
-			set(life.points.values)
 			randomAreaRows.update((n) => n - 1)
+
+			life.edgeRow.pop()
+			edgeRow.update(() => life.edgeRow)
 		},
 	}
 })()
+
+edgeColumn.subscribe(() => {
+	randomPoints.set(life.points.values.slice())
+})
+edgeRow.subscribe(() => {
+	randomPoints.set(life.points.values.slice())
+})
 
 export const penMode: Writable<number> = (() => {
 	const { subscribe, set, update } = writable(0)

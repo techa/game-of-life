@@ -3,6 +3,8 @@
 	import { afterUpdate, getContext, onMount } from 'svelte'
 	import type { Writable } from 'svelte/store'
 
+	import SVG from '../resource/sprite.svg'
+
 	import {
 		life,
 		table,
@@ -10,7 +12,10 @@
 		rows,
 		selectedColor,
 		randomAreaColumns,
+		randomAreaRows,
 		randomPoints,
+		edgeColumn,
+		edgeRow,
 	} from './store'
 
 	const header = getContext<Writable<string>>('ModalHeader')
@@ -49,119 +54,195 @@
 	// randomPoints.subscribe(redraw)
 </script>
 
-<div class="map">
-	<div class="left-column">
+<div class="wrapper">
+	<div class="left-column flex flex-col">
 		<button>Random</button>
 		<button>Random</button>
 		<button>Random</button>
 	</div>
-	<div class="canvas-wrapper">
-		<canvas bind:this={canvas} width={$columns} height={$rows} />
-		<div class="areas">
-			{#each Array(life.area).fill(0) as point}
-				<div />
-			{/each}
+	<div class="map">
+		<div class="canvas-wrapper">
+			<canvas bind:this={canvas} width={$columns} height={$rows} />
+			<div class="areas">
+				{#each Array(life.area).fill(0) as point}
+					<div />
+				{/each}
+			</div>
+			<div
+				class="points"
+				style:grid-template-columns={$randomAreaColumns === 1
+					? '1fr 1fr'
+					: `1fr repeat(${$randomAreaColumns - 1}, 2fr) 1fr`}
+				style:grid-template-rows={$randomAreaRows === 1
+					? '1fr 1fr'
+					: `1fr repeat(${$randomAreaRows - 1}, 2fr) 1fr`}
+			>
+				{#each $randomPoints as point, i (i)}
+					<div class="point {life.pointDirectionClass(i)}">
+						{#if life.isEdgeLoop(i)}
+							<input
+								type="number"
+								disabled={true}
+								value={life.getRandomPoint(i)}
+							/>
+						{:else}
+							<input
+								type="number"
+								min="0"
+								max="100"
+								placeholder="%"
+								disabled={false}
+								bind:value={point}
+							/>
+						{/if}
+					</div>
+				{/each}
+			</div>
 		</div>
-		<div
-			class="points"
-			style:grid-template-columns={`repeat(${
-				$randomAreaColumns + 1
-			}, 1fr)`}
-		>
-			{#each $randomPoints as point, i (i)}
-				<div
-					class="point {life.pointDirectionClass(i)}"
-					class:harf={life.isPointEdge(i)}
+		<div class="x_edge">
+			<div class="plmi flex flex-row">
+				<button
+					on:click={() => {
+						randomPoints.addColumns(0)
+					}}
 				>
-					<input
-						type="number"
-						min="0"
-						max="100"
-						placeholder="%"
-						bind:value={point}
-					/>
-				</div>
+					+
+				</button>
+				<button
+					on:click={() => {
+						randomPoints.removeColumns(0)
+					}}
+				>
+					-
+				</button>
+			</div>
+			{#each $edgeColumn as edge}
+				<button
+					on:click={() => {
+						edge = ++edge % 3
+					}}
+				>
+					{#if edge}
+						<svg>
+							<use href="{SVG}#x" />
+						</svg>
+					{:else}
+						<svg>
+							<use href="{SVG}#repeat" />
+						</svg>
+					{/if}
+				</button>
 			{/each}
+			<div class="plmi flex flex-row">
+				<button
+					on:click={() => {
+						randomPoints.removeColumns()
+					}}
+				>
+					-
+				</button>
+				<button
+					on:click={() => {
+						randomPoints.addColumns()
+					}}
+				>
+					+
+				</button>
+			</div>
 		</div>
-	</div>
-	<div class="y_area">
-		<button
-			on:click={() => {
-				randomPoints.addRows(0)
-			}}
-		>
-			+
-		</button>
-		<button
-			on:click={() => {
-				randomPoints.removeRows(0)
-			}}
-		>
-			-
-		</button>
-		<button
-			on:click={() => {
-				randomPoints.removeRows()
-			}}
-		>
-			-
-		</button>
-		<button
-			on:click={() => {
-				randomPoints.addRows()
-			}}
-		>
-			+
-		</button>
-	</div>
-	<div class="x_area">
-		<button
-			on:click={() => {
-				randomPoints.addColumns(0)
-			}}
-		>
-			+
-		</button>
-		<button
-			on:click={() => {
-				randomPoints.removeColumns(0)
-			}}
-		>
-			-
-		</button>
-		<button
-			on:click={() => {
-				randomPoints.removeColumns()
-			}}
-		>
-			-
-		</button>
-		<button
-			on:click={() => {
-				randomPoints.addColumns()
-			}}
-		>
-			+
-		</button>
-	</div>
+		<div class="y_edge flex flex-col">
+			<div class="plmi flex flex-col">
+				<button
+					on:click={() => {
+						randomPoints.addRows(0)
+					}}
+				>
+					+
+				</button>
+				<button
+					on:click={() => {
+						randomPoints.removeRows(0)
+					}}
+				>
+					-
+				</button>
+			</div>
+			{#each $edgeRow as edge}
+				<button
+					on:click={() => {
+						edge = ++edge % 3
+					}}
+				>
+					{#if edge}
+						<svg>
+							<use href="{SVG}#x" />
+						</svg>
+					{:else}
+						<svg>
+							<use href="{SVG}#repeat" />
+						</svg>
+					{/if}
+				</button>
+			{/each}
 
-	<div class="other">
-		<button>FillEdge</button>
+			<div class="plmi flex flex-col">
+				<button
+					on:click={() => {
+						randomPoints.removeRows()
+					}}
+				>
+					-
+				</button>
+				<button
+					on:click={() => {
+						randomPoints.addRows()
+					}}
+				>
+					+
+				</button>
+			</div>
+		</div>
 	</div>
 </div>
 
 <style>
-	.map {
-		display: grid;
-		grid-template-columns: 1fr auto 1fr;
-		grid-template-rows: auto 1fr;
+	.wrapper {
+		display: flex;
 	}
-	.left-column {
-		grid-row-start: 1;
-		grid-row-end: 3;
+	.map {
+		width: 100%;
+		flex-grow: 1;
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		grid-template-areas:
+			'.      x_area  .'
+			'y_area canvas  y_edge'
+			'.      x_edge  .';
+		/* grid-template-rows: 1fr auto 1fr; */
 	}
 	.canvas-wrapper {
 		position: relative;
+		grid-area: canvas;
+	}
+	.x_edge {
+		grid-area: x_edge;
+	}
+	.x_area {
+		grid-area: x_area;
+	}
+	.x_edge,
+	.x_area,
+	.y_edge,
+	.y_area {
+		display: flex;
+		align-content: space-between;
+		justify-content: space-between;
+	}
+	.y_edge {
+		grid-area: y_edge;
+	}
+	.y_area {
+		grid-area: y_area;
 	}
 	canvas {
 		/* border: 1px solid #ddd; */
@@ -180,6 +261,9 @@
 		display: grid;
 		/* grid-template-columns: repeat(3, 1fr); */
 	}
+	.plmi {
+		display: flex;
+	}
 	.point {
 		display: flex;
 	}
@@ -187,6 +271,13 @@
 		display: block;
 		width: 3rem;
 		height: 1rem;
+	}
+
+	.flex {
+		display: flex;
+	}
+	.flex-col {
+		flex-flow: column nowrap;
 	}
 	/* https://tailwindcss.com/docs/align-items */
 	.items-start {
