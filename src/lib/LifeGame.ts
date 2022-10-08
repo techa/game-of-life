@@ -44,7 +44,7 @@ export class LifeGame {
 	get rule() {
 		let str = `B${this.#born.join('')}/S${this.#survival.join('')}`
 		if (this.#cycle > 2) {
-			str += `C${this.#cycle}`
+			str += `/C${this.#cycle}`
 		}
 		return str as RuleString
 	}
