@@ -1,8 +1,3 @@
-// type Array2dValue = Exclude<any, (...arg:any[])=>any>
-// type Array2dValue = string|number|{}|unknown[]|Iterator
-// type NotFunction<T> = Exclude<T, typeof Function>
-// type NotFunction<T> = T extends typeof Function ? never : T
-
 const enum Direction {
 	TOP = 'top',
 	LEFT = 'left',

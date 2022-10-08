@@ -5,13 +5,13 @@
 	import TableManager from './TableManager.svelte'
 	import TableInitializer from './TableInitializer.svelte'
 	import LifeGameManager from './LifeGameManager.svelte'
-	import InitailizeSettings from './InitailizerSettings.svelte'
+	import InitializerSettings from './InitializerSettings.svelte'
 
 	import Modal from './generic/Modal.svelte'
 	import { modal, ModalsHeader } from './store'
 
 	const _modal: Record<ModalsHeader, typeof SvelteComponent> = {
-		[ModalsHeader.Random]: InitailizeSettings,
+		[ModalsHeader.Random]: InitializerSettings,
 	}
 </script>
 
