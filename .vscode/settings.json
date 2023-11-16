@@ -10,7 +10,7 @@
 		// },
 		{
 			"match": ".*\\.(test|spec).ts$",
-			"command": "pnpm exec ava ${fileRelative}",
+			"command": "pnpm exec vitest ${fileRelative}",
 			"runIn": "terminal"
 		},
 	],

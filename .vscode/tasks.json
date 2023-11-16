@@ -12,22 +12,30 @@
 		{
 			"label": "fileTest",
 			"type": "shell",
-			"command": "pnpm exec ava ${relativeFile}"
+			"group": "test",
+			"command": "pnpm",
+			"args": [
+				"exec",
+				"vitest",
+				"${relativeFile}"
+			]
 		},
 		{
 			"label": "fileTestFromOrigin",
 			"type": "shell",
-			"command": "pnpm exec ava ${relativeFileDirname}/${fileBasenameNoExtension}.test.ts"
+			"group": "test",
+			"command": "pnpm",
+			"args": [
+				"exec",
+				"vitest",
+				"${relativeFileDirname}/${fileBasenameNoExtension}.test.ts"
+			]
 		},
 		{
 			"label": "test",
 			"type": "shell",
-			"command": "pnpm exec ava"
-		},
-		{
-			"label": "coverage",
-			"type": "shell",
-			"command": "pnpm exec nyc ava"
+			"group": "test",
+			"command": "pnpm exec vitest"
 		},
 	]
 }
