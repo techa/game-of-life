@@ -12,7 +12,7 @@ export enum AreaPoint {
 export interface TableInitializer {
 	randomAreaColumns: number
 	randomAreaRows: number
-	area: number
+
 	points: Array2d<number>
 	edgeRow: Cell[]
 	edgeColumn: Cell[]
@@ -57,9 +57,6 @@ export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 
 		randomAreaColumns = 1
 		randomAreaRows = 1
-		get area() {
-			return this.randomAreaColumns * this.randomAreaRows
-		}
 
 		/**
 		 * #=inputPoint,

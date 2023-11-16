@@ -63,11 +63,6 @@
 	<div class="map">
 		<div class="canvas-wrapper">
 			<canvas bind:this={canvas} width={$columns} height={$rows} />
-			<div class="areas">
-				{#each Array(life.area).fill(0) as point}
-					<div />
-				{/each}
-			</div>
 			<div
 				class="points"
 				style:grid-template-columns={$randomAreaColumns === 1
@@ -120,7 +115,7 @@
 			{#each $edgeColumn as edge}
 				<button
 					on:click={() => {
-						edge = ++edge % 3
+						edge = ++edge % 2
 					}}
 				>
 					{#if edge}
@@ -173,7 +168,7 @@
 			{#each $edgeRow as edge}
 				<button
 					on:click={() => {
-						edge = ++edge % 3
+						edge = ++edge % 2
 					}}
 				>
 					{#if edge}
