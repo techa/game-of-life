@@ -43,6 +43,16 @@
 				bind:value={rule}
 				on:focusout={() => {
 					rule = life.setRule(rule, ruleReverse)
+					ruleName = rules.get(rule) || ''
+				}}
+				on:keydown={(e) => {
+					switch (e.code) {
+						case 'Enter':
+						case 'Tab':
+							rule = life.setRule(rule, ruleReverse)
+							ruleName = rules.get(rule) || ''
+							break
+					}
 				}}
 			/>
 			<button class="btn-right">
@@ -52,9 +62,9 @@
 				</svg>
 			</button>
 		</div>
-		<!-- svelte-ignore component-name-lowercase -->
+
 		<table class="rule_list">
-			{#each [...rules.entries()] as [name, _rule]}
+			{#each [...rules.entries()] as [_rule, name]}
 				<tr
 					class="rule_list-item"
 					class:selected={rule === _rule}
