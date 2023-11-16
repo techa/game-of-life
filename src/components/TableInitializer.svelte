@@ -1,10 +1,12 @@
 <script lang="ts">
 	// import type { Cell } from '$lib/LifeGame'
 
-	import { life, columns, rows } from './store'
+	import { life, columns, rows, modal, ModalsHeader } from './store'
 
 	import lexicon from '../resource/lexicon.json'
 	// import Patterns from '../resource/patterns.json'
+
+	import SVG from '../resource/sprite.svg'
 
 	// const patterns = Patterns as unknown as [string, Cell[][]][]
 </script>
@@ -15,6 +17,12 @@
 			life.randomInit()
 		}}
 		>Random
+	</button>
+
+	<button on:click={() => ($modal = ModalsHeader.Random)}>
+		<svg>
+			<use href="{SVG}#settings" />
+		</svg>
 	</button>
 
 	<button
