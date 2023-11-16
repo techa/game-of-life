@@ -1,6 +1,11 @@
 import { Ticker } from '../utils/Ticker.js'
 import { EventDispatcher, type EventHandler } from '../utils/EventDispatcher.js'
-import { ruleParser, ruleReversal, type RuleString } from '$lib/rules.js'
+import {
+	ruleParser,
+	ruleReversal,
+	ruleString,
+	type RuleString,
+} from '$lib/rules.js'
 import { Array2d } from '../utils/Array2d.js'
 
 export const enum Cell {
@@ -47,11 +52,7 @@ export class LifeGame {
 	}
 
 	get ruleString() {
-		let str = `B${this.#born.join('')}/S${this.#survival.join('')}`
-		if (this.#cycle > 2) {
-			str += `/C${this.#cycle}`
-		}
-		return str as RuleString
+		return ruleString(this.#born, this.#survival, this.#cycle)
 	}
 
 	setRule(rule: RuleString, reversal = false) {

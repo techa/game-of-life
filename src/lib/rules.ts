@@ -96,6 +96,19 @@ export function ruleParser(
 	return null
 }
 
+export function ruleString(
+	born: number[],
+	survival: number[],
+	c: number,
+): RuleString {
+	let str = `B${born.join('')}/S${survival.join('')}`
+	if (c > 2) {
+		// https://conwaylife.com/wiki/Generations#cite_note-2
+		str += `/C${c}`
+	}
+	return str as RuleString
+}
+
 /**
  * Black/white reversal
  * @see https://conwaylife.com/wiki/Black/white_reversal
@@ -108,15 +121,11 @@ export function ruleReversal(
 	s: number[],
 	c: number,
 ): [number[], number[], number] {
-	b = Array(9)
-		.fill(0)
-		.map((_, i) => i)
+	b = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 		.filter((v) => !b.includes(v))
 		.map((v) => 8 - v)
 		.reverse()
-	s = Array(9)
-		.fill(0)
-		.map((_, i) => i)
+	s = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 		.filter((v) => !s.includes(v))
 		.map((v) => 8 - v)
 		.reverse()
