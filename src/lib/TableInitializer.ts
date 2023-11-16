@@ -139,6 +139,14 @@ export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 		isEdgeLoop(i: number): boolean {
 			const x = this.points.getX(i)
 			const y = this.points.getY(i)
+
+			if (x === this.randomAreaColumns && y === this.randomAreaRows) {
+				return (
+					this.edgeColumn[x - 1] === Cell.DEATH ||
+					this.edgeRow[y - 1] === Cell.DEATH
+				)
+			}
+
 			return this.#isEdgeLoopX(x, y) || this.#isEdgeLoopY(x, y)
 		}
 
@@ -146,6 +154,13 @@ export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 			const indexmode = typeof target === 'number'
 			const x = indexmode ? this.points.getX(target) : target.x
 			const y = indexmode ? this.points.getY(target) : target.y
+
+			if (x === this.randomAreaColumns && y === this.randomAreaRows) {
+				return this.points.getValue({
+					x: this.edgeColumn[x - 1] === Cell.DEATH ? 0 : x,
+					y: this.edgeRow[y - 1] === Cell.DEATH ? 0 : y,
+				}) as number
+			}
 
 			return this.points.getValue({
 				x: this.#isEdgeLoopX(x, y) ? 0 : x,
