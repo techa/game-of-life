@@ -41,7 +41,9 @@
 			<input
 				placeholder="Born/Survival"
 				bind:value={rule}
-				on:focusout={() => ''}
+				on:focusout={() => {
+					rule = life.setRule(rule, ruleReverse)
+				}}
 			/>
 			<button class="btn-right">
 				{ruleName}
