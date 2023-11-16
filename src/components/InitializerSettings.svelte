@@ -204,6 +204,13 @@
 	</div>
 </div>
 
+<div style="margin-top: 1rem;">
+	<button
+		style:background-color={$selectedColor}
+		on:click={() => life.randomInit()}>Randomize!</button
+	>
+</div>
+
 <style>
 	.wrapper {
 		display: flex;
