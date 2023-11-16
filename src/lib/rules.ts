@@ -83,7 +83,14 @@ export function ruleParser(
 	const rules: (number[] | number)[] = rule
 		.replace(/[^\d/]*/g, '')
 		.split('/')
-		.map((v, i) => (i < 2 ? v.split('').map((n) => +n) : Math.max(+v, 2)))
+		.map((v, i) =>
+			i < 2
+				? v
+						.split('')
+						.map((n) => +n)
+						.sort()
+				: Math.max(+v, 2),
+		)
 
 	rules[2] ??= 2
 
