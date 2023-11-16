@@ -41,7 +41,7 @@ export class LifeGame {
 		return this.#cycle
 	}
 
-	get rule() {
+	get ruleString() {
 		let str = `B${this.#born.join('')}/S${this.#survival.join('')}`
 		if (this.#cycle > 2) {
 			str += `/C${this.#cycle}`
@@ -52,16 +52,15 @@ export class LifeGame {
 	setRule(rule: RuleString, reversal = false) {
 		let rules: [number[], number[], number] | null = ruleParser(rule)
 		if (!rules) {
-			return this.rule
+			return this.ruleString
 		}
 
 		if (reversal) {
 			rules = ruleReversal(...rules)
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-extra-semi
 		;[this.#born, this.#survival, this.#cycle] = rules
-		return this.rule
+		return this.ruleString
 	}
 
 	#generation = 0
