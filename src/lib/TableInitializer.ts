@@ -44,10 +44,13 @@ export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 		init(table?: Cell[][]) {
 			this.isRandom = false
 			super.init(table)
-			this.areaInit([
-				[50, 50],
-				[50, 50],
-			])
+
+			if (!this.points) {
+				this.areaInit([
+					[50, 50],
+					[50, 50],
+				])
+			}
 			return this
 		}
 
