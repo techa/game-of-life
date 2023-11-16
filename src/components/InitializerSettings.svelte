@@ -3,6 +3,8 @@
 	import { afterUpdate, getContext, onMount } from 'svelte'
 	import type { Writable } from 'svelte/store'
 
+	import { SavesStrage } from '../utils/SavesStrage.js'
+
 	import SVG from '../resource/sprite.svg'
 
 	import {
@@ -51,15 +53,39 @@
 		redraw()
 	})
 
-	// randomPoints.subscribe(redraw)
+	const randomSaves = new SavesStrage(
+		'RandomSaves',
+		Array(10)
+			.fill(0)
+			.map(() => life.points.get2d()),
+	)
+	let saveIndex = randomSaves.index
+	const save = () => {
+		randomSaves.set(saveIndex, life.points.get2d())
+	}
+	randomPoints.subscribe(save)
 </script>
 
 <div class="wrapper">
-	<div class="left-column flex flex-col">
-		<button>Random</button>
-		<button>Random</button>
-		<button>Random</button>
+	<div class="left-column">
+		{#each randomSaves.data as savedata, i}
+			<div class="savedata">
+				<button
+					style:background-color={saveIndex === i
+						? $selectedColor
+						: ''}
+					on:click={() => {
+						if (i !== saveIndex) {
+							life.areaInit(randomSaves.get(i))
+							saveIndex = i
+							$randomPoints = life.points.values
+						}
+					}}>Save {(i + 1 + '').padStart(2, '0')}</button
+				>
+			</div>
+		{/each}
 	</div>
+
 	<div class="map">
 		<div class="canvas-wrapper">
 			<canvas bind:this={canvas} width={$columns} height={$rows} />
@@ -94,6 +120,7 @@
 				{/each}
 			</div>
 		</div>
+
 		<div class="x_edge">
 			<div class="plmi flex flex-row">
 				<button
@@ -215,8 +242,13 @@
 	.wrapper {
 		display: flex;
 	}
+	.left-column {
+		display: flex;
+		margin-right: 0.5rem;
+		/* flex-col */
+		flex-flow: column nowrap;
+	}
 	.map {
-		width: 100%;
 		flex-grow: 1;
 		display: grid;
 		grid-template-columns: auto 1fr auto;

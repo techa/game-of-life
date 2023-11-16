@@ -60,14 +60,8 @@ export const modal = writable<ModalsHeader | null>(null)
 export const initSettingsOpen = writable(false)
 
 export const randomAreaColumns = writable(life.randomAreaColumns)
-randomAreaColumns.subscribe((randomAreaColumns: number) => {
-	life.randomAreaColumns = randomAreaColumns
-})
 
 export const randomAreaRows = writable(life.randomAreaRows)
-randomAreaRows.subscribe((randomAreaRows: number) => {
-	life.randomAreaRows = randomAreaRows
-})
 
 export const edgeColumn = writable(life.edgeColumn)
 export const edgeRow = writable(life.edgeRow)
@@ -78,50 +72,43 @@ export const randomPoints = (() => {
 		subscribe,
 		update,
 		set: (points: number[]) => {
-			set((life.points.values = points))
+			set(points)
 		},
 		addColumns(n?: number) {
 			life.points.addColumns(n)
-			randomAreaColumns.update((n) => n + 1)
-
 			life.edgeColumn.push(life.edgeCell)
-			edgeColumn.update(() => life.edgeColumn)
+			set(life.points.values)
 		},
 		removeColumns(n?: number) {
 			if (life.randomAreaColumns < 2) {
 				return
 			}
 			life.points.removeColumns(n)
-			randomAreaColumns.update((n) => n - 1)
-
 			life.edgeColumn.pop()
-			edgeColumn.update(() => life.edgeColumn)
+			set(life.points.values)
 		},
 		addRows(n?: number) {
 			life.points.addRows(n)
-			randomAreaRows.update((n) => n + 1)
-
 			life.edgeRow.push(life.edgeCell)
-			edgeRow.update(() => life.edgeRow)
+			set(life.points.values)
 		},
 		removeRows(n?: number) {
 			if (life.randomAreaRows < 2) {
 				return
 			}
 			life.points.removeRows(n)
-			randomAreaRows.update((n) => n - 1)
-
 			life.edgeRow.pop()
-			edgeRow.update(() => life.edgeRow)
+			set(life.points.values)
 		},
 	}
 })()
 
-edgeColumn.subscribe(() => {
-	randomPoints.set(life.points.values.slice())
-})
-edgeRow.subscribe(() => {
-	randomPoints.set(life.points.values.slice())
+randomPoints.subscribe(() => {
+	randomAreaColumns.set(life.randomAreaColumns)
+	randomAreaRows.set(life.randomAreaRows)
+
+	edgeColumn.update(() => life.edgeColumn)
+	edgeRow.update(() => life.edgeRow)
 })
 
 export const penMode: Writable<number> = (() => {

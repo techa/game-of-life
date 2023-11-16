@@ -16,7 +16,7 @@ export interface TableInitializer {
 	points: Array2d<number>
 	edgeRow: Cell[]
 	edgeColumn: Cell[]
-	areaInit(): void
+	areaInit(points: number[][]): void
 	isPointEdge(i: number): boolean
 	/**
 	 *
@@ -44,9 +44,10 @@ export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 		init(table?: Cell[][]) {
 			this.isRandom = false
 			super.init(table)
-			if (!this.points) {
-				this.areaInit()
-			}
+			this.areaInit([
+				[50, 50],
+				[50, 50],
+			])
 			return this
 		}
 
@@ -54,9 +55,6 @@ export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 			this.isRandom = false
 			super.insert(table)
 		}
-
-		randomAreaColumns = 1
-		randomAreaRows = 1
 
 		/**
 		 * #=inputPoint,
@@ -82,14 +80,19 @@ export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 		 * ```
 		 */
 		points!: Array2d<number>
+		get randomAreaRows() {
+			return this.points.rows - 1
+		}
+		get randomAreaColumns() {
+			return this.points.columns - 1
+		}
+
 		edgeRow: Cell[] = []
 		edgeColumn: Cell[] = []
-		areaInit() {
-			this.points = new Array2d(
-				this.randomAreaColumns + 1,
-				this.randomAreaRows + 1,
-				50,
-			)
+
+		areaInit(points: number[][]) {
+			this.points = new Array2d(points)
+			this.points.initial = 50
 			this.edgeRow = Array(this.randomAreaRows).fill(this.edgeCell)
 			this.edgeColumn = Array(this.randomAreaColumns).fill(this.edgeCell)
 		}

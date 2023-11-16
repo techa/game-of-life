@@ -476,7 +476,7 @@ export class Array2d<T> {
 			y: (target / this.columns) | 0,
 		}
 
-		const stack: typeof cell[] = [cell]
+		const stack: (typeof cell)[] = [cell]
 
 		while ((cell = stack.pop())) {
 			const { x, y } = cell
