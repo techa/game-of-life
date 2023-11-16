@@ -112,6 +112,7 @@
 					on:click={() => {
 						randomPoints.removeColumns(0)
 					}}
+					disabled={$randomAreaColumns < 2}
 				>
 					-
 				</button>
@@ -138,6 +139,7 @@
 					on:click={() => {
 						randomPoints.removeColumns()
 					}}
+					disabled={$randomAreaColumns < 2}
 				>
 					-
 				</button>
@@ -163,6 +165,7 @@
 					on:click={() => {
 						randomPoints.removeRows(0)
 					}}
+					disabled={$randomAreaRows < 2}
 				>
 					-
 				</button>
@@ -190,6 +193,7 @@
 					on:click={() => {
 						randomPoints.removeRows()
 					}}
+					disabled={$randomAreaRows < 2}
 				>
 					-
 				</button>
