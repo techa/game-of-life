@@ -36,6 +36,9 @@ export class Array2d<T> {
 	get length() {
 		return this.columns * this.rows
 	}
+	toJSON() {
+		return this.get2d()
+	}
 
 	initial?: T
 
@@ -92,6 +95,10 @@ export class Array2d<T> {
 	}
 	getIndex(x: number, y: number): number {
 		return y * this.columns + x
+	}
+
+	get(x: number, y: number): T {
+		return this.values[y * this.columns + x]
 	}
 
 	getValue(target: PositionXY, edgeLoop?: boolean): T | undefined
@@ -154,7 +161,7 @@ export class Array2d<T> {
 		return this
 	}
 
-	map<U>(cb: (value: T, indexs?: Array2dIndexs, arr?: T[]) => U): Array2d<U> {
+	map<U>(cb: (value: T, indexs: Array2dIndexs, arr?: T[]) => U): Array2d<U> {
 		const arr = new Array2d<U>(this.columns, this.rows)
 		for (let i = 0; i < this.rows * this.columns; i++) {
 			arr.setValue(
@@ -507,6 +514,41 @@ export class Array2d<T> {
 
 		console.timeEnd(timeName)
 		return this
+	}
+
+	rotate(clock = true) {
+		const table = this.get2d()
+		;[this.rows, this.columns] = [this.columns, this.rows]
+
+		this.values = []
+
+		for (let y = 0; y < this.rows; y++) {
+			for (let x = 0; x < this.columns; x++) {
+				this.values[y * this.columns + x] =
+					table[this.columns - x - 1][y]
+			}
+		}
+	}
+
+	sizing(columns: number, rows: number) {
+		const table = this.get2d()
+		if (this.rows > rows) {
+			table.length = rows
+		} else {
+			for (let y = 0; y < rows; y++) {
+				if (!table[y]) table[y] = []
+				if (this.columns > columns) {
+					table[y].length = columns
+				} else {
+					for (let x = 0; x < columns; x++) {
+						table[y][x] ??= this.initial as T
+					}
+				}
+			}
+		}
+		this.columns = table[0].length
+		this.rows = table.length
+		this.values = table.flat()
 	}
 
 	addRows(row = this.rows) {

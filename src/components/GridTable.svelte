@@ -76,12 +76,12 @@
 		if (mousedown) {
 			mousedown(x, y)
 		}
-		life.table[y][x] = drawMode
+		life.cells.setValue({ x, y }, drawMode)
 		life.emit(LifeEvent.UPDATE)
 	}
 
 	life.on(LifeEvent.UPDATE, () => {
-		$table = life.table
+		$table = life.cells.get2d()
 		$generation = life.generation
 		$population = life.population
 		// console.log('UPDATE')

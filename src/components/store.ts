@@ -9,29 +9,10 @@ interface LifeGameEx extends TableTransform, TableInitializer {}
 class LifeGameEx extends LifeGame {}
 export const life = new LifeGameEx().init()
 
-export const table = writable(life.table)
+export const table = writable(life.cells.get2d())
 
-export const columns: Writable<typeof life.columns> = (() => {
-	const { subscribe, set, update } = writable(life.columns)
-	return {
-		subscribe,
-		update,
-		set: (columns: typeof life.columns) => {
-			set((life.columns = columns))
-		},
-	}
-})()
-
-export const rows: Writable<typeof life.rows> = (() => {
-	const { subscribe, set, update } = writable(life.rows)
-	return {
-		subscribe,
-		update,
-		set: (rows: typeof life.rows) => {
-			set((life.rows = rows))
-		},
-	}
-})()
+export const columns = writable(life.columns)
+export const rows = writable(life.rows)
 
 export const edgeCell: Writable<typeof life.edgeCell> = (() => {
 	const { subscribe, set, update } = writable(life.edgeCell)
