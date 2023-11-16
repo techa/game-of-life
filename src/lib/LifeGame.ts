@@ -9,7 +9,13 @@ import {
 import { Array2d } from '../utils/Array2d.js'
 
 export const enum Cell {
+	/**
+	 * 墓場：永遠に死亡(DEATH)状態
+	 */
 	TOMB = -2,
+	/**
+	 * 不死身：永遠に生存(LIVE)状態
+	 */
 	UNDEAD,
 	DEATH,
 	LIVE,
@@ -46,6 +52,9 @@ export class LifeGame {
 
 	#born: number[] = [3]
 	#survival: number[] = [2, 3]
+	/**
+	 * min value is 2
+	 */
 	#cycle = 2
 	get cycle() {
 		return this.#cycle
@@ -56,7 +65,7 @@ export class LifeGame {
 	}
 
 	setRule(rule: RuleString, reversal = false) {
-		let rules: [number[], number[], number] | null = ruleParser(rule)
+		let rules = ruleParser(rule)
 		if (!rules) {
 			return this.ruleString
 		}
