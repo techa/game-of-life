@@ -3,6 +3,7 @@
 import { describe, it, expect } from 'vitest'
 import { LifeGame } from './LifeGame.js'
 import { Array2d } from '../utils/Array2d.js'
+import { sleep } from '../utils/Ticker.js'
 
 describe(`./LifeGame.js`, () => {
 	it(`step`, () => {
@@ -111,5 +112,42 @@ describe(`step Generation & UNDEAD`, () => {
 			[0, 0, 0, 0],
 			[0, 0, -1, 0],
 		])
+	})
+})
+
+describe('ticker', () => {
+	const life = new LifeGame().init(
+		new Array2d([
+			[0, 0, -1, 0],
+			[0, 0, 0, 0],
+			[0, 0, -1, 0],
+		]),
+	)
+	life.setRule('B234/S2/C5')
+
+	it(`start`, async () => {
+		life.start()
+		await sleep(2000)
+		life.stop()
+
+		expect(life.cells.get2d()).toStrictEqual(
+			life.ticker.count === 18
+				? [
+						[0, 3, -1, 3],
+						[0, 3, 3, 3],
+						[0, 3, -1, 3],
+				  ]
+				: life.ticker.count === 17
+				? [
+						[0, 2, -1, 2],
+						[0, 2, 2, 2],
+						[0, 2, -1, 2],
+				  ]
+				: [
+						[0, 1, -1, 1],
+						[0, 1, 1, 1],
+						[0, 1, -1, 1],
+				  ],
+		)
 	})
 })
