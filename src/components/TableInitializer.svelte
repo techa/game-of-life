@@ -31,7 +31,7 @@
 				life.stop()
 			}
 
-			life.init()
+			life.clear()
 		}}
 		>Clear
 	</button>

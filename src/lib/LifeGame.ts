@@ -149,6 +149,10 @@ export class LifeGame {
 		return this
 	}
 
+	clear() {
+		return this.init()
+	}
+
 	memory() {
 		return (this.#memory = JSON.stringify(this.cells.get2d()))
 	}

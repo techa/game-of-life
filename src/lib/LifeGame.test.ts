@@ -62,6 +62,14 @@ describe(`step Generation`, () => {
 			[3, 0, 1, 2],
 		])
 	})
+	it(`clear`, () => {
+		life.clear()
+		expect(life.cells.get2d()).toStrictEqual([
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+		])
+	})
 })
 
 describe(`step Generation & UNDEAD`, () => {
@@ -111,6 +119,14 @@ describe(`step Generation & UNDEAD`, () => {
 			[0, 0, -1, 0],
 			[0, 0, 0, 0],
 			[0, 0, -1, 0],
+		])
+	})
+	it(`clear`, () => {
+		life.clear()
+		expect(life.cells.get2d()).toStrictEqual([
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
 		])
 	})
 })
