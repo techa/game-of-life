@@ -65,8 +65,10 @@ export class LifeGame {
 	}
 
 	setRule(rule: RuleString, reversal = false) {
-		let rules = ruleParser(rule)
-		if (!rules) {
+		let rules
+		try {
+			rules = ruleParser(rule)
+		} catch (error) {
 			return this.ruleString
 		}
 

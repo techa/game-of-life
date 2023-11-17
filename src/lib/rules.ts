@@ -77,9 +77,7 @@ export const rules: Map<RuleString, string> = new Map([
 	// B34678/S234/C34
 ])
 
-export function ruleParser(
-	rule: RuleString,
-): [number[], number[], number] | null {
+export function ruleParser(rule: string): [number[], number[], number] {
 	const rules: (number[] | number)[] = rule
 		.replace(/[^\d/]*/g, '')
 		.split('/')
@@ -100,7 +98,8 @@ export function ruleParser(
 	if (/^B\d*\/S\d*(\/[CG]\d*)?$/.test(rule)) {
 		return rules as [number[], number[], number]
 	}
-	return null
+
+	throw new Error(`"${rule}" is invaild rule string.`)
 }
 
 export function ruleString(
