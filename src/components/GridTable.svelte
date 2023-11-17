@@ -57,8 +57,10 @@
 
 	let canvas: HTMLCanvasElement
 	let ctx: CanvasRenderingContext2D
+	let tableRect: DOMRect
 	onMount(() => {
 		ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+		tableRect = canvas.getBoundingClientRect()
 	})
 
 	let isPress = false
@@ -68,24 +70,18 @@
 	}
 
 	function draw(e: DrawEvent, mousedown?: (x: number, y: number) => void) {
-		const {
-			x: boxx,
-			y: boxy,
-			width,
-			height,
-		} = e.currentTarget.getBoundingClientRect()
-
+		const { x: boxx, y: boxy, width, height } = tableRect
 		const x = (((e.clientX - boxx) * $columns) / width) | 0
 		const y = (((e.clientY - boxy) * $rows) / height) | 0
 		if (mousedown) {
 			mousedown(x, y)
 		}
-		life.table[y][x] = drawMode
+		life.cells.setValue({ x, y }, drawMode)
 		life.emit(LifeEvent.UPDATE)
 	}
 
 	life.on(LifeEvent.UPDATE, () => {
-		$table = life.table
+		$table = life.cells.get2d()
 		$generation = life.generation
 		$population = life.population
 		// console.log('UPDATE')
@@ -148,6 +144,7 @@
 		style:width={width + 'px'}
 		style:height={height + 'px'}
 		on:mousedown|preventDefault={(e) => {
+			tableRect = canvas.getBoundingClientRect()
 			draw(e, (x, y) => {
 				drawMode = $table[y][x] ? Cell.DEATH : -$penMode || 1
 			})

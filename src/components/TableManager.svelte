@@ -16,7 +16,7 @@
 	import { LifeEvent } from '$lib/LifeGame'
 
 	function resize() {
-		life.tableSizing({})
+		life.tableSizing($columns, $rows)
 	}
 </script>
 

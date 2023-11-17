@@ -1,9 +1,21 @@
 import { Ticker } from '../utils/Ticker.js'
 import { EventDispatcher, type EventHandler } from '../utils/EventDispatcher.js'
-import { ruleParser, ruleReversal, type RuleString } from '$lib/rules.js'
+import {
+	ruleParser,
+	ruleReversal,
+	ruleString,
+	type RuleString,
+} from '$lib/rules.js'
+import { Array2d } from '../utils/Array2d.js'
 
 export const enum Cell {
+	/**
+	 * 墓場：永遠に死亡(DEATH)状態
+	 */
 	TOMB = -2,
+	/**
+	 * 不死身：永遠に生存(LIVE)状態
+	 */
 	UNDEAD,
 	DEATH,
 	LIVE,
@@ -25,9 +37,13 @@ export class LifeGame {
 		this.#events.on(eventName, handler)
 	}
 
-	table!: Cell[][]
-	columns = 70
-	rows = 70
+	cells = new Array2d(70, 70, Cell.DEATH)
+	get columns() {
+		return this.cells.columns
+	}
+	get rows() {
+		return this.cells.rows
+	}
 
 	/**
 	 * DEATH is loop
@@ -36,32 +52,32 @@ export class LifeGame {
 
 	#born: number[] = [3]
 	#survival: number[] = [2, 3]
+	/**
+	 * min value is 2
+	 */
 	#cycle = 2
 	get cycle() {
 		return this.#cycle
 	}
 
-	get rule() {
-		let str = `B${this.#born.join('')}/S${this.#survival.join('')}`
-		if (this.#cycle > 2) {
-			str += `C${this.#cycle}`
-		}
-		return str as RuleString
+	get ruleString() {
+		return ruleString(this.#born, this.#survival, this.#cycle)
 	}
 
 	setRule(rule: RuleString, reversal = false) {
-		let rules: [number[], number[], number] | null = ruleParser(rule)
-		if (!rules) {
-			return this.rule
+		let rules
+		try {
+			rules = ruleParser(rule)
+		} catch (error) {
+			return this.ruleString
 		}
 
 		if (reversal) {
 			rules = ruleReversal(...rules)
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-extra-semi
 		;[this.#born, this.#survival, this.#cycle] = rules
-		return this.rule
+		return this.ruleString
 	}
 
 	#generation = 0
@@ -70,14 +86,11 @@ export class LifeGame {
 	}
 	get population() {
 		let population = 0
-		for (let y = 0; y < this.rows; y++) {
-			for (let x = 0; x < this.columns; x++) {
-				const cell = this.table[y][x]
-				if (cell && cell !== Cell.TOMB) {
-					population++
-				}
+		this.cells.forEach((cell) => {
+			if (cell && cell !== Cell.TOMB) {
+				population++
 			}
-		}
+		})
 		if (population < 1) {
 			this.stop()
 		}
@@ -118,20 +131,13 @@ export class LifeGame {
 		return this.ticker?.running
 	}
 
-	init(table?: Cell[][]) {
+	init(cells?: typeof this.cells) {
 		this.#generation = 0
-		if (table) {
-			this.columns = table[0].length
-			this.rows = table.length
-			this.table = table
+		if (cells) {
+			this.cells = cells
 		} else {
-			this.table = []
-			for (let y = 0; y < this.rows; y++) {
-				if (!this.table[y]) this.table[y] = []
-				for (let x = 0; x < this.columns; x++) {
-					this.table[y][x] = Cell.DEATH
-				}
-			}
+			// clear()
+			this.cells = new Array2d(this.columns, this.rows, Cell.DEATH)
 		}
 
 		if (this.population) {
@@ -143,57 +149,58 @@ export class LifeGame {
 		return this
 	}
 
+	clear() {
+		return this.init()
+	}
+
 	memory() {
-		return (this.#memory = JSON.stringify(this.table))
+		return (this.#memory = JSON.stringify(this.cells.get2d()))
 	}
 
 	reset() {
 		this.insert(JSON.parse(this.#memory))
 	}
 
-	insert(table: Cell[][]) {
-		this.table = []
+	insert(cells: Cell[][]) {
+		this.cells = new Array2d(
+			Math.max(cells[0].length, this.columns),
+			Math.max(cells.length, this.rows),
+			Cell.DEATH,
+		)
 		this.#generation = 0
-		const rows = Math.max(table.length, this.rows)
-		const columns = Math.max(table[0].length, this.columns)
+
 		let sw = 0
 		let sh = 0
-		if (table.length < this.rows) {
-			sh = ((this.rows - table.length) / 2) | 0
+		if (cells.length < this.rows) {
+			sh = ((this.rows - cells.length) / 2) | 0
 		}
-		if (table[0].length < this.columns) {
-			sw = ((this.columns - table[0].length) / 2) | 0
+		if (cells[0].length < this.columns) {
+			sw = ((this.columns - cells[0].length) / 2) | 0
 		}
 
-		for (let y = 0; y < rows; y++) {
-			if (!this.table[y]) this.table[y] = []
-			for (let x = 0; x < columns; x++) {
-				const val = table[y - sh]?.[x - sw]
-				this.table[y][x] = val ?? Cell.DEATH
-			}
-		}
+		this.cells.each((cell, { x, y }) => {
+			return cells[y - sh]?.[x - sw] ?? Cell.DEATH
+		})
+
 		this.update()
 	}
 
-	tableSizing({ columns = this.columns, rows = this.rows }) {
-		this.columns = columns
-		this.rows = rows
-		const yl = this.table.length
-		if (yl > this.rows) {
-			this.table.length = this.rows
-		} else {
-			for (let y = 0; y < this.rows; y++) {
-				if (!this.table[y]) this.table[y] = []
-				if (this.table[y].length > this.columns) {
-					this.table[y].length = this.columns
-				} else {
-					for (let x = 0; x < this.columns; x++) {
-						this.table[y][x] ??= Cell.DEATH
-					}
-				}
-			}
-		}
+	tableSizing(columns: number, rows: number) {
+		this.cells.sizing(columns, rows)
 		this.emit(LifeEvent.TABLE_UPDATE)
+	}
+
+	addRows(row = this.rows) {
+		this.cells.addRows(row)
+	}
+	removeRows(row = -1) {
+		this.cells.removeRows(row)
+	}
+	addColumns(columns = this.columns) {
+		this.cells.addColumns(columns)
+	}
+	removeColumns(columns = -1) {
+		this.cells.removeColumns(columns)
 	}
 
 	at(x: number, y: number): Cell {
@@ -203,65 +210,52 @@ export class LifeGame {
 		if (!this.edgeCell) {
 			x = x < 0 ? xl + x : x >= xl ? x % xl : x
 			y = y < 0 ? yl + y : y >= yl ? y % yl : y
-			return this.table[y][x]
+			return this.cells.get(x, y)
 		}
 		// edge TOMB or UNDEAD
 		if (x < 0 || y < 0 || x >= xl || y >= yl) {
 			return this.edgeCell
 		}
-		return this.table[y][x]
+		return this.cells.get(x, y)
 	}
 
 	step() {
-		const table: Cell[][] = []
 		const countMax = Math.max(...this.#born, ...this.#survival)
 
-		for (let y = 0; y < this.rows; y++) {
-			if (!table[y]) table[y] = []
-			for (let x = 0; x < this.columns; x++) {
-				if (this.table[y][x] === Cell.UNDEAD) {
-					table[y][x] = Cell.UNDEAD
-					continue
-				}
-				if (this.table[y][x] === Cell.TOMB) {
-					table[y][x] = Cell.TOMB
-					continue
-				}
+		this.cells = this.cells.map((cell, { x, y }) => {
+			if (cell === Cell.UNDEAD || cell === Cell.TOMB) {
+				return cell
+			}
 
-				let count = 0
-				moore: for (let _y = -1; _y <= 1; _y++) {
-					for (let _x = -1; _x <= 1; _x++) {
-						const neighbour = this.at(x + _x, y + _y)
-						if (
-							(_y || _x) &&
-							(neighbour === Cell.LIVE ||
-								neighbour === Cell.UNDEAD)
-						) {
-							count++
-							if (countMax < count) {
-								break moore
-							}
+			let count = 0
+			moore: for (let _y = -1; _y <= 1; _y++) {
+				for (let _x = -1; _x <= 1; _x++) {
+					const neighbour = this.at(x + _x, y + _y)
+					if (
+						(_y || _x) &&
+						(neighbour === Cell.LIVE || neighbour === Cell.UNDEAD)
+					) {
+						count++
+						if (countMax < count) {
+							break moore
 						}
 					}
 				}
-
-				const center = this.table[y][x]
-
-				// Generations
-				// https://conwaylife.com/wiki/Generations
-				if (
-					(center === Cell.DEATH && this.#born.includes(count)) ||
-					(center === Cell.LIVE && this.#survival.includes(count))
-				) {
-					table[y][x] = Cell.LIVE
-				} else if (center >= 1) {
-					table[y][x] = (center + 1) % this.#cycle
-				} else {
-					table[y][x] = Cell.DEATH
-				}
 			}
-		}
-		this.table = table
+
+			// Generations
+			// https://conwaylife.com/wiki/Generations
+			if (
+				(cell === Cell.DEATH && this.#born.includes(count)) ||
+				(cell === Cell.LIVE && this.#survival.includes(count))
+			) {
+				return Cell.LIVE
+			} else if (cell >= 1) {
+				return (cell + 1) % this.#cycle
+			}
+			return Cell.DEATH
+		})
+
 		this.#generation++
 
 		this.update()
@@ -282,7 +276,7 @@ export class LifeGame {
 	}
 
 	update() {
-		const tableMemory = JSON.stringify(this.table)
+		const tableMemory = JSON.stringify(this.cells)
 		if (this.autoStop && tableMemory === this.#tableMemory) {
 			this.stop()
 		} else {

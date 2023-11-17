@@ -1,18 +1,5 @@
 {
 	"npm.packageManager": "pnpm",
 	"typescript.preferences.importModuleSpecifierEnding": "js",
-	"runOnSave.commands": [
-		// {
-		// 	"match": ".*\\.ts$",
-		// 	"notMatch": ".*\\.(test|spec).ts$",
-		// 	"command": "pnpm exec ava ${fileDirnameRelative}/${fileBasenameNoExtension}.test.ts",
-		// 	"runIn": "terminal"
-		// },
-		{
-			"match": ".*\\.(test|spec).ts$",
-			"command": "pnpm exec ava ${fileRelative}",
-			"runIn": "terminal"
-		},
-	],
 	"typescript.tsdk": "node_modules\\typescript\\lib"
 }

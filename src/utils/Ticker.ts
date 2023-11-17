@@ -1,3 +1,10 @@
+export async function sleep(msec: number) {
+	let id: number | NodeJS.Timeout
+	return new Promise((resolve) => (id = setTimeout(resolve, msec))).then(() =>
+		clearTimeout(id),
+	)
+}
+
 export interface TickerArgs {
 	tick?: (count?: number) => void
 	tpf?: number
@@ -5,7 +12,7 @@ export interface TickerArgs {
 }
 
 export class Ticker {
-	#id = 0
+	#id: number | NodeJS.Timeout = 0
 	#running = false
 	get running() {
 		return this.#running
@@ -15,6 +22,9 @@ export class Ticker {
 	// tpf: tick/frame
 	tpf = 1
 	count = 0
+
+	isBrowser =
+		typeof window !== 'undefined' && typeof window.document !== 'undefined'
 
 	constructor(opts?: TickerArgs) {
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -29,34 +39,53 @@ export class Ticker {
 
 		this.#running = true
 
-		const loop = () => {
-			if (!this.#running) {
-				this.stop()
-				return
-			}
+		if (this.isBrowser) {
+			let startTime = Date.now()
+			const loop = () => {
+				if (!this.#running) {
+					this.stop()
+					return
+				}
 
-			try {
-				this.#id = requestAnimationFrame(loop)
-				if (!(this.count++ % this.tpf | 0)) {
+				const timestamp = Date.now()
+				// console.log(timestamp - startTime)
+
+				if (timestamp - startTime > 10) {
+					startTime = timestamp
 					this.update()
 				}
-			} catch (error) {
-				cancelAnimationFrame(this.#id)
-				throw error
+				// リストからコールバック関数を削除するcancelAnimationFrameは、新しいrequestAnimationFrameが生成される前に毎回呼び出す
+				cancelAnimationFrame(this.#id as number)
+				this.#id = requestAnimationFrame(loop)
 			}
-		}
+			loop()
+		} else {
+			const loop = async () => {
+				if (!this.#running) {
+					this.stop()
+					return
+				}
 
-		loop()
+				await sleep(100)
+				this.update()
+				loop()
+			}
+			loop()
+		}
 	}
 
 	stop(): void {
 		this.#running = false
-		cancelAnimationFrame(this.#id)
+		if (this.isBrowser) {
+			cancelAnimationFrame(this.#id as number)
+		} else {
+			clearTimeout(this.#id)
+		}
 	}
 
 	update(): void {
 		try {
-			this.tick(this.count)
+			this.tick(++this.count)
 		} catch (error) {
 			this.stop()
 		}

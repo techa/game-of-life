@@ -1,12 +1,16 @@
 <!-- Copy from: https://svelte.dev/examples/modal -->
 <script lang="ts">
-	import { createEventDispatcher, onDestroy } from 'svelte'
-	import SVG from '../resource/sprite.svg'
+	import { writable, type Writable } from 'svelte/store'
+	import { createEventDispatcher, setContext, onDestroy } from 'svelte'
+	import SVG from '../../resource/sprite.svg'
 
 	const dispatch = createEventDispatcher()
 	const close = () => dispatch('close')
 
 	let modal: HTMLDivElement
+
+	const header = writable('')
+	setContext<Writable<string>>('ModalHeader', header)
 
 	const handle_keydown = (e: KeyboardEvent) => {
 		if (e.key === 'Escape') {
@@ -50,8 +54,7 @@
 			<use href="{SVG}#x" />
 		</svg>
 	</div>
-	<slot name="header" />
-	<hr />
+	<h3>{$header}</h3>
 	<slot />
 </div>
 
@@ -77,6 +80,10 @@
 		padding: 1em;
 		border-radius: 0.2em;
 		background: var(--black);
+	}
+
+	h3 {
+		margin: 0 0 1.2rem;
 	}
 
 	.close {
