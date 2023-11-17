@@ -1,19 +1,22 @@
 // https://vitest.dev/api/expect.html
 // https://jestjs.io/docs/expect
 import { describe, it, expect } from 'vitest'
-import {
-	ruleParser,
-	ruleString,
-	ruleReversal,
-	type RuleString,
-} from './rules.js'
+import { rules, ruleParser, ruleString, ruleReversal } from './rules.js'
 
 describe(`./rules.js`, () => {
+	it(`rules key sorted?`, () => {
+		for (const [key, name] of rules.entries()) {
+			const parsed = ruleString(...ruleParser(key))
+			expect(key).toBe(parsed)
+		}
+	})
+
 	it(`ruleParser`, () => {
 		expect(ruleParser('B0/S2')).toStrictEqual([[0], [2], 2])
-	})
-	it(`ruleParser`, () => {
 		expect(ruleParser('B430/S32')).toStrictEqual([[0, 3, 4], [2, 3], 2])
+		expect(ruleParser('561/4/8')).toStrictEqual([[4], [1, 5, 6], 8])
+
+		expect(() => ruleParser('')).toThrowError()
 	})
 
 	it(`ruleString`, () => {
