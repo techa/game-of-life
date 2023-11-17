@@ -524,10 +524,12 @@ export class Array2d<T> {
 
 		for (let y = 0; y < this.rows; y++) {
 			for (let x = 0; x < this.columns; x++) {
-				this.values[y * this.columns + x] =
-					table[this.columns - x - 1][y]
+				this.values[y * this.columns + x] = clock
+					? table[this.columns - x - 1][y]
+					: table[x][this.rows - y - 1]
 			}
 		}
+		return this
 	}
 
 	sizing(columns: number, rows: number) {
@@ -536,19 +538,16 @@ export class Array2d<T> {
 			table.length = rows
 		} else {
 			for (let y = 0; y < rows; y++) {
-				if (!table[y]) table[y] = []
+				if (!table[y]) table[y] = Array(columns).fill(this.initial)
 				if (this.columns > columns) {
 					table[y].length = columns
-				} else {
-					for (let x = 0; x < columns; x++) {
-						table[y][x] ??= this.initial as T
-					}
 				}
 			}
 		}
 		this.columns = table[0].length
 		this.rows = table.length
 		this.values = table.flat()
+		return this
 	}
 
 	addRows(row = this.rows) {
@@ -559,6 +558,7 @@ export class Array2d<T> {
 			this.values.splice(this.getIndex(x, row), 0, this.initial as T)
 		}
 		this.rows += 1
+		return this
 	}
 	removeRows(row = -1) {
 		if (row < 0) {
@@ -568,6 +568,7 @@ export class Array2d<T> {
 			this.values.splice(this.getIndex(x, row), 1)
 		}
 		this.rows -= 1
+		return this
 	}
 	addColumns(columns = this.columns) {
 		if (columns < 0) {
@@ -578,6 +579,7 @@ export class Array2d<T> {
 		}
 
 		this.columns += 1
+		return this
 	}
 	removeColumns(columns = -1) {
 		if (columns < 0) {
@@ -587,5 +589,6 @@ export class Array2d<T> {
 			this.values.splice(this.getIndex(columns, y), 1)
 		}
 		this.columns -= 1
+		return this
 	}
 }
