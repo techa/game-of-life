@@ -60,6 +60,7 @@ export class Array2d<T> {
 			this.columns = width[0].length
 			this.rows = width.length
 			this.values = width.flat()
+			this.initial = this.values[0]
 		}
 	}
 
