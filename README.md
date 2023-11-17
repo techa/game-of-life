@@ -1,4 +1,4 @@
-# [Game of Life](https://techa.github.io/game-of-life/)
+# [Game of Life Laboratory](https://techa.github.io/game-of-life/)
 > Game of Life playground. Not only Conway's Life.
 
 ## Feature
@@ -13,9 +13,9 @@
 	- [x] HUE slider
 	- [ ] Reload Gradation
 - [ ] Tools: Pen, FillPaint
-	- [ ] LIVE & DEATH <--> UNDEAD & TOMB
-- [ ] InitializerSettings
-	- [ ] Save sttings localStrage
+	- [x] LIVE & DEATH <--> UNDEAD & TOMB
+- [x] InitializerSettings
+	- [x] Save sttings localStrage
 - [ ] Save Rule to localStrage
 
 ## Terrain generation
