@@ -3,8 +3,7 @@ export type RuleString =
 	| `${Numbers}/${Numbers}`
 	| `B${Numbers}/S${Numbers}`
 	| `${Numbers}/${Numbers}/${Numbers}`
-	| `B${Numbers}/S${Numbers}/C${Numbers}`
-	| `B${Numbers}/S${Numbers}/G${Numbers}`
+	| `B${Numbers}/S${Numbers}/${'C' | 'G' | ''}${Numbers}`
 
 // https://conwaylife.com/wiki/List_of_Life-like_cellular_automata
 export const rules: Map<RuleString, string> = new Map([
@@ -95,7 +94,7 @@ export function ruleParser(rule: string): [number[], number[], number] {
 	if (/^\d*\/\d*(\/\d*)?$/.test(rule)) {
 		return [rules[1], rules[0], rules[2]] as [number[], number[], number]
 	}
-	if (/^B\d*\/S\d*(\/[CG]\d*)?$/.test(rule)) {
+	if (/^B\d*\/S\d*(\/[CG]?\d*)?$/.test(rule)) {
 		return rules as [number[], number[], number]
 	}
 

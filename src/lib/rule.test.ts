@@ -15,6 +15,9 @@ describe(`./rules.js`, () => {
 		expect(ruleParser('B0/S2')).toStrictEqual([[0], [2], 2])
 		expect(ruleParser('B430/S32')).toStrictEqual([[0, 3, 4], [2, 3], 2])
 		expect(ruleParser('561/4/8')).toStrictEqual([[4], [1, 5, 6], 8])
+		expect(ruleParser('B1/S4/8')).toStrictEqual([[1], [4], 8])
+		expect(ruleParser('B1/S4/C8')).toStrictEqual([[1], [4], 8])
+		expect(ruleParser('B1/S4/G8')).toStrictEqual([[1], [4], 8])
 
 		expect(() => ruleParser('')).toThrowError()
 	})

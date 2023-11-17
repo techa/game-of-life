@@ -4,28 +4,49 @@ import { describe, it, expect } from 'vitest'
 import { LifeGame } from './LifeGame.js'
 import { Array2d } from '../utils/Array2d.js'
 import { sleep } from '../utils/Ticker.js'
+import type { RuleString } from './rules.js'
 
 describe(`./LifeGame.js`, () => {
-	it(`step`, () => {
-		const life = new LifeGame().init(
-			new Array2d([
-				[0, 1, 0, 0],
-				[0, 1, 1, 0],
-				[0, 1, 0, 0],
-			]),
-		)
+	const life = new LifeGame().init(
+		new Array2d([
+			[0, 1, 0, 0],
+			[0, 1, 1, 0],
+			[0, 1, 0, 0],
+		]),
+	)
+
+	it(`setRule reversal`, () => {
+		expect(life.setRule('B3/S23', true)).toBe('B0123478/S01234678')
+	})
+
+	it(`setRule error`, () => {
+		expect(life.setRule('B5/65/7' as RuleString)).toBe('B0123478/S01234678')
+	})
+
+	it(`setRule set`, () => {
+		expect(life.setRule('B3/S23/2')).toBe('B3/S23')
+	})
+
+	it(`step 1`, () => {
 		life.step()
 		expect(life.cells.get2d()).toStrictEqual([
 			[1, 1, 0, 0],
 			[1, 1, 1, 0],
 			[1, 1, 0, 0],
 		])
+		expect(life.generation).toBe(1)
+		expect(life.population).toBe(7)
+	})
+
+	it(`step 2`, () => {
 		life.step()
 		expect(life.cells.get2d()).toStrictEqual([
 			[0, 0, 0, 0],
 			[0, 0, 1, 0],
 			[0, 0, 0, 0],
 		])
+		expect(life.generation).toBe(2)
+		expect(life.population).toBe(1)
 	})
 })
 
@@ -143,8 +164,11 @@ describe('ticker', () => {
 
 	it(`start`, async () => {
 		life.start()
-		await sleep(2000)
+		await sleep(1000)
+		expect(life.isRunning).toBe(true)
+		await sleep(1000)
 		life.stop()
+		expect(life.isRunning).toBe(false)
 
 		expect(life.cells.get2d()).toStrictEqual(
 			life.ticker.count === 18
