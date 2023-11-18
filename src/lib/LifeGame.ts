@@ -264,11 +264,19 @@ export class LifeGame {
 	}
 
 	start() {
+		if (!this.population) {
+			return
+		}
+
 		this.ticker ??= new Ticker({
 			tick: () => this.step(),
 			interval: this.interval,
 		})
 		this.ticker.start()
+
+		if (this.generation === 0) {
+			this.memory()
+		}
 		this.emit(LifeEvent.START)
 	}
 

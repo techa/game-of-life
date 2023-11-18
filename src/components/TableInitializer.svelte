@@ -44,21 +44,12 @@
 		>Reverse
 	</button>
 
-	<button
-		on:click={() => {
-			if (life.isRunning) {
-				life.stop()
-			}
-			life.reset()
-		}}
-		>Reset
-	</button>
-	<button
+	<!-- <button
 		on:click={() => {
 			navigator.clipboard.writeText(life.memory())
 		}}
 		>Copy
-	</button>
+	</button> -->
 
 	<label>
 		<select class="pulldown">

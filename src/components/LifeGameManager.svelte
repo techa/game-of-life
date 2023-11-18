@@ -98,17 +98,23 @@
 	</DropDown>
 
 	<button
+		class="player skip-back"
+		on:click={() => {
+			life.reset()
+		}}
+	>
+		<svg class:active={playing} style:stroke={'black'}>
+			<use href="{SVG}#skip-back" />
+		</svg></button
+	>
+
+	<button
 		class="player play primary-color"
 		on:click={() => {
 			if (playing) {
 				life.stop()
 			} else {
-				if ($generation === 0 && $population) {
-					life.memory()
-				}
-				if ($population) {
-					life.start()
-				}
+				life.start()
 			}
 		}}
 	>
