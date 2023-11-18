@@ -45,15 +45,14 @@
 
 <svelte:window on:keydown={handle_keydown} />
 
-<div class="modal-background" on:click={close} />
+<div class="modal-background" role="presentation" on:click={close} />
 
 <div class="modal" role="dialog" aria-modal="true" bind:this={modal}>
-	<!-- svelte-ignore a11y-autofocus -->
-	<div class="close" autofocus on:click={close}>
+	<button class="close skeleton" on:click={close}>
 		<svg>
 			<use href="{SVG}#x" />
 		</svg>
-	</div>
+	</button>
 	<h3>{$header}</h3>
 	<slot />
 </div>
@@ -92,7 +91,6 @@
 		right: 1rem;
 		display: block;
 
-		border: none;
 		color: #eee;
 	}
 	.close:hover {

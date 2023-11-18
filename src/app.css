@@ -61,15 +61,27 @@ button > svg {
 	display: none;
 }
 
-button{
+button {
 	border-radius: 4px;
 }
 
-.btn-left{
+.skeleton {
+	background: none;
+	padding: 0;
+	border-radius: 0;
+	border: none;
+}
+
+button.skeleton > svg {
+	width: 24px;
+	height: 24px;
+}
+
+.btn-left {
 	border-top-right-radius: 0;
 	border-bottom-right-radius: 0;
 }
-.btn-right{
+.btn-right {
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
 }

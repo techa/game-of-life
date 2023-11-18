@@ -66,7 +66,7 @@
 	let isPress = false
 
 	type DrawEvent = MouseEvent & {
-		currentTarget: EventTarget & HTMLTableElement
+		currentTarget: EventTarget & HTMLElement
 	}
 
 	function draw(e: DrawEvent, mousedown?: (x: number, y: number) => void) {
@@ -143,6 +143,7 @@
 		class:gridView={$gridView}
 		style:width={width + 'px'}
 		style:height={height + 'px'}
+		role="presentation"
 		on:mousedown|preventDefault={(e) => {
 			tableRect = canvas.getBoundingClientRect()
 			draw(e, (x, y) => {

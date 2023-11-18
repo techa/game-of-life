@@ -89,22 +89,21 @@
 		>Rotate
 	</button>
 
-	<svg
-		style:stroke={$penMode < 2 ? $selectedColor : 'currentColor'}
-		on:click={() => console.log(($penMode += 1))}
-	>
-		<use href="{SVG}#pen" />
-		{#if $penMode}
-			<use
-				href="{SVG}#x"
-				x="14px"
-				y="14px"
-				width="10px"
-				height="10px"
-				stroke-width="4px"
-			/>
-		{/if}
-	</svg>
+	<button class="skeleton" on:click={() => ($penMode += 1)}>
+		<svg style:stroke={$penMode < 2 ? $selectedColor : 'currentColor'}>
+			<use href="{SVG}#pen" />
+			{#if $penMode}
+				<use
+					href="{SVG}#x"
+					x="14px"
+					y="14px"
+					width="10px"
+					height="10px"
+					stroke-width="4px"
+				/>
+			{/if}
+		</svg>
+	</button>
 </nav>
 
 <style>

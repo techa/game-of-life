@@ -64,6 +64,12 @@
 	class="slider {direction} {$$props.class || ''}"
 	style={$$props.style}
 	style:background={`linear-gradient(${turn}turn, ${gradient})`}
+	role="slider"
+	aria-valuenow={value}
+	aria-valuemin={min}
+	aria-valuemax={max}
+	aria-orientation={direction}
+	tabindex={-1}
 	bind:clientWidth={width}
 	bind:clientHeight={height}
 	use:drag={dragging}
