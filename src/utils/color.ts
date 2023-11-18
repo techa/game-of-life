@@ -60,7 +60,9 @@ export function hexToHsl(hex: string): number[] {
  * @return HSL
  */
 export function hslStringParse(hslString: string): number[] {
-	const m = hslString.replace(/\s*/g, '').match(/^hsl\((\d+),(\d+)%,(\d+)%\)/)
+	const m = hslString
+		.replace(/\s*/g, '')
+		.match(/^hsl\((\d?[.]?\d+),(\d+)%,(\d+)%\)/)
 	if (!m) {
 		throw new TypeError(`Invaild-value(hslString): '${hslString}'`)
 	}
@@ -78,60 +80,26 @@ export function colorStringToHsl(hexOrHsl: string): number[] {
 		: hslStringParse(hexOrHsl)
 }
 
-export type NextColorType = 'hue' | 'random'
-export type NextColorGenerater = (str: string, n?: number) => string
+export class NextColor {
+	hueIncr = 1
 
-let hueIncr = 1
-/**
- * Next gradient color generaters.
- */
-export const NextColor: Record<NextColorType, NextColorGenerater> = {
+	constructor() {
+		this.init()
+	}
+	init() {
+		this.hueIncr = 1
+	}
+
 	/**
 	 * Hex or HSLstring to HSLstring
 	 * @param hexOrHsl
-	 * @param hue
+	 * @param hueRange min value 36
 	 * @return HSLstring
 	 */
-	hue(hexOrHsl: string, hue = 36): string {
+	next(hexOrHsl: string, hueRange = 36): string {
 		const [h, s, l] = colorStringToHsl(hexOrHsl)
-		return `hsl(${(h + hue) % 360},${s}%,${
-			!(hueIncr++ % 10) ? l - 10 : l
+		return `hsl(${(h + hueRange) % 360},${s}%,${
+			!(this.hueIncr++ % 10) ? l - 10 : l
 		}%)`
-	},
-
-	/**
-	 * Hex to hex only
-	 * @param hex
-	 * @param difference RGB-value total difference
-	 * @return Hex
-	 */
-	random(hex: string, difference = 60): string {
-		const m = hex.slice(1).match(/^(..)(..)(..)/)
-		if (!m) {
-			throw new TypeError(`Invaild-value(hex): '${hex}'`)
-		}
-		return m
-			.slice(1, 4)
-			.map((val) => {
-				const rgbvalue = parseInt(val, 16)
-				let del = (Math.random() * difference) | 0
-				difference -= del
-				if (difference > 0) {
-					// Color should not be too light.
-					if (rgbvalue + del > 240) {
-						del *= -1
-						// Color should not be too dark.
-					} else if (rgbvalue - del > 20) {
-						del *= (Math.random() * 2) | 0 ? -1 : 1
-					}
-				}
-
-				return (rgbvalue + del) | 0
-			})
-			.reduce(
-				(str: string, val: number) =>
-					str + val.toString(16).padStart(2, '0'),
-				'#',
-			)
-	},
+	}
 }

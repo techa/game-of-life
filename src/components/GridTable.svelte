@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import { NextColor, type NextColorType } from '../utils/color'
+	import { NextColor } from '../utils/color'
 	import { Cell, LifeEvent } from '$lib/LifeGame'
 	import {
 		life,
@@ -36,8 +36,7 @@
 		// 'darkgray',
 	]
 
-	let nextColorType: NextColorType = 'hue'
-	let nextColor = NextColor[nextColorType]
+	let nextColor: NextColor
 
 	function cellColor(celltype: number) {
 		if (celltype < 0) {
@@ -45,7 +44,7 @@
 		}
 		let color = colors[celltype]
 		if (!color) {
-			color = nextColor(
+			color = nextColor.next(
 				colors[celltype - 1] || $selectedColor,
 				Math.max(35, 360 / (life.cycle + 1)),
 			)
@@ -117,6 +116,8 @@
 			'transparent', // DEATH, TOMB
 			$selectedColor, // LIVE, UNDEAD
 		]
+
+		nextColor = new NextColor()
 		for (let i = 2; i < life.cycle; i++) {
 			cellColor(i)
 		}
