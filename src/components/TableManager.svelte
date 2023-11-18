@@ -56,6 +56,22 @@
 		</div>
 	</DropDown>
 
+	<button class="skeleton" on:click={() => ($penMode += 1)}>
+		<svg style:stroke={$penMode < 2 ? $selectedColor : 'currentColor'}>
+			<use href="{SVG}#pen" />
+			{#if $penMode}
+				<use
+					href="{SVG}#x"
+					x="14px"
+					y="14px"
+					width="10px"
+					height="10px"
+					stroke-width="4px"
+				/>
+			{/if}
+		</svg>
+	</button>
+
 	<label>
 		<svg class:active={$gridView}>
 			<use href="{SVG}#grid" />
@@ -91,22 +107,6 @@
 			setTimeout(() => life.emit(LifeEvent.UPDATE), 100)
 		}}
 		>Rotate
-	</button>
-
-	<button class="skeleton" on:click={() => ($penMode += 1)}>
-		<svg style:stroke={$penMode < 2 ? $selectedColor : 'currentColor'}>
-			<use href="{SVG}#pen" />
-			{#if $penMode}
-				<use
-					href="{SVG}#x"
-					x="14px"
-					y="14px"
-					width="10px"
-					height="10px"
-					stroke-width="4px"
-				/>
-			{/if}
-		</svg>
 	</button>
 </nav>
 
