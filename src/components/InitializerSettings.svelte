@@ -143,6 +143,7 @@
 				<button
 					on:click={() => {
 						edge = ++edge % 2
+						$randomPoints = $randomPoints
 					}}
 				>
 					{#if edge}
@@ -196,6 +197,7 @@
 				<button
 					on:click={() => {
 						edge = ++edge % 2
+						$randomPoints = $randomPoints
 					}}
 				>
 					{#if edge}
