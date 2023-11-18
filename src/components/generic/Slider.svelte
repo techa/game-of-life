@@ -59,6 +59,7 @@
 	}
 </script>
 
+<!-- https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/slider_role -->
 <div
 	class="slider {orientation} {$$props.class || ''}"
 	style={$$props.style}
