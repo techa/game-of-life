@@ -94,8 +94,7 @@ export function TableInitializer<T extends { new (...args: any[]): LifeGame }>(
 		edgeColumn: Cell[] = []
 
 		areaInit(points: number[][]) {
-			this.points = new Array2d(points)
-			this.points.initial = 50
+			this.points = new Array2d(points, 50)
 			this.edgeRow = Array(this.randomAreaRows).fill(this.edgeCell)
 			this.edgeColumn = Array(this.randomAreaColumns).fill(this.edgeCell)
 		}

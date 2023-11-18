@@ -13,12 +13,11 @@ export const Array2dInitials = {
 export type PositionXY = { x: number; y: number }
 export type Array2dTarget = number | PositionXY
 export type Array2dIndexs = { x: number; y: number; i: number }
-
-export type Array2dmapCallbackFn<T> = (
+export type Array2dEachCallback<T, R> = (
 	value: T,
 	indexs: Array2dIndexs,
-	arr?: T[],
-) => T
+	arr: T[],
+) => R
 
 export interface Array2dOptions {
 	// initial?: T
@@ -33,6 +32,7 @@ export class Array2d<T> {
 	values: T[] = []
 	columns: number
 	rows: number
+	initial: T
 	get length() {
 		return this.columns * this.rows
 	}
@@ -40,13 +40,11 @@ export class Array2d<T> {
 		return this.get2d()
 	}
 
-	initial?: T
-
 	options: Required<Array2dOptions> = {} as Required<Array2dOptions>
 
-	constructor(width: number, height: number, initial?: T)
-	constructor(array: T[][])
-	constructor(width: number | T[][], height?: number, initial?: T) {
+	constructor(width: number, height: number, initial: T)
+	constructor(array: T[][], initial: T)
+	constructor(width: number | T[][], height: number | T, initial?: T) {
 		if (typeof width === 'number') {
 			if (initial !== undefined) {
 				for (let i = 0; i < width * (height as number); i++) {
@@ -55,12 +53,12 @@ export class Array2d<T> {
 			}
 			this.columns = width
 			this.rows = height as number
-			this.initial = initial
+			this.initial = initial as T
 		} else {
 			this.columns = width[0].length
 			this.rows = width.length
 			this.values = width.flat()
-			this.initial = this.values[0]
+			this.initial = height as T
 		}
 	}
 
@@ -130,9 +128,11 @@ export class Array2d<T> {
 	}
 
 	clone() {
-		const arr = new Array2d<T>(this.columns, this.rows).setOptions(
-			this.options,
-		)
+		const arr = new Array2d<T>(
+			this.columns,
+			this.rows,
+			this.initial,
+		).setOptions(this.options)
 		arr.values = this.values.slice()
 		return arr
 	}
@@ -141,7 +141,7 @@ export class Array2d<T> {
 	 * The original array remains unchanged.
 	 * @param cb
 	 */
-	forEach(cb: (value: T, indexs: Array2dIndexs, arr?: T[]) => void) {
+	forEach(cb: Array2dEachCallback<T, void>) {
 		for (let i = 0; i < this.rows * this.columns; i++) {
 			cb(
 				this.getValue(i) as T,
@@ -155,8 +155,8 @@ export class Array2d<T> {
 	 * The original array will be modified.
 	 * @param cb
 	 */
-	each(cb: (value: T, indexs: Array2dIndexs, arr?: T[]) => T): this {
-		const arr = new Array2d<T>(this.columns, this.rows)
+	each(cb: Array2dEachCallback<T, T>): this {
+		const arr = new Array2d<T>(this.columns, this.rows, this.initial)
 		for (let i = 0; i < this.rows * this.columns; i++) {
 			const newVal = cb(
 				this.getValue(i) as T,
@@ -173,10 +173,11 @@ export class Array2d<T> {
 	/**
 	 * The original array remains unchanged.
 	 * @param cb
-	 * @returns new Array2d
+	 * @param initial
+	 * @returns new Array2d instance
 	 */
-	map<U>(cb: (value: T, indexs: Array2dIndexs, arr?: T[]) => U): Array2d<U> {
-		const arr = new Array2d<U>(this.columns, this.rows)
+	map<U>(cb: Array2dEachCallback<T, U>, initial: U): Array2d<U> {
+		const arr = new Array2d<U>(this.columns, this.rows, initial)
 		for (let i = 0; i < this.rows * this.columns; i++) {
 			arr.setValue(
 				i,

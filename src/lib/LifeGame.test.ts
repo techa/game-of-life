@@ -7,13 +7,11 @@ import { sleep } from '../utils/Ticker.js'
 import type { RuleString } from './rules.js'
 
 describe(`./LifeGame.js`, () => {
-	const life = new LifeGame().init(
-		new Array2d([
-			[0, 1, 0, 0],
-			[0, 1, 1, 0],
-			[0, 1, 0, 0],
-		]),
-	)
+	const life = new LifeGame().init([
+		[0, 1, 0, 0],
+		[0, 1, 1, 0],
+		[0, 1, 0, 0],
+	])
 
 	it(`setRule reversal`, () => {
 		expect(life.setRule('B3/S23', true)).toBe('B0123478/S01234678')
@@ -51,13 +49,11 @@ describe(`./LifeGame.js`, () => {
 })
 
 describe(`step Generation`, () => {
-	const life = new LifeGame().init(
-		new Array2d([
-			[0, 1, 0, 0],
-			[0, 1, 1, 0],
-			[0, 1, 0, 0],
-		]),
-	)
+	const life = new LifeGame().init([
+		[0, 1, 0, 0],
+		[0, 1, 1, 0],
+		[0, 1, 0, 0],
+	])
 	life.setRule('B23678/S145678/C4')
 	it(`step 1`, () => {
 		life.step()
@@ -94,13 +90,11 @@ describe(`step Generation`, () => {
 })
 
 describe(`step Generation & UNDEAD`, () => {
-	const life = new LifeGame().init(
-		new Array2d([
-			[0, 0, -1, 0],
-			[0, 0, 0, 0],
-			[0, 0, -1, 0],
-		]),
-	)
+	const life = new LifeGame().init([
+		[0, 0, -1, 0],
+		[0, 0, 0, 0],
+		[0, 0, -1, 0],
+	])
 	life.setRule('B234/S2/C5')
 	it(`step 1`, () => {
 		life.step()
@@ -153,13 +147,11 @@ describe(`step Generation & UNDEAD`, () => {
 })
 
 describe('ticker', () => {
-	const life = new LifeGame().init(
-		new Array2d([
-			[0, 0, -1, 0],
-			[0, 0, 0, 0],
-			[0, 0, -1, 0],
-		]),
-	)
+	const life = new LifeGame().init([
+		[0, 0, -1, 0],
+		[0, 0, 0, 0],
+		[0, 0, -1, 0],
+	])
 	life.setRule('B234/S2/C5')
 
 	it(`start`, async () => {

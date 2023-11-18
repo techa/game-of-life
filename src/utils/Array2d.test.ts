@@ -15,15 +15,18 @@ describe(`./Array2d.js`, () => {
 			[1, 1, 1, 1, 1],
 		])
 
-		const arr2 = new Array2d([
-			[1, 1, 1, 1, 1],
-			[1, 1, 1, 1, 1],
-			[1, 1, 1, 1, 1],
-			[1, 1, 1, 1, 1],
-			[1, 1, 1, 1, 1],
-		])
+		const arr2 = new Array2d(
+			[
+				[1, 1, 1, 1, 1],
+				[1, 1, 1, 1, 1],
+				[1, 1, 1, 1, 1],
+				[1, 1, 1, 1, 1],
+				[1, 1, 1, 1, 1],
+			],
+			0,
+		)
 
-		expect(arr2.initial).toBe(1)
+		expect(arr2.initial).toBe(0)
 		expect(arr2.get2d()).toStrictEqual([
 			[1, 1, 1, 1, 1],
 			[1, 1, 1, 1, 1],

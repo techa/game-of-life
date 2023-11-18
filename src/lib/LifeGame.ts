@@ -97,13 +97,15 @@ export class LifeGame {
 		return population
 	}
 
-	init(cells?: typeof this.cells) {
+	init(cells?: typeof this.cells | Cell[][]) {
 		this.#generation = 0
-		if (cells) {
+		if (cells instanceof Array2d) {
 			this.cells = cells
-		} else {
+		} else if (!cells) {
 			// clear()
 			this.cells = new Array2d(this.columns, this.rows, Cell.DEATH)
+		} else {
+			this.cells = new Array2d(cells, Cell.DEATH)
 		}
 
 		if (this.population) {
@@ -222,7 +224,7 @@ export class LifeGame {
 				return (cell + 1) % this.#cycle
 			}
 			return Cell.DEATH
-		})
+		}, Cell.DEATH)
 
 		this.#generation++
 
