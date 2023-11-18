@@ -137,6 +137,10 @@ export class Array2d<T> {
 		return arr
 	}
 
+	/**
+	 * The original array remains unchanged.
+	 * @param cb
+	 */
 	forEach(cb: (value: T, indexs: Array2dIndexs, arr?: T[]) => void) {
 		for (let i = 0; i < this.rows * this.columns; i++) {
 			cb(
@@ -147,6 +151,10 @@ export class Array2d<T> {
 		}
 	}
 
+	/**
+	 * The original array will be modified.
+	 * @param cb
+	 */
 	each(cb: (value: T, indexs: Array2dIndexs, arr?: T[]) => T): this {
 		const arr = new Array2d<T>(this.columns, this.rows)
 		for (let i = 0; i < this.rows * this.columns; i++) {
@@ -162,6 +170,11 @@ export class Array2d<T> {
 		return this
 	}
 
+	/**
+	 * The original array remains unchanged.
+	 * @param cb
+	 * @returns new Array2d
+	 */
 	map<U>(cb: (value: T, indexs: Array2dIndexs, arr?: T[]) => U): Array2d<U> {
 		const arr = new Array2d<U>(this.columns, this.rows)
 		for (let i = 0; i < this.rows * this.columns; i++) {
@@ -517,7 +530,13 @@ export class Array2d<T> {
 		return this
 	}
 
-	rotate(clock = true) {
+	// table manipulators
+
+	/**
+	 * 90-degree rotation
+	 * @param clockwise
+	 */
+	rotate(clockwise = true) {
 		const table = this.get2d()
 		;[this.rows, this.columns] = [this.columns, this.rows]
 
@@ -525,7 +544,7 @@ export class Array2d<T> {
 
 		for (let y = 0; y < this.rows; y++) {
 			for (let x = 0; x < this.columns; x++) {
-				this.values[y * this.columns + x] = clock
+				this.values[y * this.columns + x] = clockwise
 					? table[this.columns - x - 1][y]
 					: table[x][this.rows - y - 1]
 			}
@@ -533,6 +552,11 @@ export class Array2d<T> {
 		return this
 	}
 
+	/**
+	 * resize table
+	 * @param columns width
+	 * @param rows height
+	 */
 	sizing(columns: number, rows: number) {
 		const table = this.get2d()
 		if (this.rows > rows) {
