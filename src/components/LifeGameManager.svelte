@@ -98,6 +98,7 @@
 	</DropDown>
 
 	<button
+		class="player play primary-color"
 		on:click={() => {
 			if (playing) {
 				life.stop()
@@ -117,6 +118,7 @@
 	>
 	{#if playing}
 		<button
+			class="player speed"
 			on:click={() => {
 				life.speedIndex++
 				speed = life.speed

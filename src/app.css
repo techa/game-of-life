@@ -72,6 +72,10 @@ button {
 	border: none;
 }
 
+.primary-color {
+	background-color: var(--primary-color);
+}
+
 button.skeleton > svg {
 	width: 24px;
 	height: 24px;

@@ -8,7 +8,7 @@
 	import InitializerSettings from './InitializerSettings.svelte'
 
 	import Modal from './generic/Modal.svelte'
-	import { modal, ModalsHeader } from './store'
+	import { modal, ModalsHeader, selectedColor } from './store'
 
 	const _modal: Record<ModalsHeader, ComponentType> = {
 		[ModalsHeader.Random]: InitializerSettings,
@@ -19,21 +19,21 @@
 	<title>LifeGame</title>
 </svelte:head>
 
-<section>
+<main style:--primary-color={$selectedColor}>
 	<TableManager />
 	<TableInitializer />
 	<LifeGameManager />
 	<GridTable />
-</section>
 
-{#if $modal}
-	<Modal on:close={() => ($modal = null)}>
-		<svelte:component this={_modal[$modal]} />
-	</Modal>
-{/if}
+	{#if $modal}
+		<Modal on:close={() => ($modal = null)}>
+			<svelte:component this={_modal[$modal]} />
+		</Modal>
+	{/if}
+</main>
 
 <style>
-	section {
+	main {
 		position: relative;
 		width: 100%;
 		height: 100%;

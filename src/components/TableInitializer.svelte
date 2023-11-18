@@ -13,10 +13,11 @@
 
 <nav>
 	<button
+		class="primary-color"
 		on:click={() => {
 			life.randomInit()
 		}}
-		>Random
+		>Randomize!
 	</button>
 
 	<button on:click={() => ($modal = ModalsHeader.Random)}>
