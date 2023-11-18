@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { SvelteComponent } from 'svelte'
+	import type { ComponentType } from 'svelte'
 
 	import GridTable from './GridTable.svelte'
 	import TableManager from './TableManager.svelte'
@@ -10,7 +10,7 @@
 	import Modal from './generic/Modal.svelte'
 	import { modal, ModalsHeader } from './store'
 
-	const _modal: Record<ModalsHeader, typeof SvelteComponent> = {
+	const _modal: Record<ModalsHeader, ComponentType> = {
 		[ModalsHeader.Random]: InitializerSettings,
 	}
 </script>

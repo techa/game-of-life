@@ -1,8 +1,12 @@
 module.exports = {
 	root: true,
 	parser: '@typescript-eslint/parser',
-	extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
-	plugins: ['svelte3', '@typescript-eslint'],
+	extends: [
+		'eslint:recommended',
+		'plugin:@typescript-eslint/recommended',
+		'plugin:svelte/recommended',
+	],
+	plugins: ['@typescript-eslint'],
 	ignorePatterns: ['*.cjs'],
 	rules: {
 		'@typescript-eslint/no-empty-interface': [
