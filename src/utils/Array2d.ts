@@ -561,15 +561,24 @@ export class Array2d<T> {
 	sizing(columns: number, rows: number) {
 		const table = this.get2d()
 		if (this.rows > rows) {
+			// remove rows
 			table.length = rows
-		} else {
-			for (let y = 0; y < rows; y++) {
-				if (!table[y]) table[y] = Array(columns).fill(this.initial)
-				if (this.columns > columns) {
-					table[y].length = columns
-				}
+		}
+		for (let y = 0; y < rows; y++) {
+			// remove columns
+			if (this.columns > columns) {
+				table[y].length = columns
+			}
+
+			// add rows
+			if (!table[y]) table[y] = Array(columns).fill(this.initial)
+
+			// add colmns
+			for (let x = table[y].length; x < columns; x++) {
+				table[y].push(this.initial)
 			}
 		}
+
 		this.columns = table[0].length
 		this.rows = table.length
 		this.values = table.flat()

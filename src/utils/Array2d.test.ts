@@ -52,6 +52,26 @@ describe(`./Array2d.js`, () => {
 describe(`sizings`, () => {
 	const arr = new Array2d(5, 4, 1)
 
+	it(`sizing scale‐up`, () => {
+		arr.initial = 0
+		expect(arr.sizing(8, 6).get2d()).toStrictEqual([
+			[1, 1, 1, 1, 1, 0, 0, 0],
+			[1, 1, 1, 1, 1, 0, 0, 0],
+			[1, 1, 1, 1, 1, 0, 0, 0],
+			[1, 1, 1, 1, 1, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0],
+		])
+	})
+	it(`sizing scale‐down`, () => {
+		expect(arr.sizing(3, 4).get2d()).toStrictEqual([
+			[1, 1, 1],
+			[1, 1, 1],
+			[1, 1, 1],
+			[1, 1, 1],
+		])
+	})
+
 	it(`sizing`, () => {
 		arr.initial = 0
 		expect(arr.sizing(3, 6).get2d()).toStrictEqual([
