@@ -58,7 +58,7 @@
 
 	<button class="skeleton" on:click={() => ($penMode += 1)}>
 		<svg style:stroke={$penMode < 2 ? $selectedColor : 'currentColor'}>
-			<use href="{SVG}#pen" />
+			<use href="{SVG}#pencil" />
 			{#if $penMode}
 				<use
 					href="{SVG}#x"
