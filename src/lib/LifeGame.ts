@@ -97,40 +97,6 @@ export class LifeGame {
 		return population
 	}
 
-	#memory = '[[0]]'
-
-	ticker!: Ticker
-
-	#speedIndex = 1
-	#tickIntervals = [128, 64, 32, 16]
-	speeds = [1, 2, 4, 8]
-
-	get interval() {
-		return this.#tickIntervals[this.#speedIndex]
-	}
-	get speed() {
-		return this.speeds[this.#speedIndex]
-	}
-	get speedIndex() {
-		return this.#speedIndex
-	}
-	set speedIndex(val: number) {
-		const len = this.#tickIntervals.length
-		while (val < 0) val += len // positive number
-		if (val >= len) val %= len // loop
-
-		this.#speedIndex = val
-		if (this.ticker) {
-			this.ticker.interval = this.interval
-		}
-	}
-
-	#tableMemory = ''
-	autoStop = true
-	get isRunning() {
-		return this.ticker?.running
-	}
-
 	init(cells?: typeof this.cells) {
 		this.#generation = 0
 		if (cells) {
@@ -152,6 +118,8 @@ export class LifeGame {
 	clear() {
 		return this.init()
 	}
+
+	#memory = '[[0]]'
 
 	memory() {
 		return (this.#memory = JSON.stringify(this.cells.get2d()))
@@ -259,6 +227,38 @@ export class LifeGame {
 		this.#generation++
 
 		this.update()
+	}
+
+	ticker!: Ticker
+
+	#speedIndex = 1
+	#tickIntervals = [128, 64, 32, 16]
+	speeds = [1, 2, 4, 8]
+
+	get interval() {
+		return this.#tickIntervals[this.#speedIndex]
+	}
+	get speed() {
+		return this.speeds[this.#speedIndex]
+	}
+	get speedIndex() {
+		return this.#speedIndex
+	}
+	set speedIndex(val: number) {
+		const len = this.#tickIntervals.length
+		while (val < 0) val += len // positive number
+		if (val >= len) val %= len // loop
+
+		this.#speedIndex = val
+		if (this.ticker) {
+			this.ticker.interval = this.interval
+		}
+	}
+
+	#tableMemory = ''
+	autoStop = true
+	get isRunning() {
+		return this.ticker?.running
 	}
 
 	start() {
