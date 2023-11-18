@@ -14,6 +14,7 @@
 
 	import SVG from '../resource/sprite.svg'
 	import { LifeEvent } from '$lib/LifeGame'
+	import { lch2rgb } from '../utils/lch2rgb.js'
 
 	function resize() {
 		life.tableSizing($columns, $rows)
@@ -37,15 +38,18 @@
 			<Slider
 				style={'width:8rem;'}
 				max={359}
-				on:change={(e) => ($selectedColor = `hsl(${e.detail},86%,68%)`)}
+				on:change={(e) =>
+					($selectedColor = lch2rgb(100, 120, e.detail))}
 				gradient={[
-					'red',
-					'yellow',
-					'lime',
-					'cyan',
-					'blue',
-					'magenta',
-					'red',
+					'#ff6aff',
+					'#ffac5a',
+					'#fffc00',
+					'#35ff32',
+					'#00fffb',
+					'#00ffff',
+					'#00ffff',
+					'#ffb9ff',
+					'#ff6aff',
 				]}
 				--background-color={$selectedColor}
 			/>
