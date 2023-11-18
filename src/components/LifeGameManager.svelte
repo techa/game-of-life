@@ -118,7 +118,7 @@
 	{#if playing}
 		<button
 			on:click={() => {
-				life.tpfsIndex++
+				life.speedIndex++
 				speed = life.speed
 			}}
 			>x{speed}

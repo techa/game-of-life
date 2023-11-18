@@ -7,8 +7,7 @@ export async function sleep(msec: number) {
 
 export interface TickerArgs {
 	tick?: (count?: number) => void
-	tpf?: number
-	speeds?: number[]
+	interval?: number
 }
 
 export class Ticker {
@@ -19,17 +18,19 @@ export class Ticker {
 	}
 
 	tick: (count?: number) => void
-	// tpf: tick/frame
-	tpf = 1
+
+	/**
+	 * Update interval (msec)
+	 */
+	interval: number
 	count = 0
 
 	isBrowser =
 		typeof window !== 'undefined' && typeof window.document !== 'undefined'
 
 	constructor(opts?: TickerArgs) {
-		// eslint-disable-next-line @typescript-eslint/no-empty-function
 		this.tick = opts?.tick || (() => {})
-		this.tpf = opts?.tpf || 1
+		this.interval = opts?.interval || 64
 	}
 
 	start(): void {
@@ -50,7 +51,7 @@ export class Ticker {
 				const timestamp = Date.now()
 				// console.log(timestamp - startTime)
 
-				if (timestamp - startTime > 10) {
+				if (timestamp - startTime > this.interval) {
 					startTime = timestamp
 					this.update()
 				}
@@ -66,7 +67,7 @@ export class Ticker {
 					return
 				}
 
-				await sleep(100)
+				await sleep(this.interval)
 				this.update()
 				loop()
 			}
