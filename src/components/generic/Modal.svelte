@@ -5,14 +5,14 @@
 	import SVG from '../../resource/sprite.svg'
 	import { modal } from '../store.js'
 
-	export let showModal = !!$modal
+	// export let showModal = false // !!$modal
 
 	const dispatch = createEventDispatcher()
 	const close = () => dispatch('close')
 
 	let dialog: HTMLDialogElement
 
-	$: if (dialog && showModal) dialog.showModal()
+	$: if (dialog && $modal) dialog.showModal()
 
 	const header = writable('')
 	setContext<Writable<string>>('ModalHeader', header)
@@ -20,7 +20,7 @@
 
 <dialog
 	bind:this={dialog}
-	on:close={() => (showModal = false)}
+	on:close={() => ($modal = null)}
 	on:click|self={() => dialog.close()}
 >
 	<button class="close skeleton" on:click={close}>
