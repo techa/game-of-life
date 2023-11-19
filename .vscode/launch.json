@@ -1,34 +1,26 @@
 {
-  // IntelliSense を使用して利用可能な属性を学べます。
-  // 既存の属性の説明をホバーして表示します。
-  // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
-  "version": "0.2.0",
-  "configurations": [
-    {
-		// https://github.com/avajs/ava/blob/main/docs/recipes/debugging-with-vscode.md
-		"type": "node",
-		"request": "launch",
-		"name": "Debug AVA test file",
-		"runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ava",
-		"runtimeArgs": [
-		  "${file}"
-		],
-		"outputCapture": "std",
-		"skipFiles": [
-		  "<node_internals>/**/*.js"
-		]
-    },
-	{
-      "type": "pwa-node",
-      "request": "launch",
-      "name": "Launch Program",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "program": "${workspaceFolder}\\dist\\index.js",
-      "outFiles": [
-        "${workspaceFolder}/**/*.js"
-      ]
-	}
-  ]
+	// IntelliSense を使用して利用可能な属性を学べます。
+	// 既存の属性の説明をホバーして表示します。
+	// 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			// https://vitest.dev/guide/debugging.html
+			"type": "node",
+			"request": "launch",
+			"name": "Debug Current Test File",
+			"autoAttachChildProcesses": true,
+			"skipFiles": [
+				"<node_internals>/**",
+				"**/node_modules/**"
+			],
+			"program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",
+			"args": [
+				"run",
+				"${relativeFile}"
+			],
+			"smartStep": true,
+			"console": "integratedTerminal"
+		}
+	]
 }
