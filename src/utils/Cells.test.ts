@@ -162,8 +162,8 @@ describe(`./Cells.js`, () => {
 	})
 
 	it(`encode`, () => {
-		expect(new Cells(12, 8, 0).encode()).toBe('12/8:0')
-		expect(new Cells(12, 8, 1).encode()).toBe('12/8-////////////////')
+		expect(new Cells(12, 8, 0).encode()).toBe('12-8:0')
+		expect(new Cells(12, 8, 1).encode()).toBe('12-8-////////////////')
 	})
 
 	it(`compress`, () => {

@@ -85,14 +85,14 @@ export class Cells extends Array2d<Cell> {
 		const b = +(
 			d10 < Number.MAX_SAFE_INTEGER && num36.length < base64.length
 		)
-		return `${this.columns}/${this.rows}${b ? ':' : '-'}${
+		return `${this.columns}-${this.rows}${b ? ':' : '-'}${
 			b ? num36 : base64
 		}`
 	}
 
 	decode(str: string) {
 		const b = !!str.includes(':')
-		const [w, h, d] = str.split(/[/:-]/).map((v) => +v || v) as [
+		const [w, h, d] = str.split(/[:-]/).map((v) => +v || v) as [
 			number,
 			number,
 			string,
