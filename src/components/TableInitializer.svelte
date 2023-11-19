@@ -1,9 +1,9 @@
 <script lang="ts">
 	// import type { Cell } from '$lib/LifeGame'
 
-	import { life, columns, rows, modal, ModalsHeader } from './store'
+	import { life, modal, ModalsHeader } from './store'
 
-	import lexicon from '../resource/lexicon.json'
+	import lexicon from '../resource/lexicon.min.json'
 	// import Patterns from '../resource/patterns.json'
 
 	import SVG from '../resource/sprite.svg'
@@ -46,22 +46,19 @@
 
 	<!-- <button
 		on:click={() => {
-			navigator.clipboard.writeText(life.memory())
+			navigator.clipboard.writeText(life.toString())
 		}}
 		>Copy
 	</button> -->
 
 	<label>
 		<select class="pulldown">
-			{#each Object.entries(lexicon) as [name, lexico], i}
+			{#each lexicon as { n, d }, i}
 				<option
 					value={i}
 					on:click={() => {
-						$columns = life.columns
-						$rows = life.rows
-						life.insert(lexico)
-						life.memory()
-					}}>{i}: {name}</option
+						life.lexicon(d)
+					}}>{i}: {n}</option
 				>
 			{/each}
 		</select>

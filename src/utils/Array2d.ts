@@ -77,6 +77,23 @@ export class Array2d<T> {
 		return this
 	}
 
+	/**
+	 *
+	 * @param original
+	 * @param rows y, height
+	 */
+	static get2d<A>(original: A[], rows: number): A[][] {
+		const arr2d: A[][] = []
+		for (let y = 0; y < rows; y++) {
+			arr2d[y] ||= [] as A[]
+			const columns = original.length / rows
+			for (let x = 0; x < columns; x++) {
+				arr2d[y].push(original[y * columns + x])
+			}
+		}
+		return arr2d
+	}
+
 	get2d() {
 		const arr2d = []
 		for (let i = 0; i < this.rows; i++) {

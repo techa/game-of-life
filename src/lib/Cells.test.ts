@@ -4,8 +4,8 @@ import { describe, it, expect, test } from 'vitest'
 import {
 	Cells,
 	strBinaryToBase64,
-	type MiniData,
 	base64ToStrBinary,
+	type DataTemp,
 } from './Cells.js'
 
 import { readFile, writeFile } from 'fs/promises'
@@ -16,7 +16,7 @@ describe(`lexicon`, async () => {
 	let title = ''
 	let pattern: (0 | 1)[][] = []
 
-	const datas: MiniData[] = []
+	const datas: { n: string; d: DataTemp }[] = []
 	const patterns: (typeof pattern)[] = []
 
 	// results count
@@ -52,14 +52,14 @@ describe(`lexicon`, async () => {
 			}
 
 			// Add data & pattern
-			const cells = new Cells(pattern, 0).compress()
+			const cells = new Cells(pattern, 0).encode(1)
 			datas.push({
 				n: title,
-				...cells,
+				d: cells,
 			})
 			patterns.push(JSON.parse(JSON.stringify(pattern)))
 
-			if (cells.b) {
+			if (cells.includes(':')) {
 				b1Count++
 			}
 
@@ -79,7 +79,7 @@ describe(`lexicon`, async () => {
 		test.each(datas.map((data, i) => ({ ...data, p: patterns[i] })))(
 			'$n',
 			(data) => {
-				expect(cell.decompress(data).get2d()).toStrictEqual(data.p)
+				expect(cell.decode(data.d, 1)).toStrictEqual(data.p)
 			},
 		)
 	})
@@ -88,7 +88,7 @@ describe(`lexicon`, async () => {
 })
 
 describe(`./Cells.js`, () => {
-	it(`strBinaryToBase64`, () => {
+	it(`strBinaryToBase64, 1`, () => {
 		expect(strBinaryToBase64('111010001111011')).toBe('6PY=')
 		expect(base64ToStrBinary('6PY=')).toBe('1110100011110110')
 
@@ -214,120 +214,18 @@ describe(`./Cells.js`, () => {
 	})
 
 	it(`encode decode`, () => {
-		expect(new Cells([[]], 1).decode('12-8:0', 1).encode(1)).toBe('12-8:0')
+		const noo = new Cells([[]], 1)
+		expect(new Cells(noo.decode('12-8:0', 1), 0).encode(1)).toBe('12-8:0')
 
 		expect(
-			new Cells([[]], 1).decode('12-8-////////////////', 1).encode(1),
+			new Cells(noo.decode('12-8-////////////////', 1), 1).encode(1),
 		).toBe('12-8-////////////////')
 
-		expect(new Cells([[]], 1).decode('4-1:4x', 2).encode(2)).toBe('4-1:4x')
+		expect(new Cells(noo.decode('4-1:4x', 2), 0).encode(2)).toBe('4-1:4x')
 
-		expect(new Cells([[]], 1).decode('4-3-sYdb', 2).encode(2)).toBe(
+		expect(new Cells(noo.decode('4-3-sYdb', 2), 0).encode(2)).toBe(
 			'4-3-sYdb',
 		)
-	})
-
-	it(`compress`, () => {
-		expect(new Cells(12, 8, 0).compress()).toStrictEqual({
-			b: 1,
-			d: '0',
-			h: 8,
-			w: 12,
-		})
-		expect(new Cells(12, 8, 1).compress()).toStrictEqual({
-			d: '////////////////',
-			h: 8,
-			w: 12,
-		})
-
-		expect(
-			new Cells(
-				[
-					[0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
-					[0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
-					[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-					[1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1],
-					[1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1],
-					[0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0],
-					[0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0],
-					[1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1],
-					[1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1],
-					[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-					[0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
-					[0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
-				],
-				1,
-			).compress(),
-		).toStrictEqual({
-			d: 'DAwFAoEAI0AL1MrFSoFSo1Mr0ALEAIFAoDAw',
-			h: 12,
-			w: 18,
-		})
-	})
-
-	it(`decompress`, () => {
-		expect(
-			new Cells([[]], 0)
-				.decompress({
-					b: 1,
-					d: '0',
-					h: 8,
-					w: 12,
-				})
-				.get2d(),
-		).toStrictEqual([
-			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		])
-
-		expect(
-			new Cells([[]], 1)
-				.decompress({
-					d: '////////////////',
-					h: 8,
-					w: 12,
-				})
-				.get2d(),
-		).toStrictEqual([
-			[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-			[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-			[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-			[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-			[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-			[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-			[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-			[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-		])
-
-		expect(
-			new Cells([[]], 1)
-				.decompress({
-					b: 0,
-					d: 'DAwFAoEAI0AL1MrFSoFSo1Mr0ALEAIFAoDAw',
-					h: 12,
-					w: 18,
-				})
-				.get2d(),
-		).toStrictEqual([
-			[0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
-			[0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
-			[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-			[1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1],
-			[1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1],
-			[0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0],
-			[0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0],
-			[1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1],
-			[1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1],
-			[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-			[0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
-			[0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
-		])
 	})
 
 	// it(`_atob`, () => {

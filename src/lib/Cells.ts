@@ -8,36 +8,6 @@ export const enum Cell {
 	LIVE,
 }
 
-export const enum DataType {
-	base64,
-	number36,
-	binary,
-}
-
-export interface MiniData {
-	/**
-	 * name
-	 */
-	n?: string
-	/**
-	 * width
-	 */
-	w: number
-	/**
-	 * height
-	 */
-	h: number
-	/**
-	 * 1 = binary
-	 * 0|undefined = base64(ASCII)
-	 */
-	b?: 1 | 0
-	/**
-	 * data
-	 */
-	d: string
-}
-
 /**
  * * `x-y:36radixNumber` or `x-y-Base64String`
  */
@@ -70,41 +40,6 @@ export function base64ToStrBinary(base64: string, bit: DataBit = 1) {
 }
 
 export class Cells extends Array2d<Cell | number> {
-	compress(): MiniData {
-		const binary = this.values.join('')
-		const base64 = strBinaryToBase64(binary)
-		const d10 = parseInt(binary, 2)
-		const num36 = d10.toString(36)
-		const b = +(
-			d10 < Number.MAX_SAFE_INTEGER && num36.length < base64.length
-		)
-		const data: MiniData = {
-			w: this.columns,
-			h: this.rows,
-			d: b ? num36 : base64,
-		}
-		if (b) {
-			data.b = 1
-		}
-		return data
-	}
-
-	decompress({ w, h, b, d }: MiniData) {
-		this.values = (
-			b
-				? parseInt(d, 36)
-						.toString(2)
-						.padStart(w * h, '0')
-				: base64ToStrBinary(d)
-		)
-			.slice(0, w * h)
-			.split('')
-			.map((v) => +v)
-		this.columns = w
-		this.rows = h
-		return this
-	}
-
 	/**
 	 *
 	 * @param bit
@@ -136,7 +71,7 @@ export class Cells extends Array2d<Cell | number> {
 				number,
 				string,
 			]
-			this.values = (
+			const darr = (
 				b
 					? parseInt(d, 36)
 							.toString(2 ** bit)
@@ -146,12 +81,13 @@ export class Cells extends Array2d<Cell | number> {
 				.slice(0, w * h)
 				.split('')
 				.map((v) => (bit > 1 ? +v - 2 : +v))
-			this.columns = w
-			this.rows = h
+
+			return Array2d.get2d(darr, h)
 		} catch (err) {
 			console.error(err)
+			throw err
 		}
 
-		return this
+		// return this
 	}
 }

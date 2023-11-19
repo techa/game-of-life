@@ -131,6 +131,15 @@ export class LifeGame {
 		this.insert(JSON.parse(this.#memory))
 	}
 
+	/**
+	 * load lexicon data
+	 * @param data Cells#DataTemp
+	 */
+	lexicon(data: string) {
+		this.insert(this.cells.decode(data, 1))
+		this.memory()
+	}
+
 	insert(cells: Cell[][]) {
 		this.cells = new Cells(
 			Math.max(cells[0].length, this.columns),
