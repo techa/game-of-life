@@ -127,8 +127,8 @@ export class Array2d<T> {
 		this.values[target] = value
 	}
 
-	clone() {
-		const arr = new Array2d<T>(
+	clone(): this {
+		const arr = new (this.constructor as any)(
 			this.columns,
 			this.rows,
 			this.initial,
@@ -156,7 +156,11 @@ export class Array2d<T> {
 	 * @param cb
 	 */
 	each(cb: Array2dEachCallback<T, T>): this {
-		const arr = new Array2d<T>(this.columns, this.rows, this.initial)
+		const arr = new (this.constructor as any)(
+			this.columns,
+			this.rows,
+			this.initial,
+		)
 		for (let i = 0; i < this.rows * this.columns; i++) {
 			const newVal = cb(
 				this.getValue(i) as T,
@@ -168,31 +172,6 @@ export class Array2d<T> {
 		this.values = arr.values
 
 		return this
-	}
-
-	/**
-	 * The original array remains unchanged.
-	 * @param cb
-	 * @param initial
-	 * @returns new Array2d instance
-	 */
-	map<U>(cb: Array2dEachCallback<T, U>, initial: U): Array2d<U> {
-		const arr = new Array2d<U>(this.columns, this.rows, initial)
-		for (let i = 0; i < this.rows * this.columns; i++) {
-			arr.setValue(
-				i,
-				cb(
-					this.getValue(i) as T,
-					{
-						x: this.getX(i),
-						y: this.getY(i),
-						i,
-					},
-					this.values,
-				),
-			)
-		}
-		return arr
 	}
 
 	/**

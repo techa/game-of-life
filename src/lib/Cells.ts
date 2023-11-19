@@ -1,5 +1,5 @@
-import { Array2d } from './Array2d.js'
-import { base64DecToArr, base64EncArr } from './binary.js'
+import { Array2d } from '../utils/Array2d.js'
+import { base64DecToArr, base64EncArr } from '../utils/binary.js'
 
 export const enum Cell {
 	TOMB = -2,
@@ -69,7 +69,7 @@ export function base64ToStrBinary(base64: string, bit: DataBit = 1) {
 	)
 }
 
-export class Cells extends Array2d<Cell> {
+export class Cells extends Array2d<Cell | number> {
 	compress(): MiniData {
 		const binary = this.values.join('')
 		const base64 = strBinaryToBase64(binary)

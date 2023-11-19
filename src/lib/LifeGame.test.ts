@@ -2,7 +2,6 @@
 // https://jestjs.io/docs/expect
 import { describe, it, expect } from 'vitest'
 import { LifeGame } from './LifeGame.js'
-import { Array2d } from '../utils/Array2d.js'
 import { sleep } from '../utils/Ticker.js'
 import type { RuleString } from './rules.js'
 
@@ -162,24 +161,12 @@ describe('ticker', () => {
 		life.stop()
 		expect(life.isRunning).toBe(false)
 
-		expect(life.cells.get2d()).toStrictEqual(
-			life.ticker.count === 18
-				? [
-						[0, 3, -1, 3],
-						[0, 3, 3, 3],
-						[0, 3, -1, 3],
-				  ]
-				: life.ticker.count === 17
-				? [
-						[0, 2, -1, 2],
-						[0, 2, 2, 2],
-						[0, 2, -1, 2],
-				  ]
-				: [
-						[0, 1, -1, 1],
-						[0, 1, 1, 1],
-						[0, 1, -1, 1],
-				  ],
-		)
+		const cell = life.ticker.count % 5
+
+		expect(life.cells.get2d()).toStrictEqual([
+			[0, cell, -1, cell],
+			[0, cell, cell, cell],
+			[0, cell, -1, cell],
+		])
 	})
 })

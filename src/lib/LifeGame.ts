@@ -6,7 +6,7 @@ import {
 	ruleString,
 	type RuleString,
 } from '$lib/rules.js'
-import { Array2d } from '../utils/Array2d.js'
+import { Cells } from './Cells.js'
 
 export const enum Cell {
 	/**
@@ -37,7 +37,7 @@ export class LifeGame {
 		this.#events.on(eventName, handler)
 	}
 
-	cells = new Array2d(70, 70, Cell.DEATH)
+	cells = new Cells(70, 70, Cell.DEATH)
 	get columns() {
 		return this.cells.columns
 	}
@@ -99,13 +99,13 @@ export class LifeGame {
 
 	init(cells?: typeof this.cells | Cell[][]) {
 		this.#generation = 0
-		if (cells instanceof Array2d) {
+		if (cells instanceof Cells) {
 			this.cells = cells
 		} else if (!cells) {
 			// clear()
-			this.cells = new Array2d(this.columns, this.rows, Cell.DEATH)
+			this.cells = new Cells(this.columns, this.rows, Cell.DEATH)
 		} else {
-			this.cells = new Array2d(cells, Cell.DEATH)
+			this.cells = new Cells(cells, Cell.DEATH)
 		}
 
 		if (this.population) {
@@ -132,7 +132,7 @@ export class LifeGame {
 	}
 
 	insert(cells: Cell[][]) {
-		this.cells = new Array2d(
+		this.cells = new Cells(
 			Math.max(cells[0].length, this.columns),
 			Math.max(cells.length, this.rows),
 			Cell.DEATH,
@@ -191,8 +191,9 @@ export class LifeGame {
 
 	step() {
 		const countMax = Math.max(...this.#born, ...this.#survival)
+		const cells = this.cells.clone()
 
-		this.cells = this.cells.map((cell, { x, y }) => {
+		this.cells.each((cell, { x, y }) => {
 			if (cell === Cell.UNDEAD || cell === Cell.TOMB) {
 				return cell
 			}
@@ -224,7 +225,7 @@ export class LifeGame {
 				return (cell + 1) % this.#cycle
 			}
 			return Cell.DEATH
-		}, Cell.DEATH)
+		})
 
 		this.#generation++
 
