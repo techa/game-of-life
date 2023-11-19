@@ -38,21 +38,28 @@ export interface MiniData {
 	d: string
 }
 
-export function strBinaryToBase64(strBinary: string) {
-	const arr = new Uint8Array(Math.ceil(strBinary.length / 8))
+type Bit = 1 | 2 | 4 | 8
+/**
+ *
+ * @param strBinary
+ * @param bit 1,2,4,8
+ */
+export function strBinaryToBase64(strBinary: string, bit: Bit = 1) {
+	const digit = 8 / bit
+	const arr = new Uint8Array(Math.ceil(strBinary.length / digit))
 	let i = 0
 	while (strBinary) {
-		const u8 = strBinary.substring(0, 8).padEnd(8, '0')
-		strBinary = strBinary.slice(8)
-		const val = parseInt(u8, 2)
+		const uint = strBinary.substring(0, digit).padEnd(digit, '0')
+		strBinary = strBinary.slice(digit)
+		const val = parseInt(uint, 2 * bit)
 		arr[i++] = val
 	}
 	return base64EncArr(arr)
 }
 
-export function base64ToStrBinary(base64: string) {
+export function base64ToStrBinary(base64: string, bit: Bit = 1) {
 	return base64DecToArr(base64).reduce(
-		(str, v) => str + v.toString(2).padStart(8, '0'),
+		(str, v) => str + v.toString(2 * bit).padStart(8 / bit, '0'),
 		'',
 	)
 }
@@ -77,10 +84,20 @@ export class Cells extends Array2d<Cell> {
 		return data
 	}
 
-	encode() {
-		const binary = this.values.join('')
-		const base64 = strBinaryToBase64(binary)
-		const d10 = parseInt(binary, 2)
+	/**
+	 *
+	 * @param bit
+	 * 1. = lexicon load (DEATH:0, LIVE:1)
+	 * 2. = cells table save (TOMB:-2, UNDEAD:-1, DEATH:0, LIVE:1)
+	 * 8. = cells table state (Generation:2~253)
+	 * @returns "x-y:36radix" or "x-y-Base64DataString"
+	 */
+	encode(bit: Bit = 2) {
+		const binary = this.values.map((v) => (bit > 1 ? v + 2 : v)).join('')
+		const base64 = strBinaryToBase64(binary, bit)
+		const d10 = parseInt(binary, 2 ** bit)
+
+		// binaryを１つの数字として見做した36進数
 		const num36 = d10.toString(36)
 		const b = +(
 			d10 < Number.MAX_SAFE_INTEGER && num36.length < base64.length
@@ -90,7 +107,7 @@ export class Cells extends Array2d<Cell> {
 		}`
 	}
 
-	decode(str: string) {
+	decode(str: string, bit: Bit = 2) {
 		const b = !!str.includes(':')
 		const [w, h, d] = str.split(/[:-]/).map((v) => +v || v) as [
 			number,
@@ -100,13 +117,13 @@ export class Cells extends Array2d<Cell> {
 		this.values = (
 			b
 				? parseInt(d, 36)
-						.toString(2)
-						.padStart(+w * +h, '0')
-				: base64ToStrBinary(d)
+						.toString(2 ** bit)
+						.padStart(w * h, '0')
+				: base64ToStrBinary(d, bit)
 		)
 			.slice(0, w * h)
 			.split('')
-			.map((v) => +v)
+			.map((v) => (bit > 1 ? +v - 2 : +v))
 		this.columns = w
 		this.rows = h
 		return this

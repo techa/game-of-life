@@ -7,12 +7,6 @@ import {
 	type MiniData,
 	base64ToStrBinary,
 } from './Cells.js'
-// import {
-// 	base64EncArr,
-// 	base64DecToArr,
-// 	strToUTF8Arr,
-// 	UTF8ArrToStr,
-// } from './binary.js'
 
 import { readFile, writeFile } from 'fs/promises'
 
@@ -102,6 +96,47 @@ describe(`./Cells.js`, () => {
 		expect(base64ToStrBinary('CPY=')).toBe('0000100011110110')
 	})
 
+	it(`strBinaryToBase64, 2`, () => {
+		expect(strBinaryToBase64('111010001111011', 2)).toBe('VEBVFA==')
+		expect(base64ToStrBinary('VEBVFA==', 2)).toBe('1110100011110110')
+
+		expect(strBinaryToBase64('000010001111011', 2)).toBe('AEBVFA==')
+		expect(base64ToStrBinary('AEBVFA==', 2)).toBe('0000100011110110')
+
+		expect(strBinaryToBase64('01200012312', 2)).toBe('GAbY')
+		expect(base64ToStrBinary('GAbY', 2)).toBe('012000123120')
+	})
+
+	it(`strBinaryToBase64, 4`, () => {
+		expect(strBinaryToBase64('111010001111011', 4)).toBe('CQgIAAkJAQg=')
+		expect(base64ToStrBinary('CQgIAAkJAQg=', 4)).toBe('1110100011110110')
+
+		expect(strBinaryToBase64('000010001111011', 4)).toBe('AAAIAAkJAQg=')
+		expect(base64ToStrBinary('AAAIAAkJAQg=', 4)).toBe('0000100011110110')
+
+		expect(strBinaryToBase64('01200012312', 4)).toBe('ARAAChkQ')
+		expect(base64ToStrBinary('ARAAChkQ', 4)).toBe('012000123120')
+	})
+
+	it(`strBinaryToBase64, 8`, () => {
+		expect(strBinaryToBase64('111010001111011', 8)).toBe(
+			'AQEBAAEAAAABAQEBAAEB',
+		)
+		expect(base64ToStrBinary('AQEBAAEAAAABAQEBAAEB', 8)).toBe(
+			'111010001111011',
+		)
+
+		expect(strBinaryToBase64('000010001111011', 8)).toBe(
+			'AAAAAAEAAAABAQEBAAEB',
+		)
+		expect(base64ToStrBinary('AAAAAAEAAAABAQEBAAEB', 8)).toBe(
+			'000010001111011',
+		)
+
+		expect(strBinaryToBase64('01200012312', 8)).toBe('AAECAAAAAQIDAQI=')
+		expect(base64ToStrBinary('AAECAAAAAQIDAQI=', 8)).toBe('01200012312')
+	})
+
 	it(`shortest test`, () => {
 		class Test extends Cells {
 			tests() {
@@ -162,8 +197,34 @@ describe(`./Cells.js`, () => {
 	})
 
 	it(`encode`, () => {
-		expect(new Cells(12, 8, 0).encode()).toBe('12-8:0')
-		expect(new Cells(12, 8, 1).encode()).toBe('12-8-////////////////')
+		expect(new Cells(12, 8, 0).encode(1)).toBe('12-8:0')
+		expect(new Cells(12, 8, 1).encode(1)).toBe('12-8-////////////////')
+
+		expect(new Cells([[0, 1, -2, -1]], 1).encode(2)).toBe('4-1:4x')
+		expect(
+			new Cells(
+				[
+					[0, 1, -2, -1],
+					[0, -2, -1, 1],
+					[-1, -1, 0, 1],
+				],
+				1,
+			).encode(2),
+		).toBe('4-3-sYdb')
+	})
+
+	it(`encode decode`, () => {
+		expect(new Cells([[]], 1).decode('12-8:0', 1).encode(1)).toBe('12-8:0')
+
+		expect(
+			new Cells([[]], 1).decode('12-8-////////////////', 1).encode(1),
+		).toBe('12-8-////////////////')
+
+		expect(new Cells([[]], 1).decode('4-1:4x', 2).encode(2)).toBe('4-1:4x')
+
+		expect(new Cells([[]], 1).decode('4-3-sYdb', 2).encode(2)).toBe(
+			'4-3-sYdb',
+		)
 	})
 
 	it(`compress`, () => {
