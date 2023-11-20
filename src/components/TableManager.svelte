@@ -204,7 +204,7 @@
 		</svg>
 	</button>
 
-	<label class="input w-20 py-2"
+	<label class="input w-20 py-2 rounded-r-none rounded-l-lg"
 		><span>W: </span><input
 			class="bg-transparent border-0 ring-0 focus:ring-0 focus:border-0 outline-none w-12"
 			title="Change width of Cells Table"
@@ -214,7 +214,7 @@
 			min="1"
 		/>
 	</label>
-	<label class="input w-20 py-2"
+	<label class="input w-20 py-2 rounded-r-lg rounded-l-none"
 		><span>H: </span><input
 			class="bg-transparent border-0 ring-0 focus:ring-0 focus:border-0 outline-none w-12"
 			title="Change height of Cells Table"

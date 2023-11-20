@@ -246,12 +246,12 @@ export class LifeGame {
 
 	ticker!: Ticker
 
-	#speedIndex = 1
-	#tickIntervals = [128, 64, 32, 16]
+	#speedIndex = 0
+	tickIntervals = [256, 128, 64, 32]
 	speeds = [1, 2, 4, 8]
 
 	get interval() {
-		return this.#tickIntervals[this.#speedIndex]
+		return this.tickIntervals[this.#speedIndex]
 	}
 	get speed() {
 		return this.speeds[this.#speedIndex]
@@ -260,7 +260,7 @@ export class LifeGame {
 		return this.#speedIndex
 	}
 	set speedIndex(val: number) {
-		const len = this.#tickIntervals.length
+		const len = this.tickIntervals.length
 		while (val < 0) val += len // positive number
 		if (val >= len) val %= len // loop
 

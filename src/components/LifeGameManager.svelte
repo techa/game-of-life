@@ -115,9 +115,9 @@
 		<div class="arrow bg-surface-100-800-token" />
 	</div>
 
-	<div class="player btn-group bg-initial primary-color">
+	<div class="player variant-filled-primary flex rounded-full">
 		<button
-			class="skip-back"
+			class="skip-back btn-icon"
 			title="Skip Back and Reset Cells"
 			on:click={() => {
 				life.reset()
@@ -128,7 +128,7 @@
 			</svg>
 		</button>
 		<button
-			class="play"
+			class="play btn-icon"
 			title={playing ? 'Pause' : 'Play Start'}
 			on:click={() => {
 				if (playing) {
@@ -143,7 +143,7 @@
 			</svg>
 		</button>
 		<button
-			class="speed-step"
+			class="speed-step btn-icon"
 			title={playing ? 'Speed control' : 'Advance to the next Frame'}
 			on:click={() => {
 				if (playing) {
@@ -155,7 +155,7 @@
 			}}
 		>
 			{#if playing}
-				x{speed}
+				<span class="font-bold font-mono text-xl mr-2">x{speed}</span>
 			{:else}
 				<svg>
 					<use href="{SVG}#step" />
