@@ -64,7 +64,7 @@ export class LifeGame {
 		return ruleString(this.#born, this.#survival, this.#cycle)
 	}
 
-	setRule(rule: RuleString, reversal = false) {
+	setRule(rule: string, reversal = false) {
 		let rules
 		try {
 			rules = ruleParser(rule)
@@ -118,6 +118,9 @@ export class LifeGame {
 	}
 
 	clear() {
+		if (this.isRunning) {
+			this.stop()
+		}
 		return this.init()
 	}
 

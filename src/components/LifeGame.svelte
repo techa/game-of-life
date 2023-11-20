@@ -36,6 +36,7 @@
 	main {
 		position: relative;
 		width: 100%;
+		min-width: 320px;
 		height: 100%;
 		text-align: center;
 

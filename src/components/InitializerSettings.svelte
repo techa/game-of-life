@@ -71,6 +71,8 @@
 		{#each randomSaves.data as savedata, i}
 			<div class="savedata">
 				<button
+					class="btn bg-initial"
+					class:active={saveIndex === i}
 					style:background-color={saveIndex === i
 						? $selectedColor
 						: ''}
@@ -121,26 +123,33 @@
 			</div>
 		</div>
 
-		<div class="x_edge">
-			<div class="plmi flex flex-row">
+		<div class="x_edge flex-row">
+			<div class="plmi flex-row">
 				<button
+					class="btn-icon bg-initial btn-icon-sm mani-btn"
 					on:click={() => {
 						randomPoints.addColumns(0)
 					}}
 				>
-					+
+					<svg>
+						<use href="{SVG}#plus" />
+					</svg>
 				</button>
 				<button
+					class="btn-icon bg-initial btn-icon-sm mani-btn"
 					on:click={() => {
 						randomPoints.removeColumns(0)
 					}}
 					disabled={$randomAreaColumns < 2}
 				>
-					-
+					<svg>
+						<use href="{SVG}#minus" />
+					</svg>
 				</button>
 			</div>
 			{#each $edgeColumn as edge}
 				<button
+					class="btn-icon bg-initial btn-icon-sm mani-btn"
 					on:click={() => {
 						edge = ++edge % 2
 						$randomPoints = $randomPoints
@@ -157,44 +166,57 @@
 					{/if}
 				</button>
 			{/each}
-			<div class="plmi flex flex-row">
+			<div class="plmi flex-row">
 				<button
+					class="btn-icon bg-initial btn-icon-sm mani-btn"
 					on:click={() => {
 						randomPoints.removeColumns()
 					}}
 					disabled={$randomAreaColumns < 2}
 				>
-					-
+					<svg>
+						<use href="{SVG}#minus" />
+					</svg>
 				</button>
 				<button
+					class="btn-icon bg-initial btn-icon-sm mani-btn"
 					on:click={() => {
 						randomPoints.addColumns()
 					}}
 				>
-					+
+					<svg>
+						<use href="{SVG}#plus" />
+					</svg>
 				</button>
 			</div>
 		</div>
-		<div class="y_edge flex flex-col">
-			<div class="plmi flex flex-col">
+		<div class="y_edge flex-col">
+			<div class="plmi flex-col">
 				<button
+					class="btn-icon bg-initial btn-icon-sm mani-btn"
 					on:click={() => {
 						randomPoints.addRows(0)
 					}}
 				>
-					+
+					<svg>
+						<use href="{SVG}#plus" />
+					</svg>
 				</button>
 				<button
+					class="btn-icon bg-initial btn-icon-sm mani-btn"
 					on:click={() => {
 						randomPoints.removeRows(0)
 					}}
 					disabled={$randomAreaRows < 2}
 				>
-					-
+					<svg>
+						<use href="{SVG}#minus" />
+					</svg>
 				</button>
 			</div>
 			{#each $edgeRow as edge}
 				<button
+					class="btn-icon bg-initial btn-icon-sm mani-btn"
 					on:click={() => {
 						edge = ++edge % 2
 						$randomPoints = $randomPoints
@@ -212,21 +234,27 @@
 				</button>
 			{/each}
 
-			<div class="plmi flex flex-col">
+			<div class="plmi flex-col">
 				<button
+					class="mani-btn btn-icon bg-initial btn-icon-sm"
 					on:click={() => {
 						randomPoints.removeRows()
 					}}
 					disabled={$randomAreaRows < 2}
 				>
-					-
+					<svg>
+						<use href="{SVG}#minus" />
+					</svg>
 				</button>
 				<button
+					class="mani-btn btn-icon bg-initial btn-icon-sm"
 					on:click={() => {
 						randomPoints.addRows()
 					}}
 				>
-					+
+					<svg>
+						<use href="{SVG}#plus" />
+					</svg>
 				</button>
 			</div>
 		</div>
@@ -235,6 +263,7 @@
 
 <div style="margin-top: 1rem;">
 	<button
+		class="randomize btn bg-initial"
 		style:background-color={$selectedColor}
 		on:click={() => life.randomInit()}>Randomize!</button
 	>
@@ -313,30 +342,19 @@
 		height: 1rem;
 	}
 
-	.flex {
-		display: flex;
+	.savedata button.active,
+	.randomize {
+		background-color: var(--primary-color);
+		color: var(--black);
 	}
-	.flex-col {
-		flex-flow: column nowrap;
+
+	.mani-btn {
+		border: var(--white) 1px solid;
 	}
-	/* https://tailwindcss.com/docs/align-items */
-	.items-start {
-		align-items: flex-start;
-	}
-	.items-end {
-		align-items: flex-end;
-	}
-	.items-center {
-		align-items: center;
-	}
-	/* https://tailwindcss.com/docs/justify-content */
-	.justify-start {
-		justify-content: start;
-	}
-	.justify-end {
-		justify-content: end;
-	}
-	.justify-center {
-		justify-content: center;
+
+	.mani-btn.active,
+	.mani-btn:active,
+	.mani-btn:hover {
+		border: var(--primary-color) 1px solid;
 	}
 </style>

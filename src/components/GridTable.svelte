@@ -131,7 +131,7 @@
 	}}
 />
 
-<div class="table">
+<div class="cells-table">
 	<canvas
 		bind:this={canvas}
 		width={$columns}
@@ -181,7 +181,7 @@
 </div>
 
 <style>
-	.table {
+	.cells-table {
 		position: relative;
 		width: 100%;
 		text-align: center;

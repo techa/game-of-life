@@ -9,7 +9,7 @@
 	--primary-color: #71aaff;
 }
 
-html, body { @apply h-full; }
+html, body { @apply w-full h-full; }
 
 td {
 	white-space: nowrap;
@@ -39,15 +39,6 @@ button > svg {
 	height: 18px;
 }
 
-.hidden {
-	visibility: hidden;
-	display: none;
-}
-
-button {
-	border-radius: 4px;
-}
-
 .skeleton {
 	background: none;
 	padding: 0;
@@ -59,20 +50,12 @@ button {
 .primary-color {
 	background-color: var(--primary-color);
 	color: var(--black);
+	stroke: var(--black);
 }
 
 button.skeleton > svg {
 	width: 24px;
 	height: 24px;
-}
-
-.btn-left {
-	border-top-right-radius: 0;
-	border-bottom-right-radius: 0;
-}
-.btn-right {
-	border-top-left-radius: 0;
-	border-bottom-left-radius: 0;
 }
 
 @tailwind components;

@@ -12,36 +12,41 @@
 </script>
 
 <nav>
-	<button
-		class="primary-color"
-		on:click={() => {
-			life.randomInit()
-		}}
-		>Randomize!
-	</button>
+	<div class="btn-group primary-color">
+		<button
+			on:click={() => {
+				life.randomInit()
+			}}
+			>Randomize!
+		</button>
 
-	<button on:click={() => ($modal = ModalsHeader.Random)}>
+		<button on:click={() => ($modal = ModalsHeader.Random)}>
+			<svg>
+				<use href="{SVG}#settings" />
+			</svg>
+		</button>
+	</div>
+
+	<button
+		class="btn-icon bg-initial"
+		on:click={() => {
+			life.clear()
+		}}
+	>
 		<svg>
-			<use href="{SVG}#settings" />
+			<use href="{SVG}#trash" />
 		</svg>
 	</button>
 
 	<button
-		on:click={() => {
-			if (life.isRunning) {
-				life.stop()
-			}
-
-			life.clear()
-		}}
-		>Clear
-	</button>
-
-	<button
+		class="btn-icon bg-initial"
 		on:click={() => {
 			life.reverse()
 		}}
-		>Reverse
+	>
+		<svg>
+			<use href="{SVG}#arrow-right-left" />
+		</svg>
 	</button>
 
 	<!-- <button
@@ -52,7 +57,7 @@
 	</button> -->
 
 	<label>
-		<select class="pulldown">
+		<select class="pulldown select">
 			{#each lexicon as { n, d }, i}
 				<option
 					value={i}

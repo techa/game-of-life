@@ -2,8 +2,11 @@
 <script lang="ts">
 	import { writable, type Writable } from 'svelte/store'
 	import { createEventDispatcher, setContext, onDestroy } from 'svelte'
+
+	import { TabGroup, Tab, TabAnchor } from '@skeletonlabs/skeleton'
 	import SVG from '../../resource/sprite.svg'
 	import { modal } from '../store.js'
+	import InitializerSettings from '../InitializerSettings.svelte'
 
 	// export let showModal = false // !!$modal
 
@@ -11,6 +14,8 @@
 	const close = () => dispatch('close')
 
 	let dialog: HTMLDialogElement
+
+	let tabSet = 0
 
 	$: if (dialog && $modal) dialog.showModal()
 
@@ -20,6 +25,7 @@
 
 <dialog
 	bind:this={dialog}
+	role="presentation"
 	on:close={() => ($modal = null)}
 	on:click|self={() => dialog.close()}
 >
@@ -28,8 +34,25 @@
 			<use href="{SVG}#x" />
 		</svg>
 	</button>
-	<h3>{$header}</h3>
-	<slot />
+
+	<TabGroup justify="justify-center">
+		{#each ['Cells', 'Random', 'View'] as title, i (i)}
+			<Tab bind:group={tabSet} name="tab1" value={i}>
+				<!-- <svelte:fragment slot="lead">(icon)</svelte:fragment> -->
+				<span>{title}</span>
+			</Tab>
+		{/each}
+		<!-- Tab Panels --->
+		<svelte:fragment slot="panel">
+			{#if tabSet === 0}
+				(tab panel 2 contents)
+			{:else if tabSet === 1}
+				<InitializerSettings />
+			{:else if tabSet === 2}
+				(tab panel 3 contents)
+			{/if}
+		</svelte:fragment>
+	</TabGroup>
 </dialog>
 
 <style>
@@ -52,10 +75,6 @@
 	}
 	dialog::backdrop {
 		background: rgba(0, 0, 0, 0.3);
-	}
-
-	h3 {
-		margin: 0 0 1.2rem;
 	}
 
 	.close {

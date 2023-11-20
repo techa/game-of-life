@@ -9,54 +9,64 @@
 		penMode,
 	} from './store'
 
-	import DropDown from './generic/DropDown.svelte'
 	import Slider from './generic/Slider.svelte'
 
 	import SVG from '../resource/sprite.svg'
 	import { LifeEvent } from '$lib/LifeGame'
 	import { lch2rgb } from '../utils/lch2rgb.js'
 
+	import { popup } from '@skeletonlabs/skeleton'
+	import type { PopupSettings } from '@skeletonlabs/skeleton'
+	import { colorStringToHsl } from '../utils/color.js'
+
 	function resize() {
 		life.tableSizing($columns, $rows)
+	}
+
+	const popupHueSlider: PopupSettings = {
+		event: 'click',
+		target: 'popupHueSlider',
+		placement: 'bottom',
+		// closeQuery: '.color',
 	}
 </script>
 
 <nav>
-	<a href="https://github.com/techa/game-of-life">
+	<a class="btn-icon" href="https://github.com/techa/game-of-life">
 		<svg style="stroke: #fff;">
 			<use href="{SVG}#github" />
 		</svg>
 	</a>
 
-	<DropDown>
-		<button
-			class="color"
-			slot="trigger"
-			style:background-color={$selectedColor}
+	<button class="skeleton btn-icon" use:popup={popupHueSlider}>
+		<svg class:active={$gridView}>
+			<use href="{SVG}#palette" />
+		</svg>
+	</button>
+	<div
+		class="color-choose card w-32 shadow-xl py-2 z-10 opacity-0"
+		data-popup="popupHueSlider"
+	>
+		<Slider
+			max={359}
+			value={colorStringToHsl($selectedColor)[0] || 0}
+			on:change={(e) => ($selectedColor = lch2rgb(100, 120, e.detail))}
+			gradient={[
+				'#ff6aff',
+				'#ffac5a',
+				'#fffc00',
+				'#35ff32',
+				'#00fffb',
+				'#00ffff',
+				'#00ffff',
+				'#ffb9ff',
+				'#ff6aff',
+			]}
+			--background-color={$selectedColor}
 		/>
-		<div class="color-choose">
-			<Slider
-				style={'width:8rem;'}
-				max={359}
-				on:change={(e) =>
-					($selectedColor = lch2rgb(100, 120, e.detail))}
-				gradient={[
-					'#ff6aff',
-					'#ffac5a',
-					'#fffc00',
-					'#35ff32',
-					'#00fffb',
-					'#00ffff',
-					'#00ffff',
-					'#ffb9ff',
-					'#ff6aff',
-				]}
-				--background-color={$selectedColor}
-			/>
-		</div>
-	</DropDown>
+	</div>
 
-	<button class="skeleton" on:click={() => ($penMode += 1)}>
+	<button class="skeleton btn-icon" on:click={() => ($penMode += 1)}>
 		<svg style:stroke={$penMode < 2 ? $selectedColor : 'currentColor'}>
 			<use href="{SVG}#pencil" />
 			{#if $penMode}
@@ -72,7 +82,7 @@
 		</svg>
 	</button>
 
-	<label>
+	<label class="skeleton btn-icon">
 		<svg class:active={$gridView}>
 			<use href="{SVG}#grid" />
 		</svg>
@@ -81,14 +91,26 @@
 
 	<label
 		>W:
-		<input type="number" bind:value={$columns} on:input={resize} min="1" />
+		<input
+			class="input"
+			type="number"
+			bind:value={$columns}
+			on:input={resize}
+			min="1"
+		/>
 	</label>
 	<label
 		>H:
-		<input type="number" bind:value={$rows} on:input={resize} min="1" />
+		<input
+			class="input"
+			type="number"
+			bind:value={$rows}
+			on:input={resize}
+			min="1"
+		/>
 	</label>
 
-	<button on:click={() => ($edgeCell += 1)}>
+	<button class=" btn" on:click={() => ($edgeCell += 1)}>
 		<svg>
 			<use href="{SVG}#repeat" />
 		</svg>
@@ -102,22 +124,26 @@
 	</button>
 
 	<button
+		class=" btn-icon"
 		on:click={() => {
 			life.rotate()
 			setTimeout(() => life.emit(LifeEvent.UPDATE), 100)
 		}}
-		>Rotate
+	>
+		<svg>
+			<use href="{SVG}#rotate-cw" />
+		</svg>
 	</button>
 </nav>
 
 <style>
-	.color {
+	/* .color {
 		width: 1.5rem;
 		height: 1.5rem;
 		border: none;
 		padding: 0;
 		border-radius: 50%;
-	}
+	} */
 	.color-choose {
 		padding: 8px;
 		background-color: var(--black);

@@ -7,6 +7,12 @@
 
 	import SVG from '../resource/sprite.svg'
 
+	import { popup } from '@skeletonlabs/skeleton'
+	import type { PopupSettings } from '@skeletonlabs/skeleton'
+	import { ListBox, ListBoxItem } from '@skeletonlabs/skeleton'
+	import { Table } from '@skeletonlabs/skeleton'
+	import type { TableSource } from '@skeletonlabs/skeleton'
+
 	let rulelistOpen = false
 
 	let rule: RuleString = 'B3/S23'
@@ -22,10 +28,26 @@
 	life.on(LifeEvent.STOP, () => {
 		playing = false
 	})
+
+	//
+	let comboboxValue: string
+
+	const popupCombobox: PopupSettings = {
+		event: 'focus-click',
+		target: 'popupCombobox',
+		placement: 'bottom',
+		closeQuery: '.listbox-item',
+	}
+	const ruleTable: TableSource = {
+		// A list of heading labels.
+		head: ['Rule', 'Name'],
+		body: [...rules.entries()],
+	}
 </script>
 
 <nav>
 	<button
+		class="btn-icon"
 		on:click={() => {
 			rule = life.setRule(rule, true)
 			ruleReverse = !ruleReverse
@@ -36,52 +58,37 @@
 		</svg>
 	</button>
 
-	<DropDown bind:open={rulelistOpen} style="background-color:var(--black);">
-		<div slot="trigger">
-			<input
-				placeholder="Born/Survival"
-				bind:value={rule}
-				on:focusout={() => {
-					rule = life.setRule(rule, ruleReverse)
-					ruleName = rules.get(rule) || ''
-				}}
-				on:keydown={(e) => {
-					switch (e.code) {
-						case 'Enter':
-						case 'Tab':
-							rule = life.setRule(rule, ruleReverse)
-							ruleName = rules.get(rule) || ''
-							break
-					}
-				}}
-			/>
-			<button class="btn-right">
-				{ruleName}
+	<div class="btn-group" use:popup={popupCombobox}>
+		<input class="input" placeholder="Born/Survival" bind:value={rule} />
+		<button class="btn bg-initial w-48 justify-between">
+			<span class="capitalize">{ruleName || 'Rule Name'}</span>
+			<span>
 				<svg>
 					<use href="{SVG}#chevron-down" />
 				</svg>
-			</button>
-		</div>
+			</span>
+		</button>
+	</div>
 
-		<table class="rule_list">
-			{#each [...rules.entries()] as [_rule, name]}
-				<tr
-					class="rule_list-item"
-					class:selected={rule === _rule}
-					on:click={() => {
-						rule = life.setRule(_rule, ruleReverse)
-						ruleName = name
-						rulelistOpen = false
-					}}
-				>
-					<td>{_rule}</td>
-					<td>{name}</td>
-				</tr>
-			{/each}
-		</table>
+	<div
+		class="card shadow-xl overflow-y-scroll h-2/3 z-10 opacity-0"
+		data-popup="popupCombobox"
+	>
+		<Table
+			source={ruleTable}
+			interactive={true}
+			on:selected={(e) => {
+				const data = e.detail
+				rule = life.setRule(data[0], ruleReverse)
+				ruleName = data[1]
+				rulelistOpen = false
+			}}
+		/>
+
 		<p class="list-footer">
 			and
 			<a
+				class="anchor"
 				href="https://conwaylife.com/wiki/List_of_Life-like_cellular_automata"
 				target="_blocked"
 			>
@@ -89,87 +96,84 @@
 			</a>
 			and
 			<a
+				class="anchor"
 				href="https://conwaylife.com/wiki/List_of_Generations_rules"
 				target="_blocked"
 			>
 				more.</a
 			>
 		</p>
-	</DropDown>
+		<div class="arrow bg-surface-100-800-token" />
+	</div>
 
-	<button
-		class="player skip-back"
-		on:click={() => {
-			life.reset()
-		}}
-	>
-		<svg class:active={playing} style:stroke={'black'}>
-			<use href="{SVG}#skip-back" />
-		</svg></button
-	>
-
-	<button
-		class="player play primary-color"
-		on:click={() => {
-			if (playing) {
-				life.stop()
-			} else {
-				life.start()
-			}
-		}}
-	>
-		<svg class:active={playing} style:stroke={'black'}>
-			<use href="{SVG}#{playing ? 'pause' : 'play'}" />
-		</svg>{playing ? 'Stop' : 'Start'}</button
-	>
-	{#if playing}
+	<div class="player btn-group bg-initial primary-color">
 		<button
-			class="player speed"
+			class="skip-back"
 			on:click={() => {
-				life.speedIndex++
-				speed = life.speed
+				life.reset()
 			}}
-			>x{speed}
+		>
+			<svg>
+				<use href="{SVG}#skip-back" />
+			</svg>
 		</button>
-	{:else}
-		<button on:click={() => life.step()}>Step</button>
-	{/if}
+		<button
+			class="play"
+			on:click={() => {
+				if (playing) {
+					life.stop()
+				} else {
+					life.start()
+				}
+			}}
+		>
+			<svg>
+				<use href="{SVG}#{playing ? 'pause' : 'play'}" />
+			</svg>
+		</button>
+		<button
+			class="speed-step"
+			on:click={() => {
+				if (playing) {
+					life.speedIndex++
+					speed = life.speed
+				} else {
+					life.step()
+				}
+			}}
+		>
+			{#if playing}
+				x{speed}
+			{:else}
+				<svg>
+					<use href="{SVG}#step" />
+				</svg>
+			{/if}
+		</button>
+	</div>
+</nav>
 
-	<span>Generation: <span class="numbers">{$generation}</span></span>
-	<span
+<div class="numbers">
+	<span class="badge variant-filled"
+		>Generation: <span class="numbers">{$generation}</span></span
+	><span class="badge"
 		>Population: <span class="numbers">{$population}</span>/ {$rows *
 			$columns}</span
 	>
-</nav>
+</div>
 
 <style>
 	span {
 		padding: 0 4px;
 	}
 	input {
-		width: 8rem;
+		width: 12rem;
 		text-align: center;
-	}
-	div {
-		display: flex;
-	}
-	.btn-right {
-		width: 8rem;
-	}
-	.rule_list {
-		background-color: var(--black);
-		font-size: 0.9rem;
-	}
-	.rule_list-item:hover {
-		background-color: #333;
-	}
-	.rule_list .selected {
-		background-color: #444;
 	}
 
 	.numbers {
 		display: inline-block;
 		text-align: right;
-		width: 2rem;
+		width: 100%;
 	}
 </style>
