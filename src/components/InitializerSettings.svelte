@@ -344,7 +344,7 @@
 
 	.savedata button.active,
 	.randomize {
-		background-color: var(--primary-color);
+		background-color: rgb(var(--color-primary-500));
 		color: var(--black);
 	}
 
@@ -355,6 +355,6 @@
 	.mani-btn.active,
 	.mani-btn:active,
 	.mani-btn:hover {
-		border: var(--primary-color) 1px solid;
+		border: rgb(var(--color-primary-500)) 1px solid;
 	}
 </style>

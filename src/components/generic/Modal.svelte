@@ -98,6 +98,6 @@
 		color: #eee;
 	}
 	.close:hover {
-		color: var(--primary-color);
+		color: rgb(var(--color-primary-500));
 	}
 </style>

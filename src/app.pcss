@@ -6,7 +6,6 @@
 	--white: #eee;
 	--grey: #346;
 	--red: #de3421;
-	--primary-color: #71aaff;
 }
 
 html, body { @apply w-full h-full; }
@@ -22,7 +21,7 @@ svg {
 	cursor: inherit;
 }
 svg.active {
-	stroke: var(--primary-color);
+	stroke: rgb(var(--color-primary-500));
 }
 svg.unactive {
 	stroke: #888;
@@ -48,7 +47,7 @@ svg.unactive {
 }
 
 .primary-color {
-	background-color: var(--primary-color);
+	background-color: rgb(var(--color-primary-500));
 	color: var(--black);
 	stroke: var(--black);
 }

@@ -8,6 +8,7 @@
 
 	import Modal from './generic/Modal.svelte'
 	import { modal, ModalsHeader, selectedColor } from './store'
+	import { hexToRgb } from '../utils/color.js'
 
 	const _modal: Record<ModalsHeader, ComponentType> = {
 		[ModalsHeader.Random]: InitializerSettings,
@@ -18,7 +19,7 @@
 	<title>LifeGame</title>
 </svelte:head>
 
-<main style:--primary-color={$selectedColor}>
+<main style:--color-primary-500={hexToRgb($selectedColor).join(' ')}>
 	<TableManager />
 	<LifeGameManager />
 	<GridTable />

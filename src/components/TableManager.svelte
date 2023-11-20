@@ -70,7 +70,7 @@
 		title="Color Change"
 		use:popup={popupHueSlider}
 	>
-		<svg style="stroke: var(--primary-color);">
+		<svg style="stroke: rgb(var(--color-primary-500));">
 			<use href="{SVG}#palette" />
 		</svg>
 	</button>
