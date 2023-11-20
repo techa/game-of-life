@@ -27,28 +27,36 @@
 		life.tableSizing($columns, $rows)
 	}
 
+	let popupHueSliderInvisible = true
 	const popupHueSlider: PopupSettings = {
 		event: 'click',
 		target: 'popupHueSlider',
 		placement: 'bottom-start',
+		state(e) {
+			popupHueSliderInvisible = !e.state
+		},
 	}
 
 	const cellStates = ['LIVE', 'UNDEAD', 'TOMB']
 
 	// Lexicon
+	let popupLexiconInvisible = true
 	const popupLexicon: PopupSettings = {
 		event: 'click',
 		target: 'popupLexicon',
 		placement: 'bottom',
-		// closeQuery: '.color',
+		closeQuery: '.table_lexicon',
+		state(e) {
+			popupLexiconInvisible = !e.state
+		},
 	}
 	const meta: string[][] = []
 	const lexiconTable: TableSource = {
 		// A list of heading labels.
-		head: ['№', 'Name', 'Size'],
+		head: ['No.', 'Name', 'w', 'h'],
 		body: lexicon.reduce((bodyArr, { n, d }, i) => {
 			const [w, h] = d.split(/[-:]/)
-			bodyArr.push([i + '', n, `${w} : ${h}`])
+			bodyArr.push([i + '', n, w, h])
 			meta.push([d])
 			return bodyArr
 		}, [] as string[][]),
@@ -67,7 +75,8 @@
 		</svg>
 	</button>
 	<div
-		class="color-choose card w-32 shadow-xl -mt-2 p-2 z-10 bg-surface-900 rounded-sm opacity-0 hidden"
+		class="color-choose card w-32 shadow-xl -mt-2 p-2 z-10 bg-surface-900 rounded-sm"
+		class:invisible={popupHueSliderInvisible}
 		data-popup="popupHueSlider"
 	>
 		<Slider
@@ -169,19 +178,31 @@
 		</svg>
 	</button>
 	<div
-		class="card shadow-xl overflow-y-scroll h-2/3 -mt-2 z-10 opacity-0"
+		class="card shadow-xl overflow-y-scroll h-2/3 -mt-2 z-10"
+		class:invisible={popupLexiconInvisible}
 		data-popup="popupLexicon"
 	>
 		<Table
-			class="font-mono"
+			class="table_lexicon font-mono text-left"
 			source={lexiconTable}
 			interactive={true}
 			on:selected={(e) => {
 				life.lexicon(e.detail[0])
-				document.getElementById('lexicon')?.click()
 			}}
 		/>
 	</div>
+
+	<button
+		class="btn-icon naked"
+		title="Save Cells Table"
+		on:click={() => {
+			life.randomInit()
+		}}
+	>
+		<svg>
+			<use href="{SVG}#save" />
+		</svg>
+	</button>
 
 	<label class="input w-20 py-2"
 		><span>W: </span><input
@@ -231,3 +252,14 @@
 		</svg>
 	</button>
 </nav>
+
+<style>
+	:global(
+			.lexicon .table tbody tr td:nth-child(1),
+			.lexicon .table tbody tr td:nth-child(3),
+			.lexicon .table thead tr th:nth-child(3)
+		) {
+		text-align: right;
+		padding-left: 2rem;
+	}
+</style>

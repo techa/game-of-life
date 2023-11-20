@@ -25,19 +25,25 @@
 		playing = false
 	})
 
-	//
-	let comboboxValue: string
-
+	let popupRuleListinVisible = true
 	const popupRuleList: PopupSettings = {
 		event: 'focus-click',
 		target: 'popupRuleList',
 		placement: 'bottom',
-		closeQuery: '.listbox-item',
+		closeQuery: '.table_rules',
+		state(event) {
+			popupRuleListinVisible = !event.state
+		},
 	}
+	const meta = [...rules.entries()]
 	const ruleTable: TableSource = {
 		// A list of heading labels.
-		head: ['Rule', 'Name'],
-		body: [...rules.entries()],
+		head: ['B', 'S', 'C/G', 'Name'],
+		body: meta.map(([v, name]) => {
+			const rules = v.split('/')
+			return [rules[0], rules[1], rules[2] || 'C2', name]
+		}),
+		meta,
 	}
 </script>
 
@@ -55,7 +61,7 @@
 		</svg>
 	</button>
 
-	<div id="rules" class="btn-group" use:popup={popupRuleList}>
+	<div class="btn-group" use:popup={popupRuleList}>
 		<input
 			class="input w-48 text-center font-mono outline-none"
 			placeholder="Born/Survival"
@@ -63,7 +69,7 @@
 			bind:value={rule}
 		/>
 		<button
-			class="btn bg-initial w-48 justify-between bg-secondary-900"
+			class="choose_rule btn bg-initial w-48 justify-between bg-secondary-900"
 			title="Choose Rule"
 		>
 			<span class="capitalize">{ruleName || 'Rule Name'}</span>
@@ -72,9 +78,9 @@
 			</svg>
 		</button>
 	</div>
-
 	<div
-		class="card shadow-xl overflow-y-scroll h-2/3 -mt-2 pb-4 z-10 opacity-0 hidden"
+		class="card shadow-xl overflow-y-scroll h-2/3 -mt-2 pb-4 z-10"
+		class:invisible={popupRuleListinVisible}
 		data-popup="popupRuleList"
 	>
 		<Table
@@ -85,7 +91,6 @@
 				const data = e.detail
 				rule = life.setRule(data[0], ruleReverse)
 				ruleName = data[1]
-				document.getElementById('rules')?.blur()
 			}}
 		/>
 
@@ -170,3 +175,14 @@
 		>Generation: <span class="font-mono px-1 py-0">{$generation}</span>
 	</span>
 </div>
+
+<style>
+	:global(.table tbody tr td:last-child) {
+		white-space: nowrap;
+		padding-right: 2rem;
+	}
+	:global(.table thead tr th:first-child, .table tbody tr td:first-child) {
+		white-space: nowrap;
+		padding-left: 2rem;
+	}
+</style>
