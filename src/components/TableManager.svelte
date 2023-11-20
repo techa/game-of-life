@@ -229,14 +229,4 @@
 			<use href="{SVG}#settings" />
 		</svg>
 	</button>
-
-	<a
-		class="btn-icon"
-		title="Link to Github"
-		href="https://github.com/techa/game-of-life"
-	>
-		<svg style="stroke: #fff;">
-			<use href="{SVG}#github" />
-		</svg>
-	</a>
 </nav>

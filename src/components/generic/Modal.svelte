@@ -53,6 +53,18 @@
 			{/if}
 		</svelte:fragment>
 	</TabGroup>
+
+	<div class="footer">
+		<a
+			class="btn-icon"
+			title="Link to Github"
+			href="https://github.com/techa/game-of-life"
+		>
+			<svg style="stroke: #fff;">
+				<use href="{SVG}#github" />
+			</svg>
+		</a>
+	</div>
 </dialog>
 
 <style>
