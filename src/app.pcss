@@ -1,3 +1,6 @@
+/* Write your global styles here, in PostCSS syntax */
+
+@tailwind base;
 :root {
 	--black: #111;
 	--white: #eee;
@@ -6,27 +9,7 @@
 	--primary-color: #71aaff;
 }
 
-body,
-html {
-	margin: 0;
-	padding: 0;
-}
-
-body {
-	background: var(--black);
-	color: var(--white);
-
-	width: 100vw;
-	height: 100vh;
-	overflow: hidden;
-
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	font-family: 'Play', sans-serif;
-	text-align: center;
-	min-width: fit-content;
-}
+html, body { @apply h-full; }
 
 td {
 	white-space: nowrap;
@@ -52,8 +35,8 @@ svg.active {
 	stroke: var(--primary-color);
 }
 button > svg {
-	width: 12px;
-	height: 12px;
+	width: 18px;
+	height: 18px;
 }
 
 .hidden {
@@ -75,6 +58,7 @@ button {
 
 .primary-color {
 	background-color: var(--primary-color);
+	color: var(--black);
 }
 
 button.skeleton > svg {
@@ -90,3 +74,6 @@ button.skeleton > svg {
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
 }
+
+@tailwind components;
+@tailwind utilities;
