@@ -66,7 +66,7 @@
 
 <nav class="w-full p-1 text-center flex justify-center">
 	<button
-		class="btn-icon naked"
+		class="btn-icon naked popup-trigger"
 		title="Color Change"
 		use:popup={popupHueSlider}
 	>
@@ -169,7 +169,7 @@
 
 	<button
 		id="lexicon"
-		class="btn-icon naked"
+		class="btn-icon naked popup-trigger"
 		title="Template Data Load"
 		use:popup={popupLexicon}
 	>
