@@ -29,7 +29,7 @@
 	const popupRuleList: PopupSettings = {
 		event: 'focus-click',
 		target: 'popupRuleList',
-		placement: 'bottom',
+		placement: 'bottom-start',
 		closeQuery: '.table_rules',
 		state(event) {
 			popupRuleListinVisible = !event.state
@@ -38,43 +38,43 @@
 	const meta = [...rules.entries()]
 	const ruleTable: TableSource = {
 		// A list of heading labels.
-		head: ['B', 'S', 'C/G', 'Name'],
+		head: ['Name', 'B', 'S', 'C/G'],
 		body: meta.map(([v, name]) => {
 			const rules = v.split('/')
-			return [rules[0], rules[1], rules[2] || 'C2', name]
+			return [name, rules[0], rules[1], rules[2] || 'C2']
 		}),
 		meta,
 	}
 </script>
 
 <nav class="w-full text-center flex justify-center">
-	<button
-		class="btn-icon"
-		title="Reverse Rule"
-		on:click={() => {
-			rule = life.setRule(rule, true)
-			ruleReverse = !ruleReverse
-		}}
-	>
-		<svg class:active={ruleReverse}>
-			<use href="{SVG}#exchange" />
-		</svg>
-	</button>
-
-	<div class="btn-group" use:popup={popupRuleList}>
+	<div class="flex mr-4 bg-tertiary-700 rounded-full">
+		<button
+			class="choose_rule popup-trigger btn bg-initial w-44 justify-between"
+			title="Choose Rule"
+			use:popup={popupRuleList}
+		>
+			<span class="capitalize">{ruleName || 'Rule Name'}</span>
+			<!-- <svg>
+				<use href="{SVG}#chevron-down" />
+			</svg> -->
+		</button>
 		<input
-			class="input w-48 text-center font-mono outline-none"
+			class="input w-52 text-center font-mono outline-none rounded-none"
 			placeholder="Born/Survival"
 			title="Rule Input Space"
 			bind:value={rule}
 		/>
 		<button
-			class="choose_rule btn bg-initial w-48 justify-between bg-secondary-900"
-			title="Choose Rule"
+			class="btn-icon pr-4 pl-2 bg-surface-700 rounded-l-none"
+			title="Reverse Rule"
+			on:click={() => {
+				rule = life.setRule(rule, true)
+				ruleReverse = !ruleReverse
+			}}
 		>
-			<span class="capitalize">{ruleName || 'Rule Name'}</span>
-			<svg>
-				<use href="{SVG}#chevron-down" />
+			<svg class:active={ruleReverse}>
+				<use href="{SVG}#exchange" />
 			</svg>
 		</button>
 	</div>
