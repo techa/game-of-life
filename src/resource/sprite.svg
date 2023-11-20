@@ -74,7 +74,23 @@
 	  <polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
 	</symbol>
 
-	<symbol id="arrow-right-left" viewBox="0 0 24 24"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></symbol>
+	<!-- <symbol id="arrow-right-left" viewBox="0 0 24 24"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></symbol> -->
+
+	<!-- lucide combine edit -->
+	<symbol id="exchange" viewBox="0 0 24 24">
+		<rect width="8" height="8" x="2" y="2" rx="2" /> <path d="M10 18H5c-1.7 0-3-1.3-3-3v-1" /> <polyline points="7 21 10 18 7 15" /> <rect width="8" height="8" x="14" y="14" rx="2" /> <path d="M10 18H5c-1.7 0-3-1.3-3-3v-1" /> <path d="m 14,6 h 5 c 1.7,0 3,1.3 3,3 v 1" /> <polyline points="7 21 10 18 7 15" transform="rotate(180,12,12)" />
+	</symbol>
+
+
+	<symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+
+	<symbol id="book-marked" viewBox="0 0 24 24">
+		<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><polyline points="10 2 10 10 13 7 16 10 16 2"/>
+	</symbol>
+
+	<symbol id="dice" viewBox="0 0 24 24">
+	<rect width="12" height="12" x="2" y="10" rx="2" ry="2"/><path d="m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6"/><path d="M6 18h.01"/><path d="M10 14h.01"/><path d="M15 6h.01"/><path d="M18 9h.01"/></symbol>
+
 
 	<!-- lucide-redo-dot -->
 	<symbol id="step" viewBox="0 0 24 24">

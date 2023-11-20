@@ -3,7 +3,6 @@
 
 	import GridTable from './GridTable.svelte'
 	import TableManager from './TableManager.svelte'
-	import TableInitializer from './TableInitializer.svelte'
 	import LifeGameManager from './LifeGameManager.svelte'
 	import InitializerSettings from './InitializerSettings.svelte'
 
@@ -21,7 +20,6 @@
 
 <main style:--primary-color={$selectedColor}>
 	<TableManager />
-	<TableInitializer />
 	<LifeGameManager />
 	<GridTable />
 

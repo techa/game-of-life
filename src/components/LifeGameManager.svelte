@@ -48,19 +48,25 @@
 <nav>
 	<button
 		class="btn-icon"
+		title="Reverse Rule"
 		on:click={() => {
 			rule = life.setRule(rule, true)
 			ruleReverse = !ruleReverse
 		}}
 	>
 		<svg class:active={ruleReverse}>
-			<use href="{SVG}#refresh-cw" />
+			<use href="{SVG}#exchange" />
 		</svg>
 	</button>
 
 	<div class="btn-group" use:popup={popupCombobox}>
-		<input class="input" placeholder="Born/Survival" bind:value={rule} />
-		<button class="btn bg-initial w-48 justify-between">
+		<input
+			class="input w-48 text-center outline-none"
+			placeholder="Born/Survival"
+			title="Rule Input Space"
+			bind:value={rule}
+		/>
+		<button class="btn bg-initial w-48 justify-between" title="Choose Rule">
 			<span class="capitalize">{ruleName || 'Rule Name'}</span>
 			<span>
 				<svg>
@@ -109,6 +115,7 @@
 	<div class="player btn-group bg-initial primary-color">
 		<button
 			class="skip-back"
+			title="Skip Back and Reset Cells"
 			on:click={() => {
 				life.reset()
 			}}
@@ -119,6 +126,7 @@
 		</button>
 		<button
 			class="play"
+			title={playing ? 'Pause' : 'Play Start'}
 			on:click={() => {
 				if (playing) {
 					life.stop()
@@ -133,6 +141,7 @@
 		</button>
 		<button
 			class="speed-step"
+			title={playing ? 'Speed control' : 'Advance to the next Frame'}
 			on:click={() => {
 				if (playing) {
 					life.speedIndex++
@@ -153,27 +162,12 @@
 	</div>
 </nav>
 
-<div class="numbers">
-	<span class="badge variant-filled"
-		>Generation: <span class="numbers">{$generation}</span></span
-	><span class="badge"
-		>Population: <span class="numbers">{$population}</span>/ {$rows *
-			$columns}</span
-	>
+<div class="numbers inline-block text-center w-full px-1 py-0">
+	<span class="badge px-1 py-0 variant-filled"
+		>Generation: <span class="numbers px-1 py-0">{$generation}</span>
+	</span>
+	<span class="badge px-1 py-0 bg-surface-600"
+		>Population: <span class="numbers px-1 py-0">{$population}</span>/ {$rows *
+			$columns}
+	</span>
 </div>
-
-<style>
-	span {
-		padding: 0 4px;
-	}
-	input {
-		width: 12rem;
-		text-align: center;
-	}
-
-	.numbers {
-		display: inline-block;
-		text-align: right;
-		width: 100%;
-	}
-</style>

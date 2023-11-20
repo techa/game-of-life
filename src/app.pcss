@@ -34,6 +34,9 @@ svg {
 svg.active {
 	stroke: var(--primary-color);
 }
+svg.unactive {
+	stroke: #888;
+}
 button > svg {
 	width: 18px;
 	height: 18px;
@@ -47,15 +50,19 @@ button > svg {
 	color: var(--white);
 }
 
+button.skeleton > svg {
+	width: 24px;
+	height: 24px;
+}
+
 .primary-color {
 	background-color: var(--primary-color);
 	color: var(--black);
 	stroke: var(--black);
 }
 
-button.skeleton > svg {
-	width: 24px;
-	height: 24px;
+.input_outer-off {
+	@apply border-0 ring-0 focus:ring-0 focus:border-0 outline-none;
 }
 
 @tailwind components;
