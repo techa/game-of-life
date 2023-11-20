@@ -11,17 +11,6 @@
 
 html, body { @apply w-full h-full; }
 
-td {
-	white-space: nowrap;
-}
-
-nav {
-	width: 100%;
-	text-align: center;
-	display: flex;
-	justify-content: center;
-}
-
 svg {
 	width: 24px;
 	height: 24px;
@@ -37,12 +26,8 @@ svg.active {
 svg.unactive {
 	stroke: #888;
 }
-button > svg {
-	width: 18px;
-	height: 18px;
-}
 
-.skeleton {
+.naked {
 	background: none;
 	padding: 0;
 	border-radius: 0;
@@ -50,7 +35,12 @@ button > svg {
 	color: var(--white);
 }
 
-button.skeleton > svg {
+.naked:hover,
+.naked:active {
+	background-color: rgb(var(--color-tertiary-500));
+}
+
+.naked > svg {
 	width: 24px;
 	height: 24px;
 }
@@ -59,10 +49,6 @@ button.skeleton > svg {
 	background-color: var(--primary-color);
 	color: var(--black);
 	stroke: var(--black);
-}
-
-.input_outer-off {
-	@apply border-0 ring-0 focus:ring-0 focus:border-0 outline-none;
 }
 
 @tailwind components;

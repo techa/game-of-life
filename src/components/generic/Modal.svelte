@@ -29,7 +29,7 @@
 	on:close={() => ($modal = null)}
 	on:click|self={() => dialog.close()}
 >
-	<button class="close skeleton" on:click={close}>
+	<button class="close naked" on:click={close}>
 		<svg>
 			<use href="{SVG}#x" />
 		</svg>

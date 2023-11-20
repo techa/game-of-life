@@ -56,9 +56,9 @@
 	}
 </script>
 
-<nav>
+<nav class="w-full p-1 text-center flex justify-center">
 	<button
-		class="skeleton btn-icon"
+		class="btn-icon naked"
 		title="Color Change"
 		use:popup={popupHueSlider}
 	>
@@ -90,7 +90,7 @@
 	</div>
 
 	<button
-		class="skeleton btn-icon"
+		class="btn-icon naked"
 		title="Pen Tool ({cellStates[$penMode]})"
 		on:click={() => ($penMode += 1)}
 	>
@@ -110,7 +110,7 @@
 	</button>
 
 	<button
-		class="btn-icon bg-initial"
+		class="btn-icon naked"
 		title="Clear Cells Table"
 		on:click={() => {
 			life.clear()
@@ -122,7 +122,7 @@
 	</button>
 
 	<button
-		class=" btn-icon"
+		class="btn-icon naked"
 		title="Rotate Cells Table 90deg"
 		on:click={() => {
 			life.rotate()
@@ -135,7 +135,7 @@
 	</button>
 
 	<button
-		class="btn-icon bg-initial"
+		class="btn-icon naked"
 		title="Reverse Cells Cell-Live <--> Cell-Dead"
 		on:click={() => {
 			life.reverse()
@@ -147,7 +147,7 @@
 	</button>
 
 	<button
-		class="btn-icon"
+		class="btn-icon naked"
 		title="Randomize Cells Table"
 		on:click={() => {
 			life.randomInit()
@@ -160,7 +160,7 @@
 
 	<button
 		id="lexicon"
-		class="btn-icon"
+		class="btn-icon naked"
 		title="Template Data Load"
 		use:popup={popupLexicon}
 	>
@@ -169,10 +169,11 @@
 		</svg>
 	</button>
 	<div
-		class="card shadow-xl overflow-y-scroll h-2/3 z-10 opacity-0"
+		class="card shadow-xl overflow-y-scroll h-2/3 -mt-2 z-10 opacity-0"
 		data-popup="popupLexicon"
 	>
 		<Table
+			class="font-mono"
 			source={lexiconTable}
 			interactive={true}
 			on:selected={(e) => {
@@ -184,7 +185,7 @@
 
 	<label class="input w-20 py-2"
 		><span>W: </span><input
-			class="bg-transparent input_outer-off w-12"
+			class="bg-transparent border-0 ring-0 focus:ring-0 focus:border-0 outline-none w-12"
 			title="Change width of Cells Table"
 			type="number"
 			bind:value={$columns}
@@ -194,7 +195,7 @@
 	</label>
 	<label class="input w-20 py-2"
 		><span>H: </span><input
-			class="bg-transparent input_outer-off w-12"
+			class="bg-transparent border-0 ring-0 focus:ring-0 focus:border-0 outline-none w-12"
 			title="Change height of Cells Table"
 			type="number"
 			bind:value={$rows}
@@ -204,7 +205,7 @@
 	</label>
 
 	<button
-		class="btn"
+		class="btn-icon naked"
 		title="Toggle Edge Loop of Cells Table"
 		on:click={() => ($edgeCell += 1)}
 	>
@@ -213,7 +214,7 @@
 		</svg>
 	</button>
 
-	<label class="skeleton btn-icon" title="Toggle Grid">
+	<label class="btn-icon naked" title="Toggle Grid">
 		<svg class:unactive={!$gridView}>
 			<use href="{SVG}#grid" />
 		</svg>
@@ -221,7 +222,7 @@
 	</label>
 
 	<button
-		class="btn-icon"
+		class="btn-icon naked"
 		title="Randomize Config"
 		on:click={() => ($modal = ModalsHeader.Random)}
 	>

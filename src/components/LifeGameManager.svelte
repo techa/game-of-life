@@ -3,17 +3,13 @@
 	import { LifeEvent } from '$lib/LifeGame'
 
 	import { life, columns, rows, generation, population } from './store'
-	import DropDown from './generic/DropDown.svelte'
 
 	import SVG from '../resource/sprite.svg'
 
 	import { popup } from '@skeletonlabs/skeleton'
 	import type { PopupSettings } from '@skeletonlabs/skeleton'
-	import { ListBox, ListBoxItem } from '@skeletonlabs/skeleton'
 	import { Table } from '@skeletonlabs/skeleton'
 	import type { TableSource } from '@skeletonlabs/skeleton'
-
-	let rulelistOpen = false
 
 	let rule: RuleString = 'B3/S23'
 	let ruleName = "Conway's Life"
@@ -32,9 +28,9 @@
 	//
 	let comboboxValue: string
 
-	const popupCombobox: PopupSettings = {
+	const popupRuleList: PopupSettings = {
 		event: 'focus-click',
-		target: 'popupCombobox',
+		target: 'popupRuleList',
 		placement: 'bottom',
 		closeQuery: '.listbox-item',
 	}
@@ -45,7 +41,7 @@
 	}
 </script>
 
-<nav>
+<nav class="w-full text-center flex justify-center">
 	<button
 		class="btn-icon"
 		title="Reverse Rule"
@@ -59,35 +55,37 @@
 		</svg>
 	</button>
 
-	<div class="btn-group" use:popup={popupCombobox}>
+	<div id="rules" class="btn-group" use:popup={popupRuleList}>
 		<input
-			class="input w-48 text-center outline-none"
+			class="input w-48 text-center font-mono outline-none"
 			placeholder="Born/Survival"
 			title="Rule Input Space"
 			bind:value={rule}
 		/>
-		<button class="btn bg-initial w-48 justify-between" title="Choose Rule">
+		<button
+			class="btn bg-initial w-48 justify-between bg-secondary-900"
+			title="Choose Rule"
+		>
 			<span class="capitalize">{ruleName || 'Rule Name'}</span>
-			<span>
-				<svg>
-					<use href="{SVG}#chevron-down" />
-				</svg>
-			</span>
+			<svg>
+				<use href="{SVG}#chevron-down" />
+			</svg>
 		</button>
 	</div>
 
 	<div
-		class="card shadow-xl overflow-y-scroll h-2/3 z-10 opacity-0"
-		data-popup="popupCombobox"
+		class="card shadow-xl overflow-y-scroll h-2/3 -mt-2 pb-4 z-10 opacity-0 hidden"
+		data-popup="popupRuleList"
 	>
 		<Table
+			class="table_rules font-mono pr-4 -mr-4 text-left"
 			source={ruleTable}
 			interactive={true}
 			on:selected={(e) => {
 				const data = e.detail
 				rule = life.setRule(data[0], ruleReverse)
 				ruleName = data[1]
-				rulelistOpen = false
+				document.getElementById('rules')?.blur()
 			}}
 		/>
 
@@ -162,12 +160,13 @@
 	</div>
 </nav>
 
-<div class="numbers inline-block text-center w-full px-1 py-0">
-	<span class="badge px-1 py-0 variant-filled"
-		>Generation: <span class="numbers px-1 py-0">{$generation}</span>
+<div class="inline-block text-center w-full px-0 py-0">
+	<span class="badge px-1 py-0"
+		>Population: <span class="font-mono px-1 py-0"
+			>{$population}/{$rows * $columns}</span
+		>
 	</span>
 	<span class="badge px-1 py-0 bg-surface-600"
-		>Population: <span class="numbers px-1 py-0">{$population}</span>/ {$rows *
-			$columns}
+		>Generation: <span class="font-mono px-1 py-0">{$generation}</span>
 	</span>
 </div>
