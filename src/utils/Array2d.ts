@@ -113,26 +113,38 @@ export class Array2d<T> {
 		return y * this.columns + x
 	}
 
-	get(x: number, y: number): T {
+	get(x: number, y: number, edgeLoop = this.options.edgeLoop): T {
+		if (edgeLoop) {
+			const xl = this.columns
+			const yl = this.rows
+			x = x < 0 ? xl + x : x >= xl ? x % xl : x
+			y = y < 0 ? yl + y : y >= yl ? y % yl : y
+		}
 		return this.values[y * this.columns + x]
 	}
 
 	getValue(target: PositionXY, edgeLoop?: boolean): T | undefined
 	getValue(i: number, edgeLoop?: boolean): T | undefined
-	getValue(target: Array2dTarget, edgeLoop?: boolean): T | undefined {
+	getValue(
+		target: Array2dTarget,
+		edgeLoop = this.options.edgeLoop,
+	): T | undefined {
 		const indexmode = typeof target === 'number'
 		let x = indexmode ? this.getX(target) : target.x
 		let y = indexmode ? this.getY(target) : target.y
 
 		const xl = this.columns
 		const yl = this.rows
-		if (edgeLoop || (edgeLoop === undefined && this.options.edgeLoop)) {
-			x = x < 0 ? xl + x : x >= xl ? x % xl : x
-			y = y < 0 ? yl + y : y >= yl ? y % yl : y
-			return this.values[y * this.columns + x]
-		}
+
+		//  Out of range of 2D table
 		if (x < 0 || y < 0 || x >= xl || y >= yl) {
-			return undefined
+			// enable Loop
+			if (edgeLoop) {
+				x = x < 0 ? xl + x : x >= xl ? x % xl : x
+				y = y < 0 ? yl + y : y >= yl ? y % yl : y
+			} else {
+				return undefined
+			}
 		}
 		return this.values[y * this.columns + x]
 	}

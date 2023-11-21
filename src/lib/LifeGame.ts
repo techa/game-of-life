@@ -185,25 +185,8 @@ export class LifeGame {
 		this.cells.removeColumns(columns)
 	}
 
-	at(x: number, y: number): Cell {
-		const xl = this.columns
-		const yl = this.rows
-		// edge loop
-		if (!this.edgeCell) {
-			x = x < 0 ? xl + x : x >= xl ? x % xl : x
-			y = y < 0 ? yl + y : y >= yl ? y % yl : y
-			return this.cells.get(x, y)
-		}
-		// edge TOMB or UNDEAD
-		if (x < 0 || y < 0 || x >= xl || y >= yl) {
-			return this.edgeCell
-		}
-		return this.cells.get(x, y)
-	}
-
 	step() {
 		const countMax = Math.max(...this.#born, ...this.#survival)
-		const cells = this.cells.clone()
 
 		this.cells.each((cell, { x, y }) => {
 			if (cell === Cell.UNDEAD || cell === Cell.TOMB) {
@@ -213,7 +196,12 @@ export class LifeGame {
 			let count = 0
 			moore: for (let _y = -1; _y <= 1; _y++) {
 				for (let _x = -1; _x <= 1; _x++) {
-					const neighbour = this.at(x + _x, y + _y)
+					const neighbour =
+						this.cells.getValue(
+							{ x: x + _x, y: y + _y },
+							!this.edgeCell,
+						) || this.edgeCell
+
 					if (
 						(_y || _x) &&
 						(neighbour === Cell.LIVE || neighbour === Cell.UNDEAD)
