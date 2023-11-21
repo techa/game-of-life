@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte'
 	import {
 		life,
 		columns,
@@ -62,6 +63,10 @@
 		}, [] as string[][]),
 		meta,
 	}
+
+	onMount(() => {
+		life.lexicon(lexicon[(Math.random() * lexicon.length) | 0].d)
+	})
 </script>
 
 <nav class="w-full p-1 text-center flex justify-center">

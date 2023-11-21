@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ComponentType } from 'svelte'
+	import { onMount, type ComponentType } from 'svelte'
 
 	import GridTable from './GridTable.svelte'
 	import TableManager from './TableManager.svelte'
@@ -7,12 +7,16 @@
 	import InitializerSettings from './InitializerSettings.svelte'
 
 	import Modal from './generic/Modal.svelte'
-	import { modal, ModalsHeader, selectedColor } from './store'
+	import { table, modal, ModalsHeader, selectedColor } from './store'
 	import { hexToRgb } from '../utils/color.js'
 
 	const _modal: Record<ModalsHeader, ComponentType> = {
 		[ModalsHeader.Random]: InitializerSettings,
 	}
+
+	onMount(() => {
+		$table = $table
+	})
 </script>
 
 <svelte:head>
