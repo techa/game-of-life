@@ -31,7 +31,7 @@ export const population = writable(life.population)
 
 // Not LifeGame menbers -------------------------
 //'#F469E4' hsl(307,86%,68%)
-export const selectedColor = writable(lch2rgb(100, 120, Math.random() * 360))
+export const selectedColor = writable(lch2rgb(90, 70, Math.random() * 360))
 export const gridView = writable(false)
 
 // Modal

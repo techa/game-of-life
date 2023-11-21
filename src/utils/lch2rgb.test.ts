@@ -16,24 +16,27 @@ describe(`./lch2rgb.js`, () => {
 })
 
 test(`rainbow`, () => {
-	const chroma = 120
+	const lightness = 90
+	const chroma = 70
 	expect([
-		lch2rgb(100, chroma, 0),
-		lch2rgb(100, chroma, 45),
-		lch2rgb(100, chroma, 90),
-		lch2rgb(100, chroma, 135),
-		lch2rgb(100, chroma, 180),
-		lch2rgb(100, chroma, 225),
-		lch2rgb(100, chroma, 270),
-		lch2rgb(100, chroma, 315),
+		lch2rgb(lightness, chroma, 0),
+		lch2rgb(lightness, chroma, 45),
+		lch2rgb(lightness, chroma, 90),
+		lch2rgb(lightness, chroma, 135),
+		lch2rgb(lightness, chroma, 180),
+		lch2rgb(lightness, chroma, 225),
+		lch2rgb(lightness, chroma, 270),
+		lch2rgb(lightness, chroma, 315),
+		lch2rgb(lightness, chroma, 360),
 	]).toStrictEqual([
-		'#ff6aff',
-		'#ffac5a',
-		'#fffc00',
-		'#35ff32',
-		'#00fffb',
-		'#00ffff',
-		'#00ffff',
-		'#ffb9ff',
+		'#ffa6e6',
+		'#ffba87',
+		'#ffe053',
+		'#90fa7d',
+		'#00ffe0',
+		'#00feff',
+		'#8ae7ff',
+		'#ffc0ff',
+		'#ffa6e6',
 	])
 })

@@ -89,15 +89,15 @@
 			value={colorStringToHsl($selectedColor)[0] || 0}
 			on:change={(e) => ($selectedColor = lch2rgb(100, 120, e.detail))}
 			gradient={[
-				'#ff6aff',
-				'#ffac5a',
-				'#fffc00',
-				'#35ff32',
-				'#00fffb',
-				'#00ffff',
-				'#00ffff',
-				'#ffb9ff',
-				'#ff6aff',
+				'#ffa6e6',
+				'#ffba87',
+				'#ffe053',
+				'#90fa7d',
+				'#00ffe0',
+				'#00feff',
+				'#8ae7ff',
+				'#ffc0ff',
+				'#ffa6e6',
 			]}
 			--background-color={$selectedColor}
 		/>
