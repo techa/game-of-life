@@ -400,14 +400,11 @@ export class Array2d<T> {
 	 * @param y (optional) initial position-y
 	 */
 	spiral(
-		cb: (
-			value: T,
-			indexs?: { x: number; y: number; i: number },
-		) => boolean | void,
 		target: Array2dTarget = {
 			x: ((this.columns - 1) / 2) | 0,
 			y: ((this.rows - 1) / 2) | 0,
 		},
+		breakCallback?: (value: T, indexs: Array2dIndexs) => boolean | void,
 	) {
 		const indexmode = typeof target === 'number'
 		let x = indexmode ? this.getX(target) : target.x
@@ -425,15 +422,17 @@ export class Array2d<T> {
 		let l = this.length
 
 		while (l) {
-			const val = this.getValue({ x, y }, false)
-			if (val !== undefined) {
-				const res = cb(val, { x, y, i })
+			const value = this.getValue({ x, y }, false)
+
+			if (value !== undefined) {
+				const res = breakCallback && breakCallback(value, { x, y, i })
 				l--
 
 				if (res === true) {
 					break
 				}
 			}
+
 			switch (this.spiralDirectionsOrder[direction]) {
 				case Direction.LEFT:
 					x += 1
