@@ -139,7 +139,7 @@
 		style:width={width + 'px'}
 		style:height={height + 'px'}
 	/>
-	<!-- svelte-ignore component-name-lowercase -->
+
 	<table
 		class:gridView={$gridView}
 		style:width={width + 'px'}

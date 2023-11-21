@@ -33,6 +33,7 @@
 <div class="dropdown-wapper">
 	<div
 		class="label-wapper"
+		role="presentation"
 		on:focusin={showHandler}
 		on:focusout={hideHandler}
 		on:mouseenter={clickable ? undefined : showHandler}
@@ -49,8 +50,7 @@
 		class={'dropdown ' + ($$props.class || '')}
 		class:hidden={!open}
 		style={$$props.style}
-		role="tooltip"
-		tabindex={-1}
+		role="presentation"
 		bind:this={contentEl}
 		on:focusin={showHandler}
 		on:focusout={hideHandler}

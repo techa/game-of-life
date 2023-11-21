@@ -1,9 +1,9 @@
 <!-- Copy from: https://svelte.dev/examples/modal -->
 <script lang="ts">
 	import { writable, type Writable } from 'svelte/store'
-	import { createEventDispatcher, setContext, onDestroy } from 'svelte'
+	import { createEventDispatcher, setContext } from 'svelte'
 
-	import { TabGroup, Tab, TabAnchor } from '@skeletonlabs/skeleton'
+	import { TabGroup, Tab } from '@skeletonlabs/skeleton'
 	import SVG from '../../resource/sprite.svg'
 	import { modal } from '../store.js'
 	import InitializerSettings from '../InitializerSettings.svelte'
