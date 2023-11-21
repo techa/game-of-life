@@ -1,11 +1,6 @@
 import { Ticker } from '../utils/Ticker.js'
 import { EventDispatcher, type EventHandler } from '../utils/EventDispatcher.js'
-import {
-	ruleParser,
-	ruleReversal,
-	ruleString,
-	type RuleString,
-} from '$lib/rules.js'
+import { ruleParser, ruleReversal, ruleString } from '$lib/rules.js'
 import { Cells } from './Cells.js'
 
 export const enum Cell {
@@ -76,6 +71,7 @@ export class LifeGame {
 			rules = ruleReversal(...rules)
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-extra-semi
 		;[this.#born, this.#survival, this.#cycle] = rules
 		return this.ruleString
 	}

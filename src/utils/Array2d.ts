@@ -157,6 +157,7 @@ export class Array2d<T> {
 	}
 
 	clone(): this {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const arr = new (this.constructor as any)(
 			this.columns,
 			this.rows,
@@ -185,6 +186,7 @@ export class Array2d<T> {
 	 * @param cb
 	 */
 	each(cb: Array2dEachCallback<T, T>): this {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const arr = new (this.constructor as any)(
 			this.columns,
 			this.rows,
