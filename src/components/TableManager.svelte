@@ -14,7 +14,7 @@
 	import Slider from './generic/Slider.svelte'
 
 	import SVG from '../resource/sprite.svg'
-	import { LifeEvent } from '$lib/LifeGame'
+	import { LifeEvent } from '$lib/LifeGame.js'
 	import { lch2rgb } from '../utils/lch2rgb.js'
 
 	import lexicon from '../resource/lexicon.min.json'
