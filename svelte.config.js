@@ -22,7 +22,6 @@ const config = {
 		paths: {
 			base: dev ? '' : `/${pkg.name}`,
 		},
-		prerender: { entries: [] },
 		appDir: 'internal',
 	},
 }
