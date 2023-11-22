@@ -65,9 +65,11 @@
 		{gridColorCentral}
 		on:drawDot={(e) => {
 			const { ctx, x, y } = e.detail
-			ctx.fillStyle = life.getColor($table[y][x])
-
-			ctx.fillRect(x, y, 1, 1)
+			const cell = life.cells.get(x, y)
+			if (cell > 0 || cell === -1) {
+				ctx.fillStyle = life.getColor(cell)
+				ctx.fillRect(x, y, 1, 1)
+			}
 		}}
 		on:setValue={(e) => {
 			const { x, y, mouseEvent } = e.detail
