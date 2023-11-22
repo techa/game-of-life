@@ -8,8 +8,6 @@
 		rows,
 		selectedColor,
 		gridView,
-		generation,
-		population,
 		penMode,
 	} from './store'
 
@@ -46,8 +44,6 @@
 
 	life.on(LifeEvent.UPDATE, () => {
 		$table = life.cells.get2d()
-		$generation = life.generation
-		$population = life.population
 		// console.log('UPDATE')
 	})
 

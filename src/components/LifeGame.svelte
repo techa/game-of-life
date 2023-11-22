@@ -35,6 +35,8 @@
 		// console.log('TABLE_UPDATE')
 	})
 
+	let settingValue = 1
+
 	selectedColor.subscribe((v) => {
 		life.colorManager.setColor(v)
 		$table = $table
@@ -68,10 +70,12 @@
 			ctx.fillRect(x, y, 1, 1)
 		}}
 		on:setValue={(e) => {
-			const { x, y } = e.detail
-			const cell = life.cells.get(x, y)
+			const { x, y, mouseEvent } = e.detail
+			if (mouseEvent.type === 'mousedown') {
+				settingValue = $table[y][x] ? 0 : -$penMode || 1
+			}
 
-			life.cells.setValue(e.detail, cell ? 0 : -$penMode || 1)
+			life.cells.setValue(e.detail, settingValue)
 			life.emit(LifeEvent.UPDATE)
 		}}
 	/>

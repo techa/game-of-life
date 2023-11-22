@@ -2,8 +2,17 @@
 	import { onMount, createEventDispatcher } from 'svelte'
 	import { readable, type Writable } from 'svelte/store'
 
+	type DrawEvent = MouseEvent & {
+		currentTarget: EventTarget & HTMLCanvasElement
+	}
+
 	const dispatch = createEventDispatcher<{
-		setValue: { x: number; y: number; ctx: CanvasRenderingContext2D }
+		setValue: {
+			x: number
+			y: number
+			ctx: CanvasRenderingContext2D
+			mouseEvent: DrawEvent
+		}
 		drawDot: { x: number; y: number; ctx: CanvasRenderingContext2D }
 		// /**
 		//  * For setting ctx.strokeStyle & ctx.lineWidth
@@ -101,14 +110,19 @@
 
 	let enphasises: number[][] = [[], []]
 
-	$: {
+	cells.subscribe(() => {
 		columns = $cells[0].length
 		rows = $cells.length
 		pxDraw()
-
 		enphasises = [enphasisIndexes(columns), enphasisIndexes(rows)]
-	}
+	})
 
+	/**
+	 * create Grid enphasis & Central line indexs
+	 * * enphasis is positive value
+	 * * central is negative value
+	 * @param colrow columns or rows
+	 */
 	function enphasisIndexes(colrow: number) {
 		const enphasises = []
 
@@ -155,8 +169,16 @@
 		return [x, y]
 	}
 
-	function setValue([x, y]: [number, number]) {
-		dispatch('setValue', { ctx: px_ctx, x, y })
+	let xmemo = -3
+	let ymemo = -3
+	function setValue(e: DrawEvent) {
+		const [x, y] = getXY(e)
+		if (isPress && (xmemo !== x || ymemo !== y)) {
+			dispatch('setValue', { ctx: px_ctx, x, y, mouseEvent: e })
+			drawDot([x, y])
+			xmemo = x
+			ymemo = y
+		}
 	}
 
 	function drawDot([x, y]: [number, number]) {
@@ -166,10 +188,10 @@
 	function pxDraw() {
 		if (px_ctx) {
 			px_ctx.clearRect(-1, -1, columns + 1, rows + 1)
-		}
-		for (let y = 0; y < rows; y++) {
-			for (let x = 0; x < columns; x++) {
-				drawDot([x, y])
+			for (let y = 0; y < rows; y++) {
+				for (let x = 0; x < columns; x++) {
+					drawDot([x, y])
+				}
 			}
 		}
 	}
@@ -285,29 +307,26 @@
 			bind:this={sc_canvas}
 			{width}
 			{height}
-			on:mouseleave={() => {
+			on:mouseleave|preventDefault={() => {
 				isHover = false
 				scDraw()
 			}}
-			on:mouseenter={() => {
+			on:mouseenter|preventDefault={() => {
 				isHover = true
 			}}
 			on:mousedown|preventDefault={(e) => {
-				const xy = getXY(e)
 				if (e.button === 2 /* Right click */) {
 					// right click spuit?
 				} else {
 					isPress = true
-					setValue(xy)
-					drawDot(xy)
+					setValue(e)
 				}
 			}}
 			on:mousemove|preventDefault={(e) => {
-				const xy = getXY(e)
-				if (isPress) {
-					setValue(xy)
-					drawDot(xy)
-				}
+				setValue(e)
+			}}
+			on:mouseup|preventDefault={() => {
+				isPress = false
 			}}
 			on:contextmenu|preventDefault
 		/>
