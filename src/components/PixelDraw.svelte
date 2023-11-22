@@ -266,23 +266,6 @@
 		isPress = false
 		scDraw()
 	}}
-	on:keydown={(e) => {
-		// https://developer.mozilla.org/ja/docs/Web/API/KeyboardEvent/code
-		if (e.ctrlKey) {
-			switch (e.code) {
-				case 'KeyZ':
-					if (e.shiftKey) {
-						// redo
-					} else {
-						// undo
-					}
-					break
-
-				default:
-					break
-			}
-		}
-	}}
 />
 
 <div
