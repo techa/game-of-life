@@ -27,6 +27,18 @@
 	function resize() {
 		life.tableSizing($columns, $rows)
 	}
+	function blur(axis: 'rows' | 'columns') {
+		return (
+			e: FocusEvent & {
+				currentTarget: EventTarget & HTMLInputElement
+			},
+		) => {
+			const val = +e.currentTarget.value | 0
+			if (val < 1 && e.currentTarget) {
+				e.currentTarget.value = life[axis] + ''
+			}
+		}
+	}
 
 	let popupHueSliderInvisible = true
 	const popupHueSlider: PopupSettings = {
@@ -216,6 +228,7 @@
 			type="number"
 			bind:value={$columns}
 			on:input={resize}
+			on:blur={blur('columns')}
 			min="1"
 		/>
 	</label>
@@ -226,6 +239,7 @@
 			type="number"
 			bind:value={$rows}
 			on:input={resize}
+			on:blur={blur('rows')}
 			min="1"
 		/>
 	</label>

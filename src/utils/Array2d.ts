@@ -230,6 +230,14 @@ export class Array2d<T> {
 	 * @param rows height
 	 */
 	sizing(columns: number, rows: number) {
+		if (columns < 1 || rows < 1) {
+			// return 0 length array
+			this.columns = 0
+			this.rows = 0
+			this.values = []
+			return this
+		}
+
 		const table = this.get2d()
 		if (this.rows > rows) {
 			// remove rows
@@ -250,7 +258,7 @@ export class Array2d<T> {
 			}
 		}
 
-		this.columns = table[0].length
+		this.columns = table[0]?.length || 0
 		this.rows = table.length
 		this.values = table.flat()
 		return this

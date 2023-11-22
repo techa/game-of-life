@@ -164,8 +164,10 @@ export class LifeGame {
 	}
 
 	tableSizing(columns: number, rows: number) {
-		this.cells.sizing(columns, rows)
-		this.emit(LifeEvent.TABLE_UPDATE)
+		if (columns > 0 && rows > 0) {
+			this.cells.sizing(columns, rows)
+			this.emit(LifeEvent.TABLE_UPDATE)
+		}
 	}
 
 	addRows(row = this.rows) {
