@@ -70,7 +70,9 @@
 		on:setValue={(e) => {
 			const { x, y } = e.detail
 			const cell = life.cells.get(x, y)
-			$table[y][x] = cell ? 0 : -$penMode || 1
+
+			life.cells.setValue(e.detail, cell ? 0 : -$penMode || 1)
+			life.emit(LifeEvent.UPDATE)
 		}}
 	/>
 

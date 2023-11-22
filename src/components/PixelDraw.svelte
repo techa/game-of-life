@@ -300,7 +300,6 @@
 					isPress = true
 					setValue(xy)
 					drawDot(xy)
-					$cells
 				}
 			}}
 			on:mousemove|preventDefault={(e) => {
@@ -309,7 +308,6 @@
 					setValue(xy)
 					drawDot(xy)
 				}
-				$cells
 			}}
 			on:contextmenu|preventDefault
 		/>
