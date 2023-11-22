@@ -14,21 +14,17 @@
 		ModalsHeader,
 		selectedColor,
 		gridView,
-		generation,
-		population,
 		columns,
 		rows,
 		penMode,
+		gridColorCentral,
 	} from './store'
 	import { hexToRgb } from '../utils/color.js'
 
 	import { LifeEvent } from '$lib/LifeGame.js'
-	import { writable } from 'svelte/store'
 
 	life.on(LifeEvent.UPDATE, () => {
 		$table = life.cells.get2d()
-		$generation = life.generation
-		$population = life.population
 		// console.log('UPDATE')
 	})
 
@@ -64,7 +60,7 @@
 		class="h-4/5"
 		cells={table}
 		gridShow={gridView}
-		gridColorCentral={writable('red')}
+		{gridColorCentral}
 		on:drawDot={(e) => {
 			const { ctx, x, y } = e.detail
 			ctx.fillStyle = life.getColor($table[y][x])

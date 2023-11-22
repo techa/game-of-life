@@ -36,7 +36,11 @@ export class ColorManager {
 	}
 
 	setByHue(hue: number, c = this.chroma, l = this.lightness) {
+		this.hue = hue
 		return this.setColor(lch2rgb(l, c, hue))
+	}
+	getIncHue(addhue: number, c = this.chroma, l = this.lightness) {
+		return lch2rgb(l, c, this.hue + addhue)
 	}
 
 	get(cell: Cell | number) {
