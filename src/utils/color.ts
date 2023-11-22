@@ -79,27 +79,3 @@ export function colorStringToHsl(hexOrHsl: string): number[] {
 		? rgbToHsl(hexToRgb(hexOrHsl))
 		: hslStringParse(hexOrHsl)
 }
-
-export class NextColor {
-	hueIncr = 1
-
-	constructor() {
-		this.init()
-	}
-	init() {
-		this.hueIncr = 1
-	}
-
-	/**
-	 * Hex or HSLstring to HSLstring
-	 * @param hexOrHsl
-	 * @param hueRange min value 36
-	 * @return HSLstring
-	 */
-	next(hexOrHsl: string, hueRange = 36): string {
-		const [h, s, l] = colorStringToHsl(hexOrHsl)
-		return `hsl(${(h + hueRange) % 360},${s}%,${
-			!(this.hueIncr++ % 10) ? l - 10 : l
-		}%)`
-	}
-}

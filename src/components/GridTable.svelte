@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import { NextColor } from '../utils/color'
+	import { CellColors } from '../lib/CellColors.js'
 	import { Cell, LifeEvent } from '$lib/LifeGame'
 	import {
 		life,
@@ -20,39 +20,7 @@
 
 	export let drawMode = Cell.LIVE
 
-	let colors = [
-		'transparent', // DEATH, TOMB
-		$selectedColor, // LIVE, UNDEAD
-		// 'red',
-		// 'orange',
-		// 'yellow',
-		// '#60ff00', // lime
-		// 'cyan',
-		// '#0060ff', // blue
-		// 'magenta',
-		// 'white',
-		// 'lightgray',
-		// 'gray',
-		// 'darkgray',
-	]
-
-	let nextColor: NextColor
-
-	function cellColor(celltype: number) {
-		if (celltype < 0) {
-			celltype += 2
-		}
-		let color = colors[celltype]
-		if (!color) {
-			color = nextColor.next(
-				colors[celltype - 1] || $selectedColor,
-				Math.max(35, 360 / (life.cycle + 1)),
-			)
-			colors.push(color)
-			// console.log(`%c${color}`, `color:${color};font-weight:bold;`)
-		}
-		return color
-	}
+	let nextColor: CellColors
 
 	let canvas: HTMLCanvasElement
 	let ctx: CanvasRenderingContext2D
@@ -99,7 +67,7 @@
 			for (let y = 0; y < $rows; y++) {
 				for (let x = 0; x < $columns; x++) {
 					if ($table[y]) {
-						ctx.fillStyle = cellColor($table[y][x])
+						ctx.fillStyle = nextColor.get($table[y][x])
 						ctx.fillRect(x, y, 1, 1)
 					} else break
 				}
@@ -111,16 +79,7 @@
 	table.subscribe(redraw)
 
 	selectedColor.subscribe(() => {
-		// Reload colors
-		colors = [
-			'transparent', // DEATH, TOMB
-			$selectedColor, // LIVE, UNDEAD
-		]
-
-		nextColor = new NextColor()
-		for (let i = 2; i < life.cycle; i++) {
-			cellColor(i)
-		}
+		nextColor = new CellColors($selectedColor, life.cycle)
 		redraw()
 	})
 </script>
