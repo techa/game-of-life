@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import { CellColors } from '../lib/CellColors.js'
 	import { Cell, LifeEvent } from '$lib/LifeGame'
 	import {
 		life,
@@ -19,8 +18,6 @@
 	$: height = $rows * cell_size
 
 	export let drawMode = Cell.LIVE
-
-	let nextColor: CellColors
 
 	let canvas: HTMLCanvasElement
 	let ctx: CanvasRenderingContext2D
@@ -67,7 +64,7 @@
 			for (let y = 0; y < $rows; y++) {
 				for (let x = 0; x < $columns; x++) {
 					if ($table[y]) {
-						ctx.fillStyle = nextColor.get($table[y][x])
+						ctx.fillStyle = life.getColor($table[y][x])
 						ctx.fillRect(x, y, 1, 1)
 					} else break
 				}
@@ -78,8 +75,8 @@
 
 	table.subscribe(redraw)
 
-	selectedColor.subscribe(() => {
-		nextColor = new CellColors($selectedColor, life.cycle)
+	selectedColor.subscribe((v) => {
+		life.colorManager.setColor(v)
 		redraw()
 	})
 </script>

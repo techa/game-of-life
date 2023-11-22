@@ -1,19 +1,42 @@
 import { colorStringToHsl } from '../utils/color.js'
-import type { Cell } from './LifeGame.js'
+import { lch2rgb } from '../utils/lch2rgb.js'
+import type { Cell, LifeGame } from './LifeGame.js'
 
-export class CellColors {
+export class ColorManager {
+	life: LifeGame
 	hueIncr = 1
 
-	colors: string[]
-	cycle = 2
+	selectedColor = 'white'
+	hue: number
+	lightness = 90
+	chroma = 70
 
-	constructor(selectedColor: string, cycle: number) {
+	colors: string[]
+
+	constructor(life: LifeGame) {
+		this.life = life
+		this.hue = Math.random() * 360
+		this.colors = [
+			'transparent', // DEATH, TOMB
+			this.setByHue(this.hue), // LIVE, UNDEAD
+			// Generations colors...
+		]
+	}
+
+	setColor(color: string) {
+		this.selectedColor = color
+
 		this.hueIncr = 1
 		this.colors = [
 			'transparent', // DEATH, TOMB
-			selectedColor, // LIVE, UNDEAD
+			color, // LIVE, UNDEAD
+			// Generations colors...
 		]
-		this.cycle = cycle
+		return color
+	}
+
+	setByHue(hue: number, c = this.chroma, l = this.lightness) {
+		return this.setColor(lch2rgb(l, c, hue))
 	}
 
 	get(cell: Cell | number) {
@@ -24,7 +47,7 @@ export class CellColors {
 		if (!color) {
 			color = this.next(
 				this.colors[cell - 1] || this.colors[1],
-				Math.max(35, 360 / (this.cycle + 1)),
+				Math.max(36, 360 / (this.life.cycle + 1)),
 			)
 			this.colors.push(color)
 			console.log(`%c${color}`, `color:${color};font-weight:bold;`)

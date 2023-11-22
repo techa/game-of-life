@@ -2,7 +2,6 @@ import { writable, type Writable } from 'svelte/store'
 import { LifeGame } from '$lib/LifeGame.js'
 import { TableTransform } from '$lib/TableTransform.js'
 import { TableInitializer } from '$lib/TableInitializer.js'
-import { lch2rgb } from '../utils/lch2rgb.js'
 
 interface LifeGameEx extends TableTransform, TableInitializer {}
 @TableTransform
@@ -31,7 +30,7 @@ export const population = writable(life.population)
 
 // Not LifeGame menbers -------------------------
 //'#F469E4' hsl(307,86%,68%)
-export const selectedColor = writable(lch2rgb(90, 70, Math.random() * 360))
+export const selectedColor = writable(life.getColor())
 export const gridView = writable(false)
 
 // Modal

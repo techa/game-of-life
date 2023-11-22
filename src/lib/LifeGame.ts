@@ -2,6 +2,7 @@ import { Ticker } from '../utils/Ticker.js'
 import { EventDispatcher, type EventHandler } from '../utils/EventDispatcher.js'
 import { ruleParser, ruleReversal, ruleString } from '$lib/rules.js'
 import { Cells } from './Cells.js'
+import { ColorManager } from './ColorManager.js'
 
 export const enum Cell {
 	/**
@@ -24,6 +25,14 @@ export const enum LifeEvent {
 }
 
 export class LifeGame {
+	colorManager: ColorManager
+	constructor() {
+		this.colorManager = new ColorManager(this)
+	}
+	getColor(cell = Cell.LIVE) {
+		return this.colorManager.get(cell)
+	}
+
 	#events = new EventDispatcher()
 	emit(eventName: LifeEvent, event?: unknown): void {
 		this.#events.emit(eventName, event)
