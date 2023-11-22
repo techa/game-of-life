@@ -1,4 +1,4 @@
-import { writable, type Writable } from 'svelte/store'
+import { derived, writable, type Writable } from 'svelte/store'
 import { LifeGame } from '$lib/LifeGame.js'
 import { TableTransform } from '$lib/TableTransform.js'
 import { TableInitializer } from '$lib/TableInitializer.js'
@@ -25,13 +25,16 @@ export const edgeCell: Writable<typeof life.edgeCell> = (() => {
 	}
 })()
 
-export const generation = writable(life.generation)
-export const population = writable(life.population)
+export const generation = derived(table, () => life.generation)
+export const population = derived(table, () => life.population)
 
 // Not LifeGame menbers -------------------------
 //'#F469E4' hsl(307,86%,68%)
 export const selectedColor = writable(life.getColor())
 export const gridView = writable(false)
+export const gridColorCentral = derived(selectedColor, () => {
+	return life.colorManager.getIncHue(120)
+})
 
 // Modal
 export const enum ModalsHeader {
@@ -39,10 +42,6 @@ export const enum ModalsHeader {
 }
 export const modal = writable<ModalsHeader | null>(null)
 export const initSettingsOpen = writable(false)
-
-export const randomAreaColumns = writable(life.randomAreaColumns)
-
-export const randomAreaRows = writable(life.randomAreaRows)
 
 export const edgeColumn = writable(life.edgeColumn)
 export const edgeRow = writable(life.edgeRow)
@@ -85,12 +84,14 @@ export const randomPoints = (() => {
 })()
 
 randomPoints.subscribe(() => {
-	randomAreaColumns.set(life.randomAreaColumns)
-	randomAreaRows.set(life.randomAreaRows)
-
 	edgeColumn.update(() => life.edgeColumn)
 	edgeRow.update(() => life.edgeRow)
 })
+export const randomAreaColumns = derived(
+	randomPoints,
+	() => life.randomAreaColumns,
+)
+export const randomAreaRows = derived(randomPoints, () => life.randomAreaRows)
 
 export const penMode: Writable<number> = (() => {
 	const { subscribe, set, update } = writable(0)

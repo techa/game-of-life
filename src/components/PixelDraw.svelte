@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount, createEventDispatcher } from 'svelte'
-	import { writable, type Writable } from 'svelte/store'
+	import { readable, type Writable } from 'svelte/store'
 
 	const dispatch = createEventDispatcher<{
 		setValue: { x: number; y: number; ctx: CanvasRenderingContext2D }
@@ -32,12 +32,12 @@
 
 	export let cells: Writable<unknown[][]>
 
-	export let gridShow = writable(true)
-	export let gridCursor = writable(true)
-	export let gridCursorColor = writable('#ccc')
-	export let gridColor = writable('#333')
-	export let gridColorEmphasis = writable('#555')
-	export let gridColorCentral = writable('#188')
+	export let gridShow = readable(true)
+	export let gridCursor = readable(true)
+	export let gridCursorColor = readable('#ccc')
+	export let gridColor = readable('#333')
+	export let gridColorEmphasis = readable('#555')
+	export let gridColorCentral = readable('#188')
 
 	export let viewMode = 'full'
 
