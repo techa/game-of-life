@@ -112,8 +112,13 @@
 	function enphasisIndexes(colrow: number) {
 		const enphasises = []
 
+		// center line
 		if (!(colrow % 2)) {
 			enphasises.push(-(colrow / 2))
+		} else {
+			// 2 lines when odd size
+			enphasises.push(-Math.floor(colrow / 2))
+			enphasises.push(-Math.ceil(colrow / 2))
 		}
 
 		if (!(colrow % 3)) {
