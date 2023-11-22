@@ -24,12 +24,9 @@
 	import type { PopupSettings, TableSource } from '@skeletonlabs/skeleton'
 	import { colorStringToHsl } from '../utils/color.js'
 
-	function resize() {
-		life.tableSizing($columns, $rows)
-	}
-	function blur(axis: 'rows' | 'columns') {
+	function resize(axis: 'rows' | 'columns') {
 		return (
-			e: FocusEvent & {
+			e: Event & {
 				currentTarget: EventTarget & HTMLInputElement
 			},
 		) => {
@@ -37,6 +34,7 @@
 			if (val < 1 && e.currentTarget) {
 				e.currentTarget.value = life[axis] + ''
 			}
+			life.tableSizing($columns, $rows)
 		}
 	}
 
@@ -227,8 +225,8 @@
 			title="Change width of Cells Table"
 			type="number"
 			bind:value={$columns}
-			on:input={resize}
-			on:blur={blur('columns')}
+			on:input={resize('columns')}
+			on:blur={resize('columns')}
 			min="1"
 		/>
 	</label>
@@ -238,8 +236,8 @@
 			title="Change height of Cells Table"
 			type="number"
 			bind:value={$rows}
-			on:input={resize}
-			on:blur={blur('rows')}
+			on:input={resize('rows')}
+			on:blur={resize('rows')}
 			min="1"
 		/>
 	</label>
