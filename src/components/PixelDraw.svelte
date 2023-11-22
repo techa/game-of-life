@@ -220,31 +220,42 @@
 			return
 		}
 		sc_ctx.clearRect(-1, -1, width + 2, height + 2)
+		const bit = [0, 1]
 
 		if ($gridShow) {
 			const sizes = [columns, rows]
 
-			for (const axis of [0, 1]) {
+			// draw base grid line
+			for (const axis of bit) {
 				const colrow = sizes[axis]
-				const enphas = enphasises[axis]
-
 				for (let i = 0; i <= colrow; i++) {
-					const inportant = enphas.includes(-i)
-					const enphasis = enphas.includes(i)
-
-					sc_ctx.strokeStyle = inportant
-						? $gridColorCentral
-						: enphasis
-						? $gridColorEmphasis
-						: $gridColor
-					sc_ctx.lineWidth = enphasis ? 2 : 1
-
+					sc_ctx.strokeStyle = $gridColor
+					sc_ctx.lineWidth = 1
 					drawGridLine(axis, i)
 				}
 			}
+			// draw enphas line
+			for (const axis of bit) {
+				for (const enphas of enphasises[axis])
+					if (enphas > 0) {
+						sc_ctx.strokeStyle = $gridColorEmphasis
+						sc_ctx.lineWidth = 2
+						drawGridLine(axis, enphas)
+					}
+			}
+			// draw central line
+			for (const axis of bit) {
+				for (const central of enphasises[axis])
+					if (central < 0) {
+						sc_ctx.strokeStyle = $gridColorCentral
+						sc_ctx.lineWidth = 2
+						drawGridLine(axis, -central)
+					}
+			}
 		}
 
-		for (const axis of [0, 1]) {
+		// grid focus
+		for (const axis of bit) {
 			sc_ctx.strokeStyle = $gridCursorColor
 			drawGridLine(axis, coordinate[axis])
 			drawGridLine(axis, coordinate[axis] + 1)
