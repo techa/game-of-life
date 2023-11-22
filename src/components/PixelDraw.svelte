@@ -169,15 +169,11 @@
 		return [x, y]
 	}
 
-	let xmemo = -3
-	let ymemo = -3
 	function setValue(e: DrawEvent) {
 		const [x, y] = getXY(e)
-		if (isPress && (xmemo !== x || ymemo !== y)) {
+		if (isPress) {
 			dispatch('setValue', { ctx: px_ctx, x, y, mouseEvent: e })
 			drawDot([x, y])
-			xmemo = x
-			ymemo = y
 		}
 	}
 
