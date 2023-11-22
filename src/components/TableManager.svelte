@@ -24,7 +24,7 @@
 	import type { PopupSettings, TableSource } from '@skeletonlabs/skeleton'
 	import { colorStringToHsl } from '../utils/color.js'
 
-	function resize(axis: 'rows' | 'columns') {
+	function validateResize(axis: 'rows' | 'columns') {
 		return (
 			e: Event & {
 				currentTarget: EventTarget & HTMLInputElement
@@ -225,8 +225,8 @@
 			title="Change width of Cells Table"
 			type="number"
 			bind:value={$columns}
-			on:input={resize('columns')}
-			on:blur={resize('columns')}
+			on:input={validateResize('columns')}
+			on:blur={validateResize('columns')}
 			min="1"
 		/>
 	</label>
@@ -236,8 +236,8 @@
 			title="Change height of Cells Table"
 			type="number"
 			bind:value={$rows}
-			on:input={resize('rows')}
-			on:blur={resize('rows')}
+			on:input={validateResize('rows')}
+			on:blur={validateResize('rows')}
 			min="1"
 		/>
 	</label>
