@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="./favicon.png" />
+		<meta name="viewport" content="width=device-width" />
+		
+		<link rel="modulepreload" href="./internal/immutable/entry/start.f0f31f28.js">
+		<link rel="modulepreload" href="./internal/immutable/chunks/scheduler.2bec0796.js">
+		<link rel="modulepreload" href="./internal/immutable/chunks/singletons.c6e67242.js">
+		<link rel="modulepreload" href="./internal/immutable/chunks/index.cfc49adb.js">
+		<link rel="modulepreload" href="./internal/immutable/entry/app.02f9e589.js">
+		<link rel="modulepreload" href="./internal/immutable/chunks/index.e987d694.js">
+	</head>
+	<body data-theme="my-custom-theme">
+		<div style="display: contents">
+			<script>
+				{
+					__sveltekit_98dbg0 = {
+						assets: "/game-of-life",
+						base: new URL(".", location).pathname.slice(0, -1),
+						env: {}
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("./internal/immutable/entry/start.f0f31f28.js"),
+						import("./internal/immutable/entry/app.02f9e589.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element);
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
