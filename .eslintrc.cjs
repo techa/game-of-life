@@ -7,7 +7,7 @@ module.exports = {
 		'plugin:svelte/recommended',
 	],
 	plugins: ['@typescript-eslint'],
-	ignorePatterns: ['*.cjs'],
+	ignorePatterns: ['*.cjs', '*.html'],
 	rules: {
 		'@typescript-eslint/no-empty-interface': [
 			'error',
