@@ -90,8 +90,11 @@
 	let sc_ctx: CanvasRenderingContext2D
 
 	let pixel_draw: HTMLDivElement
-	let canvas_wapper: HTMLDivElement
 	let boxRect: DOMRect
+
+	let canvas_wapper: HTMLDivElement
+	let canvasRect: DOMRect
+	let canvasResize: DOMRect
 
 	onMount(() => {
 		const _px_ctx = px_canvas.getContext('2d')
@@ -102,9 +105,29 @@
 		} else {
 			console.error(`canvas.getContext('2d') returns null`)
 		}
-		boxRect = pixel_draw.getBoundingClientRect()
+		getRects()
 	})
 
+	function getRects() {
+		// console.log('getRects')
+		boxRect = pixel_draw.getBoundingClientRect()
+		canvasRect = canvas_wapper.getBoundingClientRect()
+	}
+
+	$: if (canvasResize) {
+		// console.log('resize')
+		getRects()
+		scDraw()
+	}
+
+	/**
+	 * 1cell width
+	 */
+	let w = 0
+	/**
+	 * 1cell height
+	 */
+	let h = 0
 	$: if (canvas_wapper) {
 		const vertical = boxRect.width < boxRect.height
 		if (viewMode === 'full') {
@@ -172,15 +195,10 @@
 	}
 
 	function getXY(e: MouseEvent): [number, number] {
-		const {
-			x: boxx,
-			y: boxy,
-			width,
-			height,
-		} = canvas_wapper.getBoundingClientRect()
+		const { x: boxPositionX, y: boxPositionY, width, height } = canvasRect
 
-		const x = (((e.clientX - boxx) * columns) / width) | 0
-		const y = (((e.clientY - boxy) * rows) / height) | 0
+		const x = (((e.clientX - boxPositionX) * columns) / width) | 0
+		const y = (((e.clientY - boxPositionY) * rows) / height) | 0
 		return [x, y]
 	}
 
@@ -279,6 +297,9 @@
 </script>
 
 <svelte:window
+	on:resize={() => {
+		getRects()
+	}}
 	on:mousemove={(e) => {
 		if (isHover || isPress) {
 			const xy = getXY(e)
@@ -304,6 +325,7 @@
 		style:width={width + 'px'}
 		style:height={height + 'px'}
 		bind:this={canvas_wapper}
+		bind:contentRect={canvasResize}
 	>
 		<canvas
 			class="px_canvas"
