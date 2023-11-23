@@ -14,6 +14,7 @@
 			mouseEvent: DrawEvent
 		}
 		drawDot: { x: number; y: number; ctx: CanvasRenderingContext2D }
+		optionDraw: { x: number; y: number; ctx: CanvasRenderingContext2D }
 		// /**
 		//  * For setting ctx.strokeStyle & ctx.lineWidth
 		//  * ```
@@ -180,13 +181,17 @@
 	function drawDot([x, y]: [number, number]) {
 		dispatch('drawDot', { ctx: px_ctx, x, y })
 	}
+	function optionDraw([x, y]: [number, number]) {
+		dispatch('optionDraw', { ctx: sc_ctx, x, y })
+	}
 
 	function pxDraw() {
-		if (px_ctx) {
+		if (px_ctx && sc_ctx) {
 			px_ctx.clearRect(-1, -1, columns + 1, rows + 1)
 			for (let y = 0; y < rows; y++) {
 				for (let x = 0; x < columns; x++) {
 					drawDot([x, y])
+					optionDraw([x, y])
 				}
 			}
 		}

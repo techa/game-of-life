@@ -71,6 +71,26 @@
 				ctx.fillRect(x, y, 1, 1)
 			}
 		}}
+		on:optionDraw={(e) => {
+			const { ctx, x, y } = e.detail
+			if ($penMode > 0) {
+				// UNDEAD TOMB
+				ctx.beginPath()
+				// const w = width / columns
+				// // const w = Math.round(x * cell_size)
+				// ctx.moveTo(x , y)
+				// ctx.lineTo(w, height)
+				// ctx.closePath()
+				// ctx.stroke()
+
+				// const cell_size_h = height / rows
+				// const h = Math.round(y * cell_size_h)
+				// ctx.moveTo(0, h)
+				// ctx.lineTo(width, h)
+				// ctx.closePath()
+				// ctx.stroke()
+			}
+		}}
 		on:setValue={(e) => {
 			const { x, y, mouseEvent } = e.detail
 			if (mouseEvent.type === 'mousedown') {
