@@ -50,7 +50,8 @@ export const gridColorCentral = derived(selectedColor, () => {
 	return life.colorManager.getIncHue(120)
 })
 
-export const gridView = writable(false)
+export const tooltipShow = writable(false)
+
 
 // Modal
 export const enum ModalsHeader {
