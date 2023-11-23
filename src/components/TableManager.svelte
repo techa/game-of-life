@@ -5,6 +5,7 @@
 		columns,
 		rows,
 		edgeCell,
+		colorHue,
 		selectedColor,
 		gridView,
 		penMode,
@@ -106,7 +107,6 @@
 				'#ffc0ff',
 				'#ffa6e6',
 			]}
-			--background-color={$selectedColor}
 		/>
 	</div>
 

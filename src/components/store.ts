@@ -1,5 +1,5 @@
 import { derived, writable, type Writable } from 'svelte/store'
-import { LifeGame } from '$lib/LifeGame.js'
+import { LifeEvent, LifeGame } from '$lib/LifeGame.js'
 import { TableTransform } from '$lib/TableTransform.js'
 import { TableInitializer } from '$lib/TableInitializer.js'
 
@@ -10,9 +10,19 @@ class LifeGameEx extends LifeGame {}
 export const life = new LifeGameEx().init()
 
 export const table = writable(life.cells.get2d())
+life.on(LifeEvent.UPDATE, () => {
+	table.set(life.cells.get2d())
+	// console.log('UPDATE')
+})
 
 export const columns = writable(life.columns)
 export const rows = writable(life.rows)
+life.on(LifeEvent.TABLE_UPDATE, () => {
+	columns.set(life.columns)
+	rows.set(life.rows)
+	life.emit(LifeEvent.UPDATE)
+	// console.log('TABLE_UPDATE')
+})
 
 export const edgeCell: Writable<typeof life.edgeCell> = (() => {
 	const { subscribe, set, update } = writable(life.edgeCell)
@@ -31,13 +41,16 @@ export const population = derived(table, () => life.population)
 // Not LifeGame menbers -------------------------
 //'#F469E4' hsl(307,86%,68%)
 export const colorHue = writable(life.colorManager.hue)
-export const selectedColor = derived(colorHue, () => {
-	return life.getColor()
+export const selectedColor = derived(colorHue, (hue) => {
+	const color = life.colorManager.setByHue(hue)
+	table.update((v) => v)
+	return color
 })
-export const gridView = writable(false)
 export const gridColorCentral = derived(selectedColor, () => {
 	return life.colorManager.getIncHue(120)
 })
+
+export const gridView = writable(false)
 
 // Modal
 export const enum ModalsHeader {

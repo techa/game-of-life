@@ -14,8 +14,6 @@
 		ModalsHeader,
 		selectedColor,
 		gridView,
-		columns,
-		rows,
 		penMode,
 		gridColorCentral,
 	} from './store'
@@ -23,24 +21,8 @@
 
 	import { LifeEvent } from '$lib/LifeGame.js'
 
-	life.on(LifeEvent.UPDATE, () => {
-		$table = life.cells.get2d()
-		// console.log('UPDATE')
-	})
-
-	life.on(LifeEvent.TABLE_UPDATE, () => {
-		$columns = life.columns
-		$rows = life.rows
-		life.emit(LifeEvent.UPDATE)
-		// console.log('TABLE_UPDATE')
-	})
 
 	let settingValue = 1
-
-	selectedColor.subscribe((v) => {
-		life.colorManager.setColor(v)
-		$table = $table
-	})
 
 	const _modal: Record<ModalsHeader, ComponentType> = {
 		[ModalsHeader.Random]: InitializerSettings,
