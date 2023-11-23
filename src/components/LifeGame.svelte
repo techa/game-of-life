@@ -56,10 +56,13 @@
 </svelte:head>
 
 <main style:--color-primary-500={hexToRgb($selectedColor).join(' ')}>
-	<TableManager />
-	<LifeGameManager />
+	<div class="tools h-32">
+		<TableManager />
+		<LifeGameManager />
+	</div>
+
 	<PixelDraw
-		class="h-4/5"
+		style={`height: calc(100vh - 8rem);`}
 		cells={table}
 		gridShow={gridView}
 		{gridColorCentral}
