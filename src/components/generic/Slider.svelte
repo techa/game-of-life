@@ -9,7 +9,7 @@
 	export let handle = true
 	export let handleWidth = 0
 
-	export let value = 0
+	export let value: Writable<number>
 	export let min = 0
 	export let max = 100
 	export let step = 1
@@ -32,7 +32,7 @@
 
 	$: {
 		const _size = vertical ? height : width
-		let per = (value - min) / (max - min)
+		let per = ($value - min) / (max - min)
 		if (reverse) {
 			per = 1 - per
 		}
@@ -53,9 +53,9 @@
 
 		// position to value
 		const val = (max - min) * per + min
-		value = clamp(Math.round(val / step) * step, max, min)
+		$value = clamp(Math.round(val / step) * step, max, min)
 
-		dispatch('change', value)
+		dispatch('change', $value)
 	}
 </script>
 
@@ -65,7 +65,7 @@
 	style={$$props.style}
 	style:background={`linear-gradient(${turn}turn, ${gradient})`}
 	role="slider"
-	aria-valuenow={value}
+	aria-valuenow={$value}
 	aria-valuemin={min}
 	aria-valuemax={max}
 	aria-orientation={orientation}
@@ -82,7 +82,7 @@
 			style:bottom={`${vertical ? position : 0}px`}
 			style:left={`${vertical ? 0 : position}px`}
 		>
-			{+value.toFixed(max === 1 && min === 0 ? 2 : 0)}
+			{+$value.toFixed(max === 1 && min === 0 ? 2 : 0)}
 		</div>
 	{/if}
 </div>

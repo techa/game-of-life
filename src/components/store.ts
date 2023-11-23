@@ -30,7 +30,10 @@ export const population = derived(table, () => life.population)
 
 // Not LifeGame menbers -------------------------
 //'#F469E4' hsl(307,86%,68%)
-export const selectedColor = writable(life.getColor())
+export const colorHue = writable(life.colorManager.hue)
+export const selectedColor = derived(colorHue, () => {
+	return life.getColor()
+})
 export const gridView = writable(false)
 export const gridColorCentral = derived(selectedColor, () => {
 	return life.colorManager.getIncHue(120)

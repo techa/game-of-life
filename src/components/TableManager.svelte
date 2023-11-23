@@ -16,13 +16,11 @@
 
 	import SVG from '../resource/sprite.svg'
 	import { LifeEvent } from '$lib/LifeGame.js'
-	import { lch2rgb } from '../utils/lch2rgb.js'
 
 	import lexicon from '../resource/lexicon.min.json'
 
 	import { popup, Table } from '@skeletonlabs/skeleton'
 	import type { PopupSettings, TableSource } from '@skeletonlabs/skeleton'
-	import { colorStringToHsl } from '../utils/color.js'
 
 	function validateResize(axis: 'rows' | 'columns') {
 		return (
@@ -96,8 +94,7 @@
 	>
 		<Slider
 			max={359}
-			value={colorStringToHsl($selectedColor)[0] || 0}
-			on:change={(e) => ($selectedColor = lch2rgb(100, 120, e.detail))}
+			value={colorHue}
 			gradient={[
 				'#ffa6e6',
 				'#ffba87',

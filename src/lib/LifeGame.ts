@@ -29,6 +29,10 @@ export class LifeGame {
 	constructor() {
 		this.colorManager = new ColorManager(this)
 	}
+	/**
+	 *
+	 * @param cell default = Cell.LIVE
+	 */
 	getColor(cell = Cell.LIVE) {
 		return this.colorManager.get(cell)
 	}
