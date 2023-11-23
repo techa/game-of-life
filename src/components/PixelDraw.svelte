@@ -7,6 +7,20 @@
 	}
 
 	const dispatch = createEventDispatcher<{
+		mousemove: {
+			x: number
+			y: number
+			mouseEvent: DrawEvent
+			isPress: boolean
+		}
+		mouseenter: {
+			mouseEvent: DrawEvent
+			isPress: boolean
+		}
+		mouseleave: {
+			mouseEvent: DrawEvent
+			isPress: boolean
+		}
 		setValue: {
 			x: number
 			y: number
@@ -317,8 +331,16 @@
 					setValue(e)
 				}
 			}}
+			on:mouseenter|preventDefault={(e) => {
+				dispatch('mouseenter', { mouseEvent: e, isPress })
+			}}
+			on:mouseleave|preventDefault={(e) => {
+				dispatch('mouseleave', { mouseEvent: e, isPress })
+			}}
 			on:mousemove|preventDefault={(e) => {
 				setValue(e)
+				const [x, y] = getXY(e)
+				dispatch('mousemove', { mouseEvent: e, x, y, isPress })
 			}}
 			on:mouseup|preventDefault={() => {
 				isPress = false
