@@ -1,7 +1,7 @@
 // https://vitest.dev/api/expect.html
 // https://jestjs.io/docs/expect
 import { describe, it, expect } from 'vitest'
-import { Array2d, manhattanDistance } from './Array2d.js'
+import { Array2d } from './Array2d.js'
 
 describe(`./Array2d.js`, () => {
 	const arr = new Array2d(5, 5, 1)
@@ -40,22 +40,6 @@ describe(`./Array2d.js`, () => {
 		expect(JSON.stringify(arr)).toBe(
 			'[[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1]]',
 		)
-	})
-
-	it(`spiral`, () => {
-		const narr: number[] = []
-		new Array2d(
-			[
-				[0, 1, 2],
-				[3, 4, 5],
-				[6, 7, 8],
-				[9, 10, 11],
-			],
-			0,
-		).spiral(4, (val, { i }) => {
-			narr.push(val)
-		})
-		expect(narr).toStrictEqual([4, 5, 8, 7, 6, 3, 0, 1, 2, 11, 10, 9])
 	})
 })
 
