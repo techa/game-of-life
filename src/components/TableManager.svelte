@@ -6,7 +6,6 @@
 		rows,
 		edgeCell,
 		colorHue,
-		selectedColor,
 		gridShow,
 		gridCursor,
 		penMode,
@@ -48,7 +47,8 @@
 		},
 	}
 
-	const cellStates = ['LIVE', 'UNDEAD', 'TOMB']
+	// for pen tool tile-attribute
+	const cellStates = ['disabled', 'LIVE', 'UNDEAD', 'TOMB']
 
 	// Lexicon
 	let popupLexiconInvisible = true
@@ -114,11 +114,11 @@
 	<button
 		class="btn-icon naked"
 		title="Pen Tool ({cellStates[$penMode]})"
-		on:click={() => ($penMode += 1)}
+		on:click={() => penMode.next()}
 	>
-		<svg style:stroke={$penMode < 2 ? $selectedColor : 'currentColor'}>
+		<svg class:unactive={!$penMode} class:active={Math.abs($penMode) === 1}>
 			<use href="{SVG}#pencil" />
-			{#if $penMode}
+			{#if $penMode < 0}
 				<use
 					href="{SVG}#x"
 					x="14px"

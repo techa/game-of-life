@@ -113,13 +113,18 @@ export const randomAreaColumns = derived(
 )
 export const randomAreaRows = derived(randomPoints, () => life.randomAreaRows)
 
-export const penMode: Writable<number> = (() => {
+export const penMode = (() => {
 	const { subscribe, set, update } = writable(0)
+	const indexes = [0, 1, -1, -2]
+	let index = 0
 	return {
 		subscribe,
 		update,
-		set: (penMode) => {
-			set(penMode % 3)
+		set,
+		next() {
+			++index
+			set(indexes[(index %= 4)])
+			console.log('indexes[++index % 4]', indexes[index])
 		},
 	}
 })()

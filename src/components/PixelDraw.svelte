@@ -27,7 +27,12 @@
 			ctx: CanvasRenderingContext2D
 			mouseEvent: DrawEvent
 		}
-		drawDot: { x: number; y: number; ctx: CanvasRenderingContext2D }
+		drawDot: {
+			x: number
+			y: number
+			ctx: CanvasRenderingContext2D
+			pen: boolean
+		}
 		optionDraw: { x: number; y: number; ctx: CanvasRenderingContext2D }
 		// /**
 		//  * For setting ctx.strokeStyle & ctx.lineWidth
@@ -206,12 +211,12 @@
 		const [x, y] = getXY(e)
 		if (isPress) {
 			dispatch('setValue', { ctx: px_ctx, x, y, mouseEvent: e })
-			drawDot([x, y])
+			drawDot([x, y], true)
 		}
 	}
 
-	function drawDot([x, y]: [number, number]) {
-		dispatch('drawDot', { ctx: px_ctx, x, y })
+	function drawDot([x, y]: [number, number], pen = false) {
+		dispatch('drawDot', { ctx: px_ctx, x, y, pen })
 	}
 	function optionDraw([x, y]: [number, number]) {
 		dispatch('optionDraw', { ctx: sc_ctx, x, y })

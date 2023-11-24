@@ -21,8 +21,6 @@
 	} from './store'
 	import { hexToRgb } from '../utils/color.js'
 
-	import { LifeEvent } from '$lib/LifeGame.js'
-
 	import { isSmartPhone } from '../utils/miscellanies.js'
 	import { computePosition, offset, flip, shift } from '@floating-ui/dom'
 
@@ -103,11 +101,19 @@
 			$tooltipShow = false
 		}}
 		on:drawDot={(e) => {
-			const { ctx, x, y } = e.detail
+			const { ctx, x, y, pen } = e.detail
+			if (pen && !$penMode) {
+				// when pen-mode disabled
+				return
+			}
+
 			cell_state = life.cells.get(x, y)
 			if (cell_state > 0 || cell_state === -1) {
 				ctx.fillStyle = life.getColor(cell_state)
 				ctx.fillRect(x, y, 1, 1)
+			} else if (!(cell_state % 2)) {
+				// cell_state == 0 or -2
+				ctx.clearRect(x, y, 1, 1)
 			}
 		}}
 		on:optionDraw={(e) => {
@@ -131,12 +137,11 @@
 		}}
 		on:setValue={(e) => {
 			const { x, y, mouseEvent } = e.detail
-			if (mouseEvent.type === 'mousedown') {
-				settingValue = life.cells.get(x, y) ? 0 : -$penMode || 1
+			if ($penMode && mouseEvent.type === 'mousedown') {
+				settingValue = life.cells.get(x, y) ? 0 : $penMode
 			}
 
 			life.cells.setValue(e.detail, settingValue)
-			life.emit(LifeEvent.UPDATE)
 		}}
 	/>
 
