@@ -13,6 +13,7 @@
 		selectedColor,
 		penMode,
 		tooltipShow,
+		templateLoaded,
 		gridShow,
 		gridColorCentral,
 		gridCursor,
@@ -133,6 +134,7 @@
 			const { x, y, mouseEvent } = e.detail
 			if ($penMode && mouseEvent.type === 'mousedown') {
 				settingValue = life.cells.get(x, y) ? 0 : $penMode
+				$templateLoaded = false
 			}
 
 			life.cells.setValue(e.detail, settingValue)

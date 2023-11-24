@@ -13,6 +13,7 @@
 		modal,
 		ModalsHeader,
 		autoConway,
+		templateLoaded,
 	} from './store'
 
 	import Slider from './generic/Slider.svelte'
@@ -22,7 +23,8 @@
 
 	import lexicon from '../resource/lexicon.min.json'
 
-	import { popup, Table } from '@skeletonlabs/skeleton'
+	import { popup } from '@skeletonlabs/skeleton'
+	import Table from './generic/Table.svelte'
 	import type { PopupSettings, TableSource } from '@skeletonlabs/skeleton'
 
 	function validateResize(axis: 'rows' | 'columns') {
@@ -53,6 +55,7 @@
 	const cellStates = ['disabled', 'LIVE', 'UNDEAD', 'TOMB']
 
 	// Lexicon
+	let lexiconIndex = (Math.random() * lexicon.length) | 0
 	let popupLexiconInvisible = true
 	const popupLexicon: PopupSettings = {
 		event: 'click',
@@ -77,7 +80,8 @@
 	}
 
 	onMount(() => {
-		life.lexicon(lexicon[(Math.random() * lexicon.length) | 0].d)
+		life.lexicon(lexicon[lexiconIndex].d)
+		$templateLoaded = true
 	})
 </script>
 
@@ -163,6 +167,7 @@
 		title="Reverse Cells Cell-Live <--> Cell-Dead"
 		on:click={() => {
 			life.reverse()
+			$templateLoaded = false
 		}}
 	>
 		<svg>
@@ -175,6 +180,7 @@
 		title="Randomize Cells Table"
 		on:click={() => {
 			life.randomInit()
+			$templateLoaded = false
 		}}
 	>
 		<svg>
@@ -188,7 +194,7 @@
 		title="Template Data Load"
 		use:popup={popupLexicon}
 	>
-		<svg>
+		<svg class:active={$templateLoaded}>
 			<use href="{SVG}#book-marked" />
 		</svg>
 	</button>
@@ -201,8 +207,10 @@
 			class="table_lexicon font-mono text-left"
 			source={lexiconTable}
 			interactive={true}
+			bind:selectingRowIndex={lexiconIndex}
 			on:selected={(e) => {
 				life.lexicon(e.detail[0])
+				$templateLoaded = true
 				if ($autoConway) {
 					$ruleString = 'B3/S23'
 				}

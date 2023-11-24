@@ -64,6 +64,9 @@ export const gridCursor = writable(true)
 
 export const tooltipShow = writable(false)
 
+export const templateLoaded = writable(false)
+
+
 
 // Modal ===================
 
