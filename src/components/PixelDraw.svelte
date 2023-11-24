@@ -288,10 +288,12 @@
 		}
 
 		// grid focus
-		for (const axis of bit) {
-			sc_ctx.strokeStyle = $gridCursorColor
-			drawGridLine(axis, coordinate[axis])
-			drawGridLine(axis, coordinate[axis] + 1)
+		if ($gridCursor) {
+			for (const axis of bit) {
+				sc_ctx.strokeStyle = $gridCursorColor
+				drawGridLine(axis, coordinate[axis])
+				drawGridLine(axis, coordinate[axis] + 1)
+			}
 		}
 	}
 </script>

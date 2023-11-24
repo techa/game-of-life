@@ -50,6 +50,9 @@ export const gridColorCentral = derived(selectedColor, () => {
 	return life.colorManager.getIncHue(120)
 })
 
+export const gridShow = writable(true)
+export const gridCursor = writable(true)
+
 export const tooltipShow = writable(false)
 
 

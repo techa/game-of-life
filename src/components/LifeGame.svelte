@@ -13,10 +13,11 @@
 		modal,
 		ModalsHeader,
 		selectedColor,
-		gridView,
 		penMode,
 		tooltipShow,
+		gridShow,
 		gridColorCentral,
+		gridCursor,
 	} from './store'
 	import { hexToRgb } from '../utils/color.js'
 
@@ -59,7 +60,8 @@
 	<PixelDraw
 		style={`height: calc(100vh - 8rem);`}
 		cells={table}
-		gridShow={gridView}
+		{gridShow}
+		{gridCursor}
 		{gridColorCentral}
 		on:mousemove={(e) => {
 			const { x, y, mouseEvent } = e.detail
@@ -86,10 +88,10 @@
 
 			computePosition(virtualEl, tooltip, {
 				placement: 'right-start',
-				middleware: [offset(16), flip(), shift()],
+				middleware: [offset(14), flip(), shift()],
 			}).then(({ x, y }) => {
 				Object.assign(tooltip.style, {
-					top: `${y + 14}px`,
+					top: `${y + 24}px`,
 					left: `${x}px`,
 				})
 			})

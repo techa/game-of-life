@@ -7,7 +7,8 @@
 		edgeCell,
 		colorHue,
 		selectedColor,
-		gridView,
+		gridShow,
+		gridCursor,
 		penMode,
 		modal,
 		ModalsHeader,
@@ -250,10 +251,17 @@
 	</button>
 
 	<label class="btn-icon naked" title="Toggle Grid">
-		<svg class:unactive={!$gridView}>
+		<svg class:unactive={!$gridCursor}>
+			<use href="{SVG}#search" />
+		</svg>
+		<input type="checkbox" class="hidden" bind:checked={$gridCursor} />
+	</label>
+
+	<label class="btn-icon naked" title="Toggle Grid">
+		<svg class:unactive={!$gridShow}>
 			<use href="{SVG}#grid" />
 		</svg>
-		<input type="checkbox" class="hidden" bind:checked={$gridView} />
+		<input type="checkbox" class="hidden" bind:checked={$gridShow} />
 	</label>
 
 	<button

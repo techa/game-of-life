@@ -6,8 +6,8 @@
 		table,
 		columns,
 		rows,
+		gridShow,
 		selectedColor,
-		gridView,
 		penMode,
 	} from './store'
 
@@ -93,7 +93,7 @@
 	/>
 
 	<table
-		class:gridView={$gridView}
+		class:gridShow={$gridShow}
 		style:width={width + 'px'}
 		style:height={height + 'px'}
 		role="presentation"
@@ -201,7 +201,7 @@
 		border: solid 1px #888;
 		border-collapse: collapse;
 	}
-	table.gridView td {
+	table.gridShow td {
 		border: dashed 1px #888;
 	}
 </style>
