@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte'
 	import {
 		life,
+		ruleString,
 		columns,
 		rows,
 		edgeCell,
@@ -11,6 +12,7 @@
 		penMode,
 		modal,
 		ModalsHeader,
+		autoConway,
 	} from './store'
 
 	import Slider from './generic/Slider.svelte'
@@ -201,6 +203,9 @@
 			interactive={true}
 			on:selected={(e) => {
 				life.lexicon(e.detail[0])
+				if ($autoConway) {
+					$ruleString = 'B3/S23'
+				}
 			}}
 		/>
 	</div>

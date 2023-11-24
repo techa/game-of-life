@@ -2,12 +2,21 @@ import { derived, writable, type Writable } from 'svelte/store'
 import { LifeEvent, LifeGame } from '$lib/LifeGame.js'
 import { TableTransform } from '$lib/TableTransform.js'
 import { TableInitializer } from '$lib/TableInitializer.js'
+import { rules, type RuleString } from '$lib/rules.js'
 
 interface LifeGameEx extends TableTransform, TableInitializer {}
 @TableTransform
 @TableInitializer
 class LifeGameEx extends LifeGame {}
 export const life = new LifeGameEx().init()
+
+export const ruleString = writable<RuleString>('B3/S23')
+export const ruleName = derived(ruleString, ($ruleString) => {
+	// ruleString.subscribe
+	life.setRule($ruleString)
+
+	return rules.get($ruleString)
+})
 
 export const table = writable(life.cells.get2d())
 life.on(LifeEvent.UPDATE, () => {
@@ -56,12 +65,18 @@ export const gridCursor = writable(true)
 export const tooltipShow = writable(false)
 
 
-// Modal
+// Modal ===================
+
 export const enum ModalsHeader {
 	Random = 1,
 }
 export const modal = writable<ModalsHeader | null>(null)
 export const initSettingsOpen = writable(false)
+
+// Automatically change the rule to `Conway's life` when a template is selected
+export const autoConway = writable(true)
+
+// Modal Random --------------
 
 export const edgeColumn = writable(life.edgeColumn)
 export const edgeRow = writable(life.edgeRow)

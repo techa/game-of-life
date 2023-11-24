@@ -1,6 +1,6 @@
 import { Ticker } from '../utils/Ticker.js'
 import { EventDispatcher, type EventHandler } from '../utils/EventDispatcher.js'
-import { ruleParser, ruleReversal, ruleString } from '$lib/rules.js'
+import { ruleParser, ruleReversal, ruleToString } from '$lib/rules.js'
 import { Cells } from './Cells.js'
 import { ColorManager } from './ColorManager.js'
 
@@ -69,7 +69,7 @@ export class LifeGame {
 	}
 
 	get ruleString() {
-		return ruleString(this.#born, this.#survival, this.#cycle)
+		return ruleToString(this.#born, this.#survival, this.#cycle)
 	}
 
 	setRule(rule: string, reversal = false) {

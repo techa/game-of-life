@@ -101,7 +101,7 @@ export function ruleParser(rule: string): [number[], number[], number] {
 	throw new Error(`"${rule}" is invaild rule string.`)
 }
 
-export function ruleString(
+export function ruleToString(
 	born: number[],
 	survival: number[],
 	c: number,

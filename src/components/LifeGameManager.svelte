@@ -1,8 +1,16 @@
 <script lang="ts">
-	import { rules, type RuleString } from '$lib/rules'
-	import { LifeEvent } from '$lib/LifeGame'
+	import { rules } from '$lib/rules.js'
+	import { LifeEvent } from '$lib/LifeGame.js'
 
-	import { life, columns, rows, generation, population } from './store'
+	import {
+		life,
+		ruleString,
+		ruleName,
+		columns,
+		rows,
+		generation,
+		population,
+	} from './store'
 
 	import SVG from '../resource/sprite.svg'
 
@@ -11,8 +19,13 @@
 	import { Table } from '@skeletonlabs/skeleton'
 	import type { TableSource } from '@skeletonlabs/skeleton'
 
-	let rule: RuleString = 'B3/S23'
-	let ruleName = "Conway's Life"
+	function ruleInput(
+		e: Event & {
+			currentTarget: EventTarget & HTMLInputElement
+		},
+	) {
+		$ruleString = life.setRule(e.currentTarget.value)
+	}
 	let ruleReverse = false
 
 	let playing = false
@@ -48,28 +61,45 @@
 </script>
 
 <nav class="w-full text-center flex justify-center">
-	<div class="flex mr-4 bg-tertiary-700 rounded-full">
+	<div class="flex mr-4 bg-tertiary-700 rounded-full w-96">
 		<button
-			class="choose_rule popup-trigger btn bg-initial w-44 justify-between"
+			class="choose_rule popup-trigger btn bg-initial justify-between"
 			title="Choose Rule"
 			use:popup={popupRuleList}
 		>
-			<span class="capitalize">{ruleName || 'Rule Name'}</span>
-			<!-- <svg>
-				<use href="{SVG}#chevron-down" />
-			</svg> -->
+			<span class="capitalize">{$ruleName || '--'}</span>
 		</button>
+		{#if !$ruleName}
+			<button
+				class="choose_rule popup-trigger btn bg-initial justify-between"
+				title="Rule Save"
+			>
+				<svg>
+					<use href="{SVG}#save" />
+				</svg>
+			</button>
+		{/if}
 		<input
 			class="input w-52 text-center font-mono outline-none rounded-none"
 			placeholder="Born/Survival"
 			title="Rule Input Space"
-			bind:value={rule}
+			bind:value={$ruleString}
+			on:blur={ruleInput}
+			on:keydown={(e) => {
+				switch (e.key) {
+					case 'Enter':
+					case 'Space':
+					case 'Tab':
+						$ruleString = life.setRule(e.currentTarget.value)
+						break
+				}
+			}}
 		/>
 		<button
 			class="btn-icon pr-4 pl-2 bg-surface-700 rounded-l-none"
 			title="Reverse Rule"
 			on:click={() => {
-				rule = life.setRule(rule, true)
+				$ruleString = life.setRule($ruleString, true)
 				ruleReverse = !ruleReverse
 			}}
 		>
@@ -89,8 +119,7 @@
 			interactive={true}
 			on:selected={(e) => {
 				const data = e.detail
-				rule = life.setRule(data[0], ruleReverse)
-				ruleName = data[1]
+				$ruleString = life.setRule(data[0], ruleReverse)
 			}}
 		/>
 
