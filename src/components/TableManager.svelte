@@ -132,7 +132,7 @@
 	</button>
 
 	<button
-		class="btn-icon naked"
+		class="btn-icon naked hidden md:inline-flex"
 		title="Clear Cells Table"
 		on:click={() => {
 			life.clear()
@@ -144,7 +144,7 @@
 	</button>
 
 	<button
-		class="btn-icon naked"
+		class="btn-icon naked hidden md:inline-flex"
 		title="Rotate Cells Table 90deg"
 		on:click={() => {
 			life.rotate()
@@ -157,7 +157,7 @@
 	</button>
 
 	<button
-		class="btn-icon naked"
+		class="btn-icon naked hidden md:inline-flex"
 		title="Reverse Cells Cell-Live <--> Cell-Dead"
 		on:click={() => {
 			life.reverse()
