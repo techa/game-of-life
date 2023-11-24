@@ -217,26 +217,44 @@
 		</svg>
 	</button>
 
-	<label class="input w-20 py-2 rounded-r-none rounded-l-lg"
+	<label
+		class="input font-mono inline-flex w-20 py-2 pl-2 rounded-r-none rounded-l-lg break-inside-avoid"
 		><span>W: </span><input
 			class="bg-transparent border-0 ring-0 focus:ring-0 focus:border-0 outline-none w-12"
 			title="Change width of Cells Table"
 			type="number"
+			min="1"
 			bind:value={$columns}
 			on:input={validateResize('columns')}
 			on:blur={validateResize('columns')}
-			min="1"
+			on:keydown={(e) => {
+				switch (e.key) {
+					case 'Enter':
+					case 'Tab':
+						validateResize('columns')
+						break
+				}
+			}}
 		/>
 	</label>
-	<label class="input w-20 py-2 rounded-r-lg rounded-l-none"
-		><span>H: </span><input
+	<label
+		class="input font-mono inline-flex w-20 py-2 pr-2 rounded-r-lg rounded-l-none break-inside-avoid"
+		>H: <input
 			class="bg-transparent border-0 ring-0 focus:ring-0 focus:border-0 outline-none w-12"
 			title="Change height of Cells Table"
 			type="number"
+			min="1"
 			bind:value={$rows}
 			on:input={validateResize('rows')}
 			on:blur={validateResize('rows')}
-			min="1"
+			on:keydown={(e) => {
+				switch (e.key) {
+					case 'Enter':
+					case 'Tab':
+						validateResize('rows')
+						break
+				}
+			}}
 		/>
 	</label>
 
