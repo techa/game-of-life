@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { onMount, type ComponentType } from 'svelte'
+	import { onMount } from 'svelte'
 
 	import TableManager from './TableManager.svelte'
 	import LifeGameManager from './LifeGameManager.svelte'
-	import InitializerSettings from './InitializerSettings.svelte'
 	import PixelDraw from './PixelDraw.svelte'
 
 	import Modal from './generic/Modal.svelte'
@@ -11,7 +10,6 @@
 		life,
 		table,
 		modal,
-		ModalsHeader,
 		selectedColor,
 		penMode,
 		tooltipShow,
@@ -28,10 +26,6 @@
 	 * var for pen tool
 	 */
 	let settingValue = 1
-
-	const _modal: Record<ModalsHeader, ComponentType> = {
-		[ModalsHeader.Random]: InitializerSettings,
-	}
 
 	let isPC = false
 	let cell_state = 0
@@ -168,9 +162,7 @@
 	{/if}
 
 	{#if $modal}
-		<Modal on:close={() => ($modal = null)}>
-			<svelte:component this={_modal[$modal]} />
-		</Modal>
+		<Modal />
 	{/if}
 </main>
 

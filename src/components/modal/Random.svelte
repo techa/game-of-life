@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { colorStringToHsl } from '../utils/color.js'
+	import { colorStringToHsl } from '../../utils/color.js'
 	import { afterUpdate, getContext, onMount } from 'svelte'
 	import type { Writable } from 'svelte/store'
 
-	import { SavesStrage } from '../utils/SavesStrage.js'
+	import { SavesStrage } from '../../utils/SavesStrage.js'
 
-	import SVG from '../resource/sprite.svg'
+	import SVG from '../../resource/sprite.svg'
 
 	import {
 		life,
@@ -18,7 +18,7 @@
 		randomPoints,
 		edgeColumn,
 		edgeRow,
-	} from './store'
+	} from '../store.js'
 
 	const header = getContext<Writable<string>>('ModalHeader')
 	$header = 'Random initializer'

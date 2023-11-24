@@ -6,7 +6,8 @@
 	import { TabGroup, Tab } from '@skeletonlabs/skeleton'
 	import SVG from '../../resource/sprite.svg'
 	import { modal } from '../store.js'
-	import InitializerSettings from '../InitializerSettings.svelte'
+	import Random from '../modal/Random.svelte'
+	import Tools from '../modal/Tools.svelte'
 
 	// export let showModal = false // !!$modal
 
@@ -16,6 +17,7 @@
 	let dialog: HTMLDialogElement
 
 	let tabSet = 0
+	const components = [Tools, Random, Tools]
 
 	$: if (dialog && $modal) dialog.showModal()
 
@@ -42,17 +44,12 @@
 				<span>{title}</span>
 			</Tab>
 		{/each}
-		<!-- Tab Panels --->
-		<svelte:fragment slot="panel">
-			{#if tabSet === 0}
-				(tab panel 2 contents)
-			{:else if tabSet === 1}
-				<InitializerSettings />
-			{:else if tabSet === 2}
-				(tab panel 3 contents)
-			{/if}
-		</svelte:fragment>
 	</TabGroup>
+
+	<!-- Tab Panels --->
+	<div class="tab-panel w-full p-2">
+		<svelte:component this={components[tabSet]} />
+	</div>
 
 	<div class="footer">
 		<a
