@@ -66,10 +66,6 @@
 		<line x1="15" y1="3" x2="15" y2="21"></line>
 	</symbol>
 
-	<symbol id="chevron-down" viewBox="0 0 24 24">
-	  <polyline points="6 9 12 15 18 9"></polyline>
-	</symbol>
-
 	<symbol id="repeat" viewBox="0 0 24 24">
 	  <polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
 	</symbol>

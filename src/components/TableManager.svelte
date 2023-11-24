@@ -81,7 +81,7 @@
 	})
 </script>
 
-<nav class="w-full p-1 text-center flex justify-center">
+<nav class="w-full p-2 text-center flex justify-center">
 	<button
 		class="btn-icon naked popup-trigger"
 		title="Color Change"

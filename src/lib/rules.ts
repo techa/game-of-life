@@ -10,23 +10,23 @@ export const rules: Map<RuleString, string> = new Map([
 	['B3/S23', "Conway's Life"],
 	['B36/S23', 'HighLife'],
 	['B34/S34', '3-4 Life'],
-	['B34/S45', ''], // step75:地形データ
-	['B34/S458', ''],
+	// ['B34/S45', ''], // step75:地形データ
+	// ['B34/S458', ''],
 	// https://en.wikipedia.org/wiki/Day_and_Night_(cellular_automaton)
 	['B3678/S34678', 'Day & Night'],
-	// ['B25678/S5678', 'Iceballs'], //大きな塊ができる
-	// ['B3/S012345678', 'Life without death'], //インクのシミが広がっていくような
-	// ['B3/S1234', 'Mazectric'], //迷路
-	// ['B3/S12345', 'Maze'], //迷路
-	// ['B3/S45678', 'Coral'], //step30:地形データ
-	// // 塗りに対して使うと幅２マスの線になる
-	// ['B345/S4567', 'Assimilation'], //アメーバみたいに変化しながら菱型になる.塗り
-	// ['B345/S5', 'Long Life'], //縦横の線で構成される。大きさがあまり変化しない
-	// ['B3457/S4568', 'Gems'], //アメーバみたいに変化しながら菱型になる
-	// ['B34578/S456', 'Gems Minor'], //アメーバみたいに変化しながら菱型になる
+	['B25678/S5678', 'Iceballs'], //大きな塊ができる
+	['B3/S012345678', 'Life without death'], //インクのシミが広がっていくような
+	['B3/S1234', 'Mazectric'], //迷路
+	['B3/S12345', 'Maze'], //迷路
+	['B3/S45678', 'Coral'], //step30:地形データ
+	// 塗りに対して使うと幅２マスの線になる
+	['B345/S4567', 'Assimilation'], //アメーバみたいに変化しながら菱型になる.塗り
+	['B345/S5', 'Long Life'], //縦横の線で構成される。大きさがあまり変化しない
+	['B3457/S4568', 'Gems'], //アメーバみたいに変化しながら菱型になる
+	['B34578/S456', 'Gems Minor'], //アメーバみたいに変化しながら菱型になる
 	['B3567/S15678', 'Bugs'], //うごうご塗り潰し
-	// ['B35678/S4678', 'Holstein'], //step40:地形データ!!
-	// ['B35678/S5678', 'Diamoeba'], //step30:地形データ!!
+	['B35678/S4678', 'Holstein'], //step40:地形データ!!
+	['B35678/S5678', 'Diamoeba'], //step30:地形データ!!
 	['B367/S125678', 'Slow Blob'], //雪が積もるかのような
 	['B3678/S235678', 'Stains'],
 	['B3678/S2345678', 'Stains2'],
@@ -65,8 +65,8 @@ export const rules: Map<RuleString, string> = new Map([
 	['B34/S23/C8', 'Swirl'], //step:
 	['B34/S1234/C48', 'Thrill Grill'], //step:地形データに使えそう
 
-	['B23678/S145678/C8', ''], //step:地形データに使えそう
 	['B3468/S0235678/C9', 'Burst'], //step:地形データに使えそう
+	['B23678/S145678/C8', 'Burst 2'], //step:地形データに使えそう
 	['B3468/S235678/C9', 'Burst2'], //step:地形データに使えそう。２のほうが地形向き
 
 	['B1234/S2345/C8', 'Circuit Genesis'], //step5:地形データに使えそう
