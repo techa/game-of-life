@@ -63,6 +63,7 @@
 
 	export let gridShow = readable(true)
 	export let gridCursor = readable(true)
+	export let gridCentral = readable(true)
 	export let gridCursorColor = readable('#ccc')
 	export let gridColor = readable('#333')
 	export let gridColorEmphasis = readable('#555')
@@ -263,6 +264,7 @@
 	}
 
 	gridShow.subscribe(() => scDraw())
+	gridCentral.subscribe(() => scDraw())
 	gridCursor.subscribe(() => scDraw())
 	function scDraw(coordinate: [number, number] = [-2, -2]) {
 		if (!sc_ctx) {
@@ -283,23 +285,26 @@
 					drawGridLine(axis, i)
 				}
 			}
-			// draw enphas line
+			// draw emphasis line
 			for (const axis of bit) {
-				for (const enphas of enphasises[axis])
-					if (enphas > 0) {
+				for (const emphasis of enphasises[axis])
+					if (emphasis > 0) {
 						sc_ctx.strokeStyle = $gridColorEmphasis
 						sc_ctx.lineWidth = 2
-						drawGridLine(axis, enphas)
+						drawGridLine(axis, emphasis)
 					}
 			}
-			// draw central line
-			for (const axis of bit) {
-				for (const central of enphasises[axis])
-					if (central < 0) {
-						sc_ctx.strokeStyle = $gridColorCentral
-						sc_ctx.lineWidth = 2
-						drawGridLine(axis, -central)
-					}
+
+			if ($gridCentral) {
+				// draw central line
+				for (const axis of bit) {
+					for (const central of enphasises[axis])
+						if (central < 0) {
+							sc_ctx.strokeStyle = $gridColorCentral
+							sc_ctx.lineWidth = 2
+							drawGridLine(axis, -central)
+						}
+				}
 			}
 		}
 

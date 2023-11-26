@@ -17,6 +17,7 @@
 		gridShow,
 		gridColorCentral,
 		gridCursor,
+		gridCentral,
 	} from './store'
 	import { hexToRgb } from '../utils/color.js'
 
@@ -55,6 +56,7 @@
 		cells={table}
 		{gridShow}
 		{gridCursor}
+		{gridCentral}
 		{gridColorCentral}
 		on:mousemove={(e) => {
 			const { x, y, mouseEvent } = e.detail

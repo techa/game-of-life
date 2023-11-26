@@ -60,6 +60,8 @@ export const gridColorCentral = derived(selectedColor, () => {
 })
 
 export const gridShow = writable(true)
+export const gridCentral = writable(true)
+
 export const gridCursor = writable(true)
 
 export const tooltipShow = writable(false)
