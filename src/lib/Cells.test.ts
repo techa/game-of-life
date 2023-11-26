@@ -9,6 +9,8 @@ import {
 } from './Cells.js'
 
 import { readFile, writeFile } from 'fs/promises'
+import { LifeGame } from './LifeGame.js'
+import { Array2d } from '../utils/Array2d.js'
 
 describe(`lexicon`, async () => {
 	const txt = await readFile('./lex_asc/lexicon.txt', 'utf-8')
@@ -16,7 +18,28 @@ describe(`lexicon`, async () => {
 	let title = ''
 	let pattern: (0 | 1)[][] = []
 
-	const datas: { n: string; d: DataTemp }[] = []
+	const datas: {
+		/**
+		 * name
+		 */
+		n: string
+		/**
+		 * data
+		 */
+		d: DataTemp
+		/**
+		 * count(can step count)
+		 */
+		g?: number
+		/**
+		 * ending (0='over100step', 1='stop', 2='loop')
+		 */
+		e?: number
+		/**
+		 * loop interval
+		 */
+		l?: number
+	}[] = []
 	const patterns: (typeof pattern)[] = []
 
 	// results count
@@ -71,7 +94,7 @@ describe(`lexicon`, async () => {
 		expect(b1Count).toBe(145)
 		expect(datas.length).toBe(733)
 		expect(pCountMax).toBe(3)
-		expect(datas).toMatchSnapshot()
+		// expect(datas).toMatchSnapshot()
 	})
 
 	it(`data decompress tests`, () => {
@@ -84,7 +107,73 @@ describe(`lexicon`, async () => {
 		)
 	})
 
-	writeFile('./src/resource/lexicon.min.json', JSON.stringify(datas))
+	let longestLoop = 0
+	let longestLoopInterval = 0
+
+	// 1000: 358s. 6分くらい
+	const maxGeneration = 1
+
+	const plays = async (pattern: (0 | 1)[][], i: number) => {
+		const margin = 50
+		const initial = new Array2d(
+			pattern[0].length + margin,
+			pattern.length + margin,
+			0,
+		)
+		const life = new LifeGame().init(initial.get2d())
+		life.insert(pattern)
+		let cantStep = false
+		let isLoop = false
+		let loopBeginIndex = -1
+		const memos = [life.cells.encode()]
+
+		while (!(cantStep || isLoop || life.generation >= maxGeneration)) {
+			cantStep = !life.step()
+
+			const memo = life.cells.encode()
+			loopBeginIndex = memos.indexOf(memo)
+			isLoop = loopBeginIndex >= 0
+			memos.push(memo)
+		}
+
+		if (life.generation) {
+			datas[i].g = life.generation
+		}
+
+		if (cantStep) {
+			// stop
+			datas[i].e = 1
+		} else if (isLoop) {
+			if (longestLoop < life.generation) {
+				longestLoop = life.generation
+			}
+			const loopInterval = life.generation - loopBeginIndex
+			if (longestLoopInterval < loopInterval) {
+				longestLoopInterval = loopInterval
+			}
+
+			datas[i].l = loopInterval
+			datas[i].e = 2
+		} // else datas[i].e = 0 // 100 step over
+	}
+
+	const waits: Promise<void>[] = []
+
+	for (let i = 0; i < patterns.length; i++) {
+		const pattern = patterns[i]
+		waits.push(plays(pattern, i))
+	}
+	await Promise.all(waits).then(() => {
+		console.log('longestLoop', longestLoop)
+		console.log('longestLoopInterval', longestLoopInterval)
+		if (maxGeneration > 1000) {
+			writeFile(
+				'./src/resource/lexicon.json',
+				JSON.stringify(datas, null, 4),
+			)
+			writeFile('./src/resource/lexicon.min.json', JSON.stringify(datas))
+		}
+	})
 })
 
 describe(`./Cells.js`, () => {

@@ -71,13 +71,17 @@
 			popupLexiconInvisible = !e.state
 		},
 	}
+
 	const meta: string[][] = []
 	const lexiconTable: TableSource = {
 		// A list of heading labels.
-		head: ['No.', 'Name', 'w', 'h'],
-		body: lexicon.reduce((bodyArr, { n, d }, i) => {
+		head: ['No.', 'Name', 'Size', 'Generation', 'Type'],
+		body: lexicon.reduce((bodyArr, { n, d, g = 0, e = 0, l = 0 }, i) => {
 			const [w, h] = d.split(/[-:]/)
-			bodyArr.push([i + '', n, w, h])
+			const size = `${w.padStart(2)}:${h.padStart(2)}`
+			const ending = e === 1 ? 'stop' : e === 2 ? l + ' loop' : '-'
+			const generation = g >= 300 ? '' : g + ''
+			bodyArr.push([i + '', n, size, generation, ending])
 			meta.push([d])
 			return bodyArr
 		}, [] as string[][]),
