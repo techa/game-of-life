@@ -68,9 +68,7 @@
 	export let gridColorEmphasis = readable('#555')
 	export let gridColorCentral = readable('#188')
 
-	export let viewMode = 'full'
-
-	let cell_size = 10
+	export let viewMode = 'square'
 
 	/**
 	 * pixels size width
@@ -134,18 +132,31 @@
 	 */
 	let h = 0
 	$: if (canvas_wapper) {
-		const vertical = boxRect.width < boxRect.height
-		if (viewMode === 'full') {
-			if (vertical) {
-				cell_size = columns / boxRect.width
+		// const vertical = boxRect.width < boxRect.height
+		switch (viewMode) {
+			case 'full':
 				width = boxRect.width
-				height = rows / cell_size
-			} else {
-				cell_size = rows / boxRect.height
-				width = columns / cell_size
 				height = boxRect.height
-			}
+				break
+			case 'square':
+			default:
+				{
+					w = boxRect.width / columns
+					h = boxRect.height / rows
+					const boxRatio = boxRect.width / boxRect.height
+					const canvasRatio = w / h
+					if (boxRatio > canvasRatio) {
+						width = boxRect.width
+						height = rows * w
+					} else {
+						width = columns * h
+						height = boxRect.height
+					}
+				}
+				break
 		}
+
+		pxDraw()
 	}
 
 	let isPress = false
