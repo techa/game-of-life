@@ -196,11 +196,15 @@ export class LifeGame {
 		this.cells.removeColumns(columns)
 	}
 
+	/**
+	 * @returns true is step success, false is ste failed
+	 */
 	step() {
 		const countMax = Math.max(...this.#born, ...this.#survival)
 
 		this.cells.each((cell, { x, y }) => {
-			if (cell === Cell.UNDEAD || cell === Cell.TOMB) {
+			if (cell < 0) {
+				// if cell === UNDEAD or TOMB
 				return cell
 			}
 
@@ -238,9 +242,17 @@ export class LifeGame {
 			return Cell.DEATH
 		})
 
-		this.#generation++
+		const newCellData = JSON.stringify(this.cells)
+		const canStep = this.#tableMemory !== newCellData
 
-		this.update()
+		if (this.autoStop && !canStep) {
+			this.stop()
+		} else {
+			this.#generation++
+			this.update(newCellData)
+		}
+
+		return !!canStep
 	}
 
 	ticker!: Ticker
@@ -297,13 +309,11 @@ export class LifeGame {
 		this.emit(LifeEvent.STOP)
 	}
 
-	update() {
-		const tableMemory = JSON.stringify(this.cells)
-		if (this.autoStop && tableMemory === this.#tableMemory) {
-			this.stop()
-		} else {
-			this.#tableMemory = tableMemory
-			this.emit(LifeEvent.UPDATE)
-		}
+	/**
+	 * @used .init(), .insert(), .step()
+	 */
+	update(tableMemory = JSON.stringify(this.cells)) {
+		this.#tableMemory = tableMemory
+		this.emit(LifeEvent.UPDATE)
 	}
 }
