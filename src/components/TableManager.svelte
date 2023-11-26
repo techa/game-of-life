@@ -51,6 +51,11 @@
 		},
 	}
 
+	/**
+	 * for scrollIntoView()
+	 */
+	let lexiconFirstOpen = true
+
 	// for pen tool tile-attribute
 	const cellStates = ['disabled', 'LIVE', 'UNDEAD', 'TOMB']
 
@@ -193,6 +198,13 @@
 		class="btn-icon naked popup-trigger"
 		title="Template Data Load"
 		use:popup={popupLexicon}
+		on:click={() => {
+			if (lexiconFirstOpen) {
+				lexiconFirstOpen = false
+				const rows = document.querySelectorAll('.table_lexicon tr')
+				rows[lexiconIndex].scrollIntoView({ behavior: 'smooth' })
+			}
+		}}
 	>
 		<svg class:active={$templateLoaded}>
 			<use href="{SVG}#book-marked" />
