@@ -3,26 +3,17 @@
 
 ## Feature
 * [Rules](https://conwaylife.com/wiki/Rulestring) can be changed.
-* Equipped with [Generations rule](https://conwaylife.com/wiki/Generations).
+	* Equipped with [Generations rule](https://conwaylife.com/wiki/Generations).
 * UNDEAD and TOMB cell types implemented.
 * Terrain generation using cellular automata.
 * Create a random initial state.
 
-## ToDo
-- [ ] ColorPicker
-	- [x] HUE slider
-	- [ ] Reload Gradation
-- [ ] Tools: Pen, FillPaint
-	- [x] LIVE & DEATH <--> UNDEAD & TOMB
-- [x] InitializerSettings
-	- [x] Save sttings localStrage
-- [ ] Save Rule to localStrage
-
-## Terrain generation
+## 2D tile map terrain generation
 ### Vote
 ![vote](./images/vote.gif)
 
 ## Operates persistently in one dimension
+It could be used to generate random melodies or something.
 * Conway's Life
 * HighLife
 * 3-4 Life
