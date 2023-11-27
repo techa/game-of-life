@@ -11,7 +11,6 @@
 		gridCursor,
 		penMode,
 		modal,
-		ModalsHeader,
 		autoConway,
 		templateLoaded,
 	} from './store'
@@ -314,7 +313,7 @@
 	<button
 		class="btn-icon naked"
 		title="Randomize Config"
-		on:click={() => ($modal = ModalsHeader.Random)}
+		on:click={() => ($modal = true)}
 	>
 		<svg>
 			<use href="{SVG}#settings" />

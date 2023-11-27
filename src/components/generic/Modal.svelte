@@ -1,7 +1,6 @@
 <!-- Copy from: https://svelte.dev/examples/modal -->
 <script lang="ts">
-	import { writable, type Writable } from 'svelte/store'
-	import { createEventDispatcher, setContext } from 'svelte'
+	import { createEventDispatcher } from 'svelte'
 
 	import { TabGroup, Tab } from '@skeletonlabs/skeleton'
 	import SVG from '../../resource/sprite.svg'
@@ -12,7 +11,11 @@
 	// export let showModal = false // !!$modal
 
 	const dispatch = createEventDispatcher()
-	const close = () => dispatch('close')
+	const close = () => {
+		dialog.close()
+		$modal = false
+		dispatch('close')
+	}
 
 	let dialog: HTMLDialogElement
 
@@ -20,18 +23,16 @@
 	const components = [Tools, Random, Tools]
 
 	$: if (dialog && $modal) dialog.showModal()
-
-	const header = writable('')
-	setContext<Writable<string>>('ModalHeader', header)
 </script>
 
 <dialog
+	class="card card-filled-surface"
 	bind:this={dialog}
 	role="presentation"
-	on:close={() => ($modal = null)}
-	on:click|self={() => dialog.close()}
+	on:close={close}
+	on:click|self={close}
 >
-	<button class="close naked" on:click={close}>
+	<button class="btn-icon naked absolute top-2 right-2" on:click={close}>
 		<svg>
 			<use href="{SVG}#x" />
 		</svg>
@@ -67,34 +68,24 @@
 <style>
 	dialog {
 		position: absolute;
-		left: 50%;
-		top: 50%;
+		/* left: 50%;
+		top: 50%; */
 		width: calc(100vw - 4em);
-		max-width: 32em;
-		max-height: calc(100vh - 4em);
+		/* max-width: 32em; */
+		height: calc(100vh - 4em);
 		overflow: auto;
-		transform: translate(-50%, -50%);
+		/* transform: translate(-50%, -50%); */
 		padding: 1em;
 
-		background: var(--black);
-		color: var(--white);
+		/* background: rgb(var(--));
+		color: var(--white); */
 
 		border-radius: 0.5em;
 		border: 1px #444 solid;
+
+		/* visibility: hidden; */
 	}
 	dialog::backdrop {
 		background: rgba(0, 0, 0, 0.3);
-	}
-
-	.close {
-		position: absolute;
-		top: 0.5rem;
-		right: 0.5rem;
-		display: block;
-
-		color: #eee;
-	}
-	.close:hover {
-		color: rgb(var(--color-primary-500));
 	}
 </style>

@@ -9,7 +9,6 @@
 	import {
 		life,
 		table,
-		modal,
 		selectedColor,
 		penMode,
 		tooltipShow,
@@ -165,9 +164,7 @@
 		</div>
 	{/if}
 
-	{#if $modal}
-		<Modal />
-	{/if}
+	<Modal />
 </main>
 
 <style>

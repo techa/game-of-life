@@ -68,14 +68,9 @@ export const tooltipShow = writable(false)
 
 export const templateLoaded = writable(false)
 
-
-
 // Modal ===================
 
-export const enum ModalsHeader {
-	Random = 1,
-}
-export const modal = writable<ModalsHeader | null>(null)
+export const modal = writable(false)
 export const initSettingsOpen = writable(false)
 
 // Automatically change the rule to `Conway's life` when a template is selected
