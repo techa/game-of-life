@@ -127,24 +127,26 @@
 			}}
 		/>
 
-		<p class="list-footer">
-			and
-			<a
-				class="anchor"
-				href="https://conwaylife.com/wiki/List_of_Life-like_cellular_automata"
-				target="_blocked"
-			>
-				more
-			</a>
-			and
-			<a
-				class="anchor"
-				href="https://conwaylife.com/wiki/List_of_Generations_rules"
-				target="_blocked"
-			>
-				more.</a
-			>
-		</p>
+		<div class="list-footer">
+			<p>
+				<a
+					class="anchor"
+					href="https://conwaylife.com/wiki/List_of_Life-like_cellular_automata"
+					target="_blocked"
+				>
+					https://conwaylife.com/wiki/List_of_Life-like
+				</a>
+			</p>
+			<p>
+				<a
+					class="anchor"
+					href="https://conwaylife.com/wiki/List_of_Generations_rules"
+					target="_blocked"
+				>
+					https://conwaylife.com/wiki/List_of_Generations_rules</a
+				>
+			</p>
+		</div>
 		<div class="arrow bg-surface-100-800-token" />
 	</div>
 
