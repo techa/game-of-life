@@ -291,7 +291,7 @@
 		title="Toggle Edge Loop of Cells Table"
 		on:click={() => ($edgeCell += 1)}
 	>
-		<svg class:primary-color={$edgeCell === -1}>
+		<svg class:variant-filled-primary={$edgeCell === -1}>
 			<use href="{SVG}#{$edgeCell ? 'x' : 'repeat'}" />
 		</svg>
 	</button>

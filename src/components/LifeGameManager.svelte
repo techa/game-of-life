@@ -62,7 +62,7 @@
 </script>
 
 <nav class="w-full text-center flex justify-center px-2">
-	<div class="flex mr-4 bg-tertiary-700 rounded-full w-96">
+	<div class="flex mr-4 variant-filled-tertiary rounded-full w-96">
 		<button
 			class="popup-trigger btn bg-initial px-4 justify-between flex-grow"
 			title="Rule Selector"
