@@ -10,6 +10,14 @@ interface LifeGameEx extends TableTransform, TableInitializer {}
 class LifeGameEx extends LifeGame {}
 export const life = new LifeGameEx().init()
 
+export const isRunning = writable(life.isRunning)
+life.on(LifeEvent.START, () => {
+	isRunning.set(true)
+})
+life.on(LifeEvent.STOP, () => {
+	isRunning.set(false)
+})
+
 export const ruleString = writable<RuleString>('B3/S23')
 export const ruleName = derived(ruleString, ($ruleString) => {
 	// ruleString.subscribe

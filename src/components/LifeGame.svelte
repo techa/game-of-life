@@ -8,6 +8,7 @@
 	import Modal from './generic/Modal.svelte'
 	import {
 		life,
+		isRunning,
 		table,
 		selectedColor,
 		penMode,
@@ -110,6 +111,11 @@
 			} else if (!(cell_state % 2)) {
 				// cell_state == 0 or -2
 				dots.clearRect(x, y, 1, 1)
+			}
+
+			// Processing stops here during playing
+			if ($isRunning) {
+				return
 			}
 
 			// draw screen UNDEAD & TOMB ✖
