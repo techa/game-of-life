@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { colorStringToHsl } from '../../utils/color.js'
-	import { afterUpdate, getContext, onMount } from 'svelte'
-	import type { Writable } from 'svelte/store'
+	import { afterUpdate, onMount } from 'svelte'
 
 	import { SavesStrage } from '../../utils/SavesStrage.js'
 
@@ -19,9 +18,6 @@
 		edgeColumn,
 		edgeRow,
 	} from '../store.js'
-
-	const header = getContext<Writable<string>>('ModalHeader')
-	$header = 'Random initializer'
 
 	let canvas: HTMLCanvasElement
 	let ctx: CanvasRenderingContext2D

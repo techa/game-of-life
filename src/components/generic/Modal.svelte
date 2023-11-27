@@ -5,6 +5,7 @@
 	import { TabGroup, Tab } from '@skeletonlabs/skeleton'
 	import SVG from '../../resource/sprite.svg'
 	import { modal } from '../store.js'
+
 	import Random from '../modal/Random.svelte'
 	import Tools from '../modal/Tools.svelte'
 
@@ -26,7 +27,7 @@
 </script>
 
 <dialog
-	class="card card-filled-surface"
+	class="variant-filled-surface"
 	bind:this={dialog}
 	role="presentation"
 	on:close={close}
