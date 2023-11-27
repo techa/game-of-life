@@ -30,10 +30,12 @@
 		drawDot: {
 			x: number
 			y: number
-			ctx: CanvasRenderingContext2D
+			w: number
+			h: number
+			screen: CanvasRenderingContext2D
+			dots: CanvasRenderingContext2D
 			pen: boolean
 		}
-		optionDraw: { x: number; y: number; ctx: CanvasRenderingContext2D }
 		// /**
 		//  * For setting ctx.strokeStyle & ctx.lineWidth
 		//  * ```
@@ -79,8 +81,9 @@
 	 * pixels size height
 	 */
 	let rows = 24
-	let px_canvas: HTMLCanvasElement
-	let sc_canvas: HTMLCanvasElement
+	let dots_canvas: HTMLCanvasElement
+	let screen_canvas: HTMLCanvasElement
+	let grid_canvas: HTMLCanvasElement
 
 	/**
 	 * screen size width
@@ -90,8 +93,9 @@
 	 * screen size height
 	 */
 	let height = 120
-	let px_ctx: CanvasRenderingContext2D
-	let sc_ctx: CanvasRenderingContext2D
+	let dots: CanvasRenderingContext2D
+	let screen: CanvasRenderingContext2D
+	let grid: CanvasRenderingContext2D
 
 	let pixel_draw: HTMLDivElement
 	let boxRect: DOMRect
@@ -101,11 +105,13 @@
 	let canvasResize: DOMRect
 
 	onMount(() => {
-		const _px_ctx = px_canvas.getContext('2d')
-		const _sc_ctx = sc_canvas.getContext('2d')
-		if (_px_ctx && _sc_ctx) {
-			px_ctx = _px_ctx
-			sc_ctx = _sc_ctx
+		const dots_ctx = dots_canvas.getContext('2d')
+		const screen_ctx = screen_canvas.getContext('2d')
+		const grid_ctx = grid_canvas.getContext('2d')
+		if (dots_ctx && screen_ctx && grid_ctx) {
+			dots = dots_ctx
+			screen = screen_ctx
+			grid = grid_ctx
 		} else {
 			console.error(`canvas.getContext('2d') returns null`)
 		}
@@ -222,55 +228,54 @@
 	function setValue(e: DrawEvent) {
 		const [x, y] = getXY(e)
 		if (isPress) {
-			dispatch('setValue', { ctx: px_ctx, x, y, mouseEvent: e })
+			dispatch('setValue', { ctx: dots, x, y, mouseEvent: e })
 			drawDot([x, y], true)
 		}
 	}
 
 	function drawDot([x, y]: [number, number], pen = false) {
-		dispatch('drawDot', { ctx: px_ctx, x, y, pen })
-	}
-	function optionDraw([x, y]: [number, number]) {
-		dispatch('optionDraw', { ctx: sc_ctx, x, y })
+		const w = width / columns
+		const h = height / rows
+		dispatch('drawDot', { dots: dots, screen: screen, x, y, w, h, pen })
 	}
 
 	function pxDraw() {
-		if (px_ctx && sc_ctx) {
-			px_ctx.clearRect(-1, -1, columns + 1, rows + 1)
+		if (dots && screen && grid) {
+			dots.clearRect(-1, -1, columns + 1, rows + 1)
+			screen.clearRect(-1, -1, columns + 1, rows + 1)
 			for (let y = 0; y < rows; y++) {
 				for (let x = 0; x < columns; x++) {
 					drawDot([x, y])
-					optionDraw([x, y])
 				}
 			}
 		}
 	}
 
 	function drawGridLine(axis: number, i: number) {
-		sc_ctx.beginPath()
+		grid.beginPath()
 		if (!axis) {
 			const cell_size = width / columns
 			const w = Math.round(i * cell_size)
-			sc_ctx.moveTo(w, 0)
-			sc_ctx.lineTo(w, height)
+			grid.moveTo(w, 0)
+			grid.lineTo(w, height)
 		} else {
 			const cell_size = height / rows
 			const h = Math.round(i * cell_size)
-			sc_ctx.moveTo(0, h)
-			sc_ctx.lineTo(width, h)
+			grid.moveTo(0, h)
+			grid.lineTo(width, h)
 		}
-		sc_ctx.closePath()
-		sc_ctx.stroke()
+		grid.closePath()
+		grid.stroke()
 	}
 
 	gridShow.subscribe(() => scDraw())
 	gridCentral.subscribe(() => scDraw())
 	gridCursor.subscribe(() => scDraw())
 	function scDraw(coordinate: [number, number] = [-2, -2]) {
-		if (!sc_ctx) {
+		if (!grid) {
 			return
 		}
-		sc_ctx.clearRect(-1, -1, width + 2, height + 2)
+		grid.clearRect(-1, -1, width + 2, height + 2)
 		const bit = [0, 1]
 
 		if ($gridShow) {
@@ -280,8 +285,8 @@
 			for (const axis of bit) {
 				const colrow = sizes[axis]
 				for (let i = 0; i <= colrow; i++) {
-					sc_ctx.strokeStyle = $gridColor
-					sc_ctx.lineWidth = 1
+					grid.strokeStyle = $gridColor
+					grid.lineWidth = 1
 					drawGridLine(axis, i)
 				}
 			}
@@ -289,8 +294,8 @@
 			for (const axis of bit) {
 				for (const emphasis of enphasises[axis])
 					if (emphasis > 0) {
-						sc_ctx.strokeStyle = $gridColorEmphasis
-						sc_ctx.lineWidth = 2
+						grid.strokeStyle = $gridColorEmphasis
+						grid.lineWidth = 2
 						drawGridLine(axis, emphasis)
 					}
 			}
@@ -300,8 +305,8 @@
 				for (const axis of bit) {
 					for (const central of enphasises[axis])
 						if (central < 0) {
-							sc_ctx.strokeStyle = $gridColorCentral
-							sc_ctx.lineWidth = 2
+							grid.strokeStyle = $gridColorCentral
+							grid.lineWidth = 2
 							drawGridLine(axis, -central)
 						}
 				}
@@ -311,7 +316,7 @@
 		// grid focus
 		if ($gridCursor) {
 			for (const axis of bit) {
-				sc_ctx.strokeStyle = $gridCursorColor
+				grid.strokeStyle = $gridCursorColor
 				drawGridLine(axis, coordinate[axis])
 				drawGridLine(axis, coordinate[axis] + 1)
 			}
@@ -352,13 +357,14 @@
 	>
 		<canvas
 			class="px_canvas"
-			bind:this={px_canvas}
+			bind:this={dots_canvas}
 			width={columns}
 			height={rows}
 		/>
+		<canvas class="ut_canvas" bind:this={screen_canvas} {width} {height} />
 		<canvas
 			class="sc_canvas"
-			bind:this={sc_canvas}
+			bind:this={grid_canvas}
 			{width}
 			{height}
 			on:mouseleave|preventDefault={() => {

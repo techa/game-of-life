@@ -97,7 +97,7 @@
 			$tooltipShow = false
 		}}
 		on:drawDot={(e) => {
-			const { ctx, x, y, pen } = e.detail
+			const { dots, screen, x, y, w, h, pen } = e.detail
 			if (pen && !$penMode) {
 				// when pen-mode disabled
 				return
@@ -105,31 +105,34 @@
 
 			cell_state = life.cells.get(x, y)
 			if (cell_state > 0 || cell_state === -1) {
-				ctx.fillStyle = life.getColor(cell_state)
-				ctx.fillRect(x, y, 1, 1)
+				dots.fillStyle = life.getColor(cell_state)
+				dots.fillRect(x, y, 1, 1)
 			} else if (!(cell_state % 2)) {
 				// cell_state == 0 or -2
-				ctx.clearRect(x, y, 1, 1)
+				dots.clearRect(x, y, 1, 1)
 			}
-		}}
-		on:optionDraw={(e) => {
-			// const { ctx, x, y } = e.detail
-			// if ($penMode > 0) {
-			// UNDEAD TOMB
-			// ctx.beginPath()
-			// const w = width / columns
-			// // const w = Math.round(x * cell_size)
-			// ctx.moveTo(x , y)
-			// ctx.lineTo(w, height)
-			// ctx.closePath()
-			// ctx.stroke()
-			// const cell_size_h = height / rows
-			// const h = Math.round(y * cell_size_h)
-			// ctx.moveTo(0, h)
-			// ctx.lineTo(width, h)
-			// ctx.closePath()
-			// ctx.stroke()
-			// }
+
+			// draw screen UNDEAD & TOMB ✖
+			const scX = x * w
+			const scY = y * h
+
+			if (cell_state >= 0) {
+				screen.clearRect(scX, scY, w, h)
+			} else {
+				screen.strokeStyle = $penMode === -1 ? '#2d1e33' : 'white'
+
+				screen.beginPath()
+				screen.moveTo(scX, scY)
+				screen.lineTo(scX + w, scY + h)
+				screen.closePath()
+				screen.stroke()
+
+				screen.beginPath()
+				screen.moveTo(scX + w, scY)
+				screen.lineTo(scX, scY + h)
+				screen.closePath()
+				screen.stroke()
+			}
 		}}
 		on:setValue={(e) => {
 			const { x, y, mouseEvent } = e.detail
