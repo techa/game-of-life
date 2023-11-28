@@ -71,7 +71,7 @@
 	export let gridColorEmphasis = readable('#555')
 	export let gridColorCentral = readable('#188')
 
-	export let viewMode = 'square'
+	export let viewMode = readable<'full' | 'fit'>('fit')
 
 	/**
 	 * pixels size width
@@ -130,34 +130,35 @@
 		scDraw()
 	}
 
-	/**
-	 * 1cell width
-	 */
-	let w = 0
-	/**
-	 * 1cell height
-	 */
-	let h = 0
 	$: if (canvas_wapper) {
-		// const vertical = boxRect.width < boxRect.height
-		switch (viewMode) {
+		switch ($viewMode) {
 			case 'full':
 				width = boxRect.width
 				height = boxRect.height
 				break
-			case 'square':
+			case 'fit':
 			default:
 				{
-					w = boxRect.width / columns
-					h = boxRect.height / rows
+					const w = boxRect.width / columns
+					const h = boxRect.height / rows
 					const boxRatio = boxRect.width / boxRect.height
 					const canvasRatio = w / h
 					if (boxRatio > canvasRatio) {
-						width = boxRect.width
-						height = rows * w
+						if (rows * w > boxRect.height) {
+							width = columns * h
+							height = boxRect.height
+						} else {
+							width = boxRect.width
+							height = rows * w
+						}
 					} else {
-						width = columns * h
-						height = boxRect.height
+						if (columns * h > boxRect.width) {
+							width = boxRect.width
+							height = rows * w
+						} else {
+							width = columns * h
+							height = boxRect.height
+						}
 					}
 				}
 				break
