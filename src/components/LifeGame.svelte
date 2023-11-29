@@ -8,6 +8,7 @@
 	import Modal from './generic/Modal.svelte'
 	import {
 		life,
+		tableViewMode,
 		isRunning,
 		table,
 		selectedColor,
@@ -34,6 +35,7 @@
 	let cursor_position_x = 0
 	let cursor_position_y = 0
 	let tooltip: HTMLDivElement
+	let tooltipVisible = false
 
 	onMount(() => {
 		$table = $table
@@ -54,11 +56,15 @@
 	<PixelDraw
 		style={`height: calc(100vh - 8rem);`}
 		cells={table}
+		viewMode={tableViewMode}
 		{gridShow}
 		{gridCursor}
 		{gridCentral}
 		{gridColorCentral}
 		on:mousemove={(e) => {
+			if (!tooltip) {
+				return
+			}
 			const { x, y, mouseEvent } = e.detail
 			const { clientX, clientY } = mouseEvent
 			cursor_position_x = x
@@ -92,10 +98,10 @@
 			})
 		}}
 		on:mouseenter={() => {
-			$tooltipShow = true
+			tooltipVisible = true
 		}}
 		on:mouseleave={() => {
-			$tooltipShow = false
+			tooltipVisible = false
 		}}
 		on:drawDot={(e) => {
 			const { dots, screen, x, y, w, h, pen } = e.detail
@@ -151,10 +157,10 @@
 		}}
 	/>
 
-	{#if isPC}
+	{#if isPC && $tooltipShow}
 		<div
 			class="mouse_tooltip chip variant-glass-tertiary absolute w-max top-0 left-0 pointer-events-none"
-			style:visibility={$tooltipShow ? 'visible' : 'hidden'}
+			style:visibility={tooltipVisible ? 'visible' : 'hidden'}
 			role="tooltip"
 			bind:this={tooltip}
 		>

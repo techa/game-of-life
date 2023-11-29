@@ -1,16 +1,38 @@
 <script lang="ts">
 	import { SlideToggle } from '@skeletonlabs/skeleton'
-	import { gridCentral, tooltipShow, autoConway } from '../store.js'
+	import {
+		tableViewMode,
+		gridCentral,
+		tooltipShow,
+		autoConway,
+	} from '../store.js'
+
+	let tableFull = false
+	$: {
+		$tableViewMode = tableFull ? 'full' : 'fit'
+	}
 </script>
 
 <div class="tools-settings text-left">
-	<h3>Grid</h3>
+	<h3 class="h3">Cells Table</h3>
 	<p>
 		<SlideToggle
-			name="grid-emphasis-line"
+			name="cell-table-view-mode"
+			bind:checked={tableFull}
+			active="bg-primary-500"
+			>Cell Table view mode: {$tableViewMode
+				? 'Full'
+				: 'Fit'}</SlideToggle
+		>
+	</p>
+
+	<h3 class="h3">Grid</h3>
+	<p>
+		<SlideToggle
+			name="grid-central-line"
 			bind:checked={$gridCentral}
 			active="bg-primary-500"
-			>Emphasis Line {$gridCentral ? '' : 'in'}visible</SlideToggle
+			>Central Line {$gridCentral ? '' : 'in'}visible</SlideToggle
 		>
 	</p>
 	<p>
@@ -21,7 +43,8 @@
 			>Cursor Tooltip {$tooltipShow ? 'Show' : 'Hide'}</SlideToggle
 		>
 	</p>
-	<h3>Setting</h3>
+
+	<h3 class="h3">Setting</h3>
 	<p>
 		<SlideToggle
 			name="auto-conway"

@@ -72,14 +72,15 @@ export const gridCentral = writable(true)
 
 export const gridCursor = writable(true)
 
-export const tooltipShow = writable(false)
+export const tooltipShow = writable(true)
 
 export const templateLoaded = writable(false)
 
 // Modal ===================
 
 export const modal = writable(false)
-export const initSettingsOpen = writable(false)
+
+export const tableViewMode = writable<'fit' | 'full'>('fit')
 
 // Automatically change the rule to `Conway's life` when a template is selected
 export const autoConway = writable(true)
