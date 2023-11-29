@@ -9,6 +9,7 @@ module.exports = {
 	plugins: ['@typescript-eslint'],
 	ignorePatterns: ['*.cjs', '*.html'],
 	rules: {
+		'no-mixed-spaces-and-tabs': ['error', { 'smart-tabs': true }],
 		'@typescript-eslint/no-empty-interface': [
 			'error',
 			{
