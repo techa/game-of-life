@@ -27,7 +27,7 @@
 </script>
 
 <dialog
-	class="variant-filled-surface"
+	class="variant-filled-surface flex flex-col w-modal-slim md:w-modal"
 	bind:this={dialog}
 	role="presentation"
 	on:close={close}
@@ -49,7 +49,9 @@
 	</TabGroup>
 
 	<!-- Tab Panels --->
-	<div class="tab-panel w-full p-2">
+	<div
+		class="tab-panel flex-grow w-full p-2 overflow-x-hidden overflow-y-scroll"
+	>
 		<svelte:component this={components[tabSet]} />
 	</div>
 
@@ -59,7 +61,7 @@
 			title="Link to Github"
 			href="https://github.com/techa/game-of-life"
 		>
-			<svg style="stroke: #fff;">
+			<svg>
 				<use href="{SVG}#github" />
 			</svg>
 		</a>
@@ -72,8 +74,9 @@
 		/* left: 50%;
 		top: 50%; */
 		width: calc(100vw - 4em);
-		/* max-width: 32em; */
-		height: calc(100vh - 4em);
+		max-height: calc(100vh - 4em);
+		min-height: 32rem;
+
 		overflow: auto;
 		/* transform: translate(-50%, -50%); */
 		padding: 1em;
