@@ -1,4 +1,4 @@
-import { writable, type Writable } from 'svelte/store'
+import { get, writable, type Writable } from 'svelte/store'
 import { base64ToStr, strToBase64 } from './binary.js'
 
 export class SavesStrage<Data> {
@@ -40,18 +40,28 @@ export class SavesStrage<Data> {
 	}
 }
 
-export type Migrator = (data: any, key: string) => any
+export type SaveData = Record<string, any>
+export type Migrator = (data: SaveData) => SaveData
 
 export class StrageStores {
 	#key: string
 	#keys = new Set()
 
-	data: Map<string, unknown> = new Map()
-	get(key: string) {
-		return this.data.get(key)
+	data = {} as Record<string, Writable<unknown>>
+
+	getStore(key: string) {
+		return this.data[key]
 	}
-	set(key: string, value: any) {
-		this.data.set(key, value)
+	get(key: string) {
+		return get(this.getStore(key))
+	}
+	setStore<T>(key: string, store: Writable<T>) {
+		;(store as any).toJSON = () => get(store)
+		this.data[key] = store
+	}
+	set<T = any>(key: string, value: T) {
+		const store = writable<T>(value)
+		this.setStore(key, store)
 		return this
 	}
 
@@ -60,39 +70,39 @@ export class StrageStores {
 
 		const lsdata = this.load()
 
-		if (lsdata) {
-			let parsedData: Map<string, unknown> = new Map(JSON.parse(lsdata))
-
-			for (const migrator of migrators) {
-				if (typeof migrator === 'function') {
-					for (const [key, value] of parsedData.entries()) {
-						parsedData.set(key, migrator(value, key))
-					}
-				}
+		let data: SaveData = JSON.parse(lsdata)
+		for (const migrator of migrators) {
+			if (typeof migrator === 'function') {
+				data = migrator(data)
 			}
+		}
 
-			this.data = parsedData
+		for (const [key, value] of Object.entries(data)) {
+			this.data[key] = writable(value)
 		}
 	}
 
-	create<T = any>(key: string, initialValue: T) {
+	create<T>(key: string, initialValue: T) {
 		return this.addStore(key, writable<T>(initialValue))
 	}
 
-	addStore<T extends Writable<any>>(key: string, store: T) {
+	addStore<T, U extends Writable<T>>(key: string, store: U) {
 		if (this.#keys.has(key)) {
 			throw new Error(`"${key}" is already exist.`)
-		} else {
-			this.#keys.add(key)
-			
-			if (this.data.has(key)) {
-				// reload json data
-				store.set(this.data.get(key))
-			}
 		}
 
-		store.subscribe((v) => {
-			this.data.set(key, v)
+		this.#keys.add(key)
+
+		const _store = this.data[key] as U
+
+		if (_store) {
+			// if localStrage has data then load data
+			store.set(get(_store))
+		}
+
+		this.setStore(key, store)
+
+		store.subscribe(async () => {
 			this.save()
 		})
 		return store
@@ -100,15 +110,15 @@ export class StrageStores {
 
 	load() {
 		try {
-			const lsdata = localStorage.getItem(this.#key) || '[]'
-			return /^\[/.test(lsdata) ? lsdata : base64ToStr(lsdata)
+			const lsdata = localStorage.getItem(this.#key) || '{}'
+			return /^\{/.test(lsdata) ? lsdata : base64ToStr(lsdata)
 		} catch {
-			return '[]'
+			return '{}'
 		}
 	}
 
 	save() {
-		const json = JSON.stringify([...this.data.entries()])
+		const json = JSON.stringify(this.data)
 		const base64 = strToBase64(json)
 		localStorage.setItem(
 			this.#key,
