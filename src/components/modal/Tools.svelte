@@ -20,9 +20,9 @@
 			name="cell-table-view-mode"
 			bind:checked={tableFull}
 			active="bg-primary-500"
-			>Cell Table view mode: {$tableViewMode
-				? 'Full'
-				: 'Fit'}</SlideToggle
+			>Cell Table view mode: <span class="capitalize"
+				>{$tableViewMode}</span
+			></SlideToggle
 		>
 	</p>
 
