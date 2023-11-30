@@ -18,7 +18,6 @@
 	import Slider from './generic/Slider.svelte'
 
 	import SVG from '../resource/sprite.svg'
-	import { LifeEvent } from '$lib/LifeGame.js'
 
 	import lexicon from '../resource/lexicon.min.json'
 
@@ -162,7 +161,6 @@
 		title="Rotate Cells Table 90deg"
 		on:click={() => {
 			life.rotate()
-			setTimeout(() => life.emit(LifeEvent.UPDATE), 100)
 		}}
 	>
 		<svg>
