@@ -7,20 +7,19 @@ export class ColorManager {
 	hueIncr = 1
 
 	selectedColor = 'white'
-	hue: number
+	hue!: number
 	lightness = 90
 	chroma = 70
 
-	colors: string[]
+	colors!: string[]
 
 	constructor(life: LifeGame) {
 		this.life = life
-		this.hue = Math.random() * 360
-		this.colors = [
-			'transparent', // DEATH, TOMB
-			this.setByHue(this.hue), // LIVE, UNDEAD
-			// Generations colors...
-		]
+		this.random()
+	}
+
+	random() {
+		return this.setByHue((Math.random() * 360) | 0)
 	}
 
 	setColor(color: string) {

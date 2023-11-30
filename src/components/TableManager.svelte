@@ -13,6 +13,7 @@
 		modal,
 		autoConway,
 		templateLoaded,
+		selectedColor,
 	} from './store'
 
 	import Slider from './generic/Slider.svelte'
@@ -103,25 +104,39 @@
 		</svg>
 	</button>
 	<div
-		class="color-choose card w-32 shadow-xl -mt-2 p-2 z-10 bg-surface-900 rounded-sm"
+		class="color-choose card w-48 shadow-xl -mt-2 p-2 z-10 bg-surface-900 rounded-sm"
 		class:invisible={popupHueSliderInvisible}
 		data-popup="popupHueSlider"
 	>
-		<Slider
-			max={359}
-			value={colorHue}
-			gradient={[
-				'#ffa6e6',
-				'#ffba87',
-				'#ffe053',
-				'#90fa7d',
-				'#00ffe0',
-				'#00feff',
-				'#8ae7ff',
-				'#ffc0ff',
-				'#ffa6e6',
-			]}
-		/>
+		<div class="flex flex-row">
+			<button
+				class="btn-icon naked"
+				title="Random Color Hue"
+				on:click={() => ($colorHue = (Math.random() * 360) | 0)}
+			>
+				<svg>
+					<use href="{SVG}#shuffle" />
+				</svg>
+			</button>
+			<Slider
+				class="h-11"
+				--cell-size={'42px'}
+				--background-color={$selectedColor}
+				max={359}
+				value={colorHue}
+				gradient={[
+					'#ffa6e6',
+					'#ffba87',
+					'#ffe053',
+					'#90fa7d',
+					'#00ffe0',
+					'#00feff',
+					'#8ae7ff',
+					'#ffc0ff',
+					'#ffa6e6',
+				]}
+			/>
+		</div>
 	</div>
 
 	<button
