@@ -27,7 +27,8 @@
 </script>
 
 <dialog
-	class="variant-filled-surface flex flex-col w-modal-slim md:w-modal"
+	class="variant-filled-surface flex-col w-modal-slim md:w-modal"
+	class:flex={$modal}
 	bind:this={dialog}
 	role="presentation"
 	on:close={close}
