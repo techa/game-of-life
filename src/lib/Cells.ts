@@ -1,5 +1,5 @@
 import { Array2d } from '../utils/Array2d.js'
-import { base64DecToArr, base64EncArr } from '../utils/binary.js'
+import { base64DecToArr, arrEncToBase64 } from '../utils/binary.js'
 
 export const enum Cell {
 	TOMB = -2,
@@ -29,7 +29,7 @@ export function strBinaryToBase64(strBinary: string, bit: DataBit = 1) {
 		const val = parseInt(uint, 2 * bit)
 		arr[i++] = val
 	}
-	return base64EncArr(arr)
+	return arrEncToBase64(arr)
 }
 
 export function base64ToStrBinary(base64: string, bit: DataBit = 1) {

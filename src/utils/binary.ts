@@ -71,7 +71,7 @@ export function uint6ToB64(nUint6: number) {
 		: 65
 }
 
-export function base64EncArr(bytes: Uint8Array) {
+export function arrEncToBase64(bytes: Uint8Array) {
 	let base64 = ''
 	let uint24 = 0
 	let iMod3 = 2

@@ -1,7 +1,7 @@
 // https://vitest.dev/api/expect.html
 // https://jestjs.io/docs/expect
 import { describe, it, expect } from 'vitest'
-import { base64DecToArr, base64EncArr } from './binary.js'
+import { base64DecToArr, arrEncToBase64 } from './binary.js'
 
 /**
  * @link https://developer.mozilla.org/ja/docs/Glossary/Base64#テスト
@@ -136,7 +136,7 @@ describe(`./binary.js`, () => {
 	const sMyInput = 'Base 64 \u2014 Mozilla Developer Network'
 	it(`${sMyInput}`, () => {
 		const aMyUTF8Input = strToUTF8Arr(sMyInput)
-		const sMyBase64 = base64EncArr(aMyUTF8Input)
+		const sMyBase64 = arrEncToBase64(aMyUTF8Input)
 		expect(sMyBase64).toBe(
 			'QmFzZSA2NCDigJQgTW96aWxsYSBEZXZlbG9wZXIgTmV0d29yaw==',
 		)
