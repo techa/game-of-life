@@ -4,6 +4,24 @@ import { TableTransform } from '$lib/TableTransform.js'
 import { TableInitializer } from '$lib/TableInitializer.js'
 import { rules, type RuleString } from '$lib/rules.js'
 
+import { StrageStores } from '../utils/SavesStrage.js'
+
+const enum SaveKeys {
+	ruleString = 'rS',
+	colorHue = 'cH',
+	gridShow = 'gS',
+	gridCentral = 'gC',
+	gridCursor = 'gCur',
+	tooltipShow = 'ttS',
+	templateLoaded = 'tL',
+	tableViewMode = 'tVM',
+	autoConway = 'aC',
+	penMode = 'pM',
+}
+
+const stores = new StrageStores('GameOfLife')
+stores.set('version', 'v0.4.1')
+
 interface LifeGameEx extends TableTransform, TableInitializer {}
 @TableTransform
 @TableInitializer
@@ -18,7 +36,10 @@ life.on(LifeEvent.STOP, () => {
 	isRunning.set(false)
 })
 
-export const ruleString = writable<RuleString>('B3/S23')
+export const ruleString = stores.create<RuleString>(
+	SaveKeys.ruleString,
+	'B3/S23',
+)
 export const ruleName = derived(ruleString, ($ruleString) => {
 	// ruleString.subscribe
 	life.setRule($ruleString)
@@ -57,7 +78,7 @@ export const population = derived(table, () => life.population)
 
 // Not LifeGame menbers -------------------------
 //'#F469E4' hsl(307,86%,68%)
-export const colorHue = writable(life.colorManager.hue)
+export const colorHue = stores.create(SaveKeys.colorHue, life.colorManager.hue)
 export const selectedColor = derived(colorHue, (hue) => {
 	const color = life.colorManager.setByHue(hue)
 	table.update((v) => v)
@@ -67,23 +88,26 @@ export const gridColorCentral = derived(selectedColor, () => {
 	return life.colorManager.getIncHue(120)
 })
 
-export const gridShow = writable(true)
-export const gridCentral = writable(true)
+export const gridShow = stores.create(SaveKeys.gridShow, true)
+export const gridCentral = stores.create(SaveKeys.gridCentral, true)
 
-export const gridCursor = writable(true)
+export const gridCursor = stores.create(SaveKeys.gridCursor, true)
 
-export const tooltipShow = writable(true)
+export const tooltipShow = stores.create(SaveKeys.tooltipShow, true)
 
-export const templateLoaded = writable(false)
+export const templateLoaded = stores.create(SaveKeys.templateLoaded, false)
+
+export const tableViewMode = stores.create<'fit' | 'full'>(
+	SaveKeys.tableViewMode,
+	'fit',
+)
+
+// Automatically change the rule to `Conway's life` when a template is selected
+export const autoConway = stores.create(SaveKeys.autoConway, true)
 
 // Modal ===================
 
 export const modal = writable(false)
-
-export const tableViewMode = writable<'fit' | 'full'>('fit')
-
-// Automatically change the rule to `Conway's life` when a template is selected
-export const autoConway = writable(true)
 
 // Modal Random --------------
 
@@ -137,18 +161,21 @@ export const randomAreaColumns = derived(
 )
 export const randomAreaRows = derived(randomPoints, () => life.randomAreaRows)
 
-export const penMode = (() => {
-	const { subscribe, set, update } = writable(0)
-	const indexes = [0, 1, -1, -2]
-	let index = 0
-	return {
-		subscribe,
-		update,
-		set,
-		next() {
-			++index
-			set(indexes[(index %= 4)])
-			console.log('indexes[++index % 4]', indexes[index])
-		},
-	}
-})()
+export const penMode = stores.addStore(
+	SaveKeys.penMode,
+	(() => {
+		const { subscribe, set, update } = writable(0)
+		const indexes = [0, 1, -1, -2]
+		let index = 0
+		return {
+			subscribe,
+			update,
+			set,
+			next() {
+				++index
+				set(indexes[(index %= 4)])
+				console.log('indexes[++index % 4]', indexes[index])
+			},
+		}
+	})(),
+)
