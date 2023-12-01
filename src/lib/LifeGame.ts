@@ -86,6 +86,8 @@ export class LifeGame {
 
 		// eslint-disable-next-line @typescript-eslint/no-extra-semi
 		;[this.#born, this.#survival, this.#cycle] = rules
+
+		this.next()
 		return this.ruleString
 	}
 
@@ -176,36 +178,68 @@ export class LifeGame {
 		this.update()
 	}
 
+	draw(target: { x: number; y: number }, value: Cell) {
+		this.cells.setValue(target, value)
+		if (this.population) {
+			this.memory()
+		}
+		this.update()
+	}
+
 	tableSizing(columns: number, rows: number) {
 		if (columns > 0 && rows > 0) {
 			this.cells.sizing(columns, rows)
 			this.emit(LifeEvent.TABLE_UPDATE)
+
+			this.update()
 		}
 	}
 
 	addRows(row = this.rows) {
 		this.cells.addRows(row)
+		this.update()
 	}
 	removeRows(row = -1) {
 		this.cells.removeRows(row)
+		this.update()
 	}
 	addColumns(columns = this.columns) {
 		this.cells.addColumns(columns)
+		this.update()
 	}
 	removeColumns(columns = -1) {
 		this.cells.removeColumns(columns)
+		this.update()
 	}
 
+	canStep = false
+	nextCells: (Cell | number)[][] = []
+
 	/**
-	 * @returns true is step success, false is ste failed
+	 * * init()/insert()/setRule()
+	 *     * memory() initial data
+	 *     * update()
+	 *         * next()
+	 * * step()
+	 *     * update()
+	 *         * next()
+	 * * step()
+	 *     * update()
+	 *         * next()
 	 */
-	step() {
+	next() {
 		const countMax = Math.max(...this.#born, ...this.#survival)
 
-		this.cells.each((cell, { x, y }) => {
+		const nextCells: (Cell | number)[][] = []
+
+		this.cells.forEach((cell, { x, y }) => {
+			if (!nextCells[y]) {
+				nextCells[y] = []
+			}
 			if (cell < 0) {
 				// if cell === UNDEAD or TOMB
-				return cell
+				nextCells[y][x] = cell
+				return
 			}
 
 			let count = 0
@@ -235,24 +269,31 @@ export class LifeGame {
 				(cell === Cell.DEATH && this.#born.includes(count)) ||
 				(cell === Cell.LIVE && this.#survival.includes(count))
 			) {
-				return Cell.LIVE
+				nextCells[y][x] = Cell.LIVE
+				return
 			} else if (cell >= 1) {
-				return (cell + 1) % this.#cycle
+				nextCells[y][x] = (cell + 1) % this.#cycle
+				return
 			}
-			return Cell.DEATH
+			nextCells[y][x] = Cell.DEATH
 		})
 
-		const newCellData = JSON.stringify(this.cells)
-		const canStep = this.#tableMemory !== newCellData
+		this.#nextTable = JSON.stringify(nextCells)
+		this.canStep = this.#tableMemory !== this.#nextTable
+		return (this.nextCells = nextCells)
+	}
 
-		if (this.autoStop && !canStep) {
+	/**
+	 * @returns true is step success, false is step failed
+	 */
+	step() {
+		if (this.autoStop && !this.canStep) {
 			this.stop()
 		} else {
 			this.#generation++
-			this.update(newCellData)
+			this.cells = new Cells(this.nextCells, 0)
+			this.update(this.#nextTable)
 		}
-
-		return !!canStep
 	}
 
 	ticker!: Ticker
@@ -282,6 +323,7 @@ export class LifeGame {
 	}
 
 	#tableMemory = ''
+	#nextTable = ''
 	autoStop = true
 	get isRunning() {
 		return this.ticker?.running
@@ -314,6 +356,7 @@ export class LifeGame {
 	 */
 	update(tableMemory = JSON.stringify(this.cells)) {
 		this.#tableMemory = tableMemory
+		this.next()
 		this.emit(LifeEvent.UPDATE)
 	}
 }

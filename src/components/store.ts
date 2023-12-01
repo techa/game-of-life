@@ -76,6 +76,8 @@ export const edgeCell: Writable<typeof life.edgeCell> = (() => {
 export const generation = derived(table, () => life.generation)
 export const population = derived(table, () => life.population)
 
+export const canStep = derived([table, ruleString], () => life.canStep)
+
 // Not LifeGame menbers -------------------------
 //'#F469E4' hsl(307,86%,68%)
 export const colorHue = stores.create(SaveKeys.colorHue, life.colorManager.hue)

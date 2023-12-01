@@ -153,7 +153,7 @@
 				$templateLoaded = false
 			}
 
-			life.cells.setValue(e.detail, settingValue)
+			life.draw(e.detail, settingValue)
 		}}
 	/>
 

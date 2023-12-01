@@ -72,6 +72,7 @@ describe(`step Generation`, () => {
 	})
 	it(`step 3`, () => {
 		life.step()
+		expect(life.canStep).toBe(true)
 		expect(life.cells.get2d()).toStrictEqual([
 			[3, 0, 1, 2],
 			[3, 0, 0, 2],
@@ -80,6 +81,7 @@ describe(`step Generation`, () => {
 	})
 	it(`clear`, () => {
 		life.clear()
+		expect(life.canStep).toBe(false)
 		expect(life.cells.get2d()).toStrictEqual([
 			[0, 0, 0, 0],
 			[0, 0, 0, 0],
@@ -97,6 +99,7 @@ describe(`step Generation & UNDEAD`, () => {
 	life.setRule('B234/S2/C5')
 	it(`step 1`, () => {
 		life.step()
+		expect(life.canStep).toBe(true)
 		expect(life.cells.get2d()).toStrictEqual([
 			[0, 1, -1, 1],
 			[0, 1, 1, 1],

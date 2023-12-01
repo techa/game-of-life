@@ -10,6 +10,7 @@
 		rows,
 		generation,
 		population,
+		canStep,
 	} from './store'
 
 	import SVG from '../resource/sprite.svg'
@@ -164,17 +165,23 @@
 		</button>
 		<button
 			class="play btn-icon"
-			title={playing ? 'Pause' : 'Play Start'}
+			title={playing ? 'Pause' : $canStep ? 'Play Start' : "Can't Play"}
 			on:click={() => {
 				if (playing) {
 					life.stop()
-				} else {
+				} else if ($canStep) {
 					life.start()
 				}
 			}}
 		>
 			<svg>
-				<use href="{SVG}#{playing ? 'pause' : 'play'}" />
+				<use
+					href="{SVG}#{playing
+						? 'pause'
+						: $canStep
+						  ? 'play'
+						  : 'square'}"
+				/>
 			</svg>
 		</button>
 		<button
