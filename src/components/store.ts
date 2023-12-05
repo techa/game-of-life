@@ -176,7 +176,6 @@ export const penMode = stores.addStore(
 			next() {
 				++index
 				set(indexes[(index %= 4)])
-				console.log('indexes[++index % 4]', indexes[index])
 			},
 		}
 	})(),

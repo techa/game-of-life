@@ -390,7 +390,9 @@
 				dispatch('mouseleave', { mouseEvent: e, isPress })
 			}}
 			on:mousemove|preventDefault={(e) => {
-				setValue(e)
+				if (isPress) {
+					setValue(e)
+				}
 				const [x, y] = getXY(e)
 				dispatch('mousemove', { mouseEvent: e, x, y, isPress })
 			}}

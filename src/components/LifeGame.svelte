@@ -25,11 +25,6 @@
 	import { isSmartPhone } from '../utils/miscellanies.js'
 	import { computePosition, offset, flip, shift } from '@floating-ui/dom'
 
-	/**
-	 * var for pen tool
-	 */
-	let settingValue = 1
-
 	let isPC = false
 	let cell_state = 0
 	let cursor_position_x = 0
@@ -69,7 +64,6 @@
 			const { clientX, clientY } = mouseEvent
 			cursor_position_x = x
 			cursor_position_y = y
-			cell_state = life.cells.get(x, y)
 			const virtualEl = {
 				getBoundingClientRect() {
 					const w = 12
@@ -110,7 +104,7 @@
 				return
 			}
 
-			cell_state = life.cells.get(x, y)
+			const cell_state = life.cells.get(x, y)
 			if (cell_state > 0 || cell_state === -1) {
 				dots.fillStyle = life.getColor(cell_state)
 				dots.fillRect(x, y, 1, 1)
@@ -148,12 +142,14 @@
 		}}
 		on:setValue={(e) => {
 			const { x, y, mouseEvent } = e.detail
-			if ($penMode && mouseEvent.type === 'mousedown') {
-				settingValue = life.cells.get(x, y) ? 0 : $penMode
+			if ($penMode && /^mouse/.test(mouseEvent.type)) {
+				if (mouseEvent.type === 'mousedown') {
+					cell_state = life.cells.get(x, y) ? 0 : $penMode
+				}
 				$templateLoaded = false
-			}
 
-			life.draw(e.detail, settingValue)
+				life.cells.setValue(e.detail, cell_state)
+			}
 		}}
 	/>
 
