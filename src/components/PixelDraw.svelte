@@ -7,6 +7,13 @@
 	}
 
 	const dispatch = createEventDispatcher<{
+		mouseup: {
+			x: number
+			y: number
+			mouseEvent: MouseEvent & {
+				currentTarget: EventTarget & Window
+			}
+		}
 		mousemove: {
 			x: number
 			y: number
@@ -336,11 +343,13 @@
 		}
 	}}
 	on:mouseup={(e) => {
-		if (e.button !== 2 && isPress) {
-			// history memory
+		if (isPress) {
+			scDraw()
+			const [x, y] = getXY(e)
+			dispatch('mouseup', { mouseEvent: e, x, y })
+
+			isPress = false
 		}
-		isPress = false
-		scDraw()
 	}}
 />
 
@@ -395,9 +404,6 @@
 				}
 				const [x, y] = getXY(e)
 				dispatch('mousemove', { mouseEvent: e, x, y, isPress })
-			}}
-			on:mouseup|preventDefault={() => {
-				isPress = false
 			}}
 			on:contextmenu|preventDefault
 		/>

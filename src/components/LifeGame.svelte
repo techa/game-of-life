@@ -91,6 +91,9 @@
 				})
 			})
 		}}
+		on:mouseup={() => {
+			life.update()
+		}}
 		on:mouseenter={() => {
 			tooltipVisible = true
 		}}
