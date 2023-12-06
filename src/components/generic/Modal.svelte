@@ -9,19 +9,21 @@
 	import Random from '../modal/Random.svelte'
 	import Tools from '../modal/Tools.svelte'
 
-	// export let showModal = false // !!$modal
-
 	const dispatch = createEventDispatcher()
+
+	let dialog: HTMLDialogElement
+
 	const close = () => {
 		dialog.close()
 		$modal = false
 		dispatch('close')
 	}
 
-	let dialog: HTMLDialogElement
-
 	let tabSet = 0
-	const components = [Tools, Random, Tools]
+	const components = [
+		{ title: 'Cells', component: Tools },
+		{ title: 'Random', component: Random },
+	]
 
 	$: if (dialog && $modal) dialog.showModal()
 </script>
@@ -41,7 +43,7 @@
 	</button>
 
 	<TabGroup justify="justify-center">
-		{#each ['Cells', 'Random', 'View'] as title, i (i)}
+		{#each components as { title }, i (i)}
 			<Tab bind:group={tabSet} name="tab1" value={i}>
 				<!-- <svelte:fragment slot="lead">(icon)</svelte:fragment> -->
 				<span>{title}</span>
@@ -53,7 +55,7 @@
 	<div
 		class="tab-panel flex-grow w-full p-2 overflow-x-hidden overflow-y-scroll"
 	>
-		<svelte:component this={components[tabSet]} />
+		<svelte:component this={components[tabSet].component} />
 	</div>
 
 	<div class="footer">
