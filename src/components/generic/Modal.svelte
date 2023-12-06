@@ -23,10 +23,10 @@
 
 	let tabSet = 0
 	const components = [
-		{ title: 'Cells', component: Tools },
-		{ title: 'Random', component: Random },
-		{ title: 'Save', component: Save },
-		{ title: 'Other', component: Other },
+		{ title: 'Cells', component: Tools, icon: 'grid' },
+		{ title: 'Random', component: Random, icon: 'dice' },
+		{ title: 'Save', component: Save, icon: 'save' },
+		{ title: 'Other', component: Other, icon: 'settings' },
 	]
 
 	$: if (dialog && $modal) dialog.showModal()
@@ -40,24 +40,27 @@
 	on:close={close}
 	on:click|self={close}
 >
-	<button class="btn-icon naked absolute top-2 right-2" on:click={close}>
-		<svg>
-			<use href="{SVG}#x" />
-		</svg>
-	</button>
-
 	<TabGroup justify="justify-center">
-		{#each components as { title }, i (i)}
-			<Tab bind:group={tabSet} name="tab1" value={i}>
-				<!-- <svelte:fragment slot="lead">(icon)</svelte:fragment> -->
-				<span>{title}</span>
+		{#each components as { title, icon }, i (i)}
+			<Tab bind:group={tabSet} name="tab1" value={i} {title}>
+				<svelte:fragment slot="lead">
+					<svg class="w-5 h-5 inline">
+						<use href="{SVG}#{icon}" />
+					</svg>
+				</svelte:fragment>
+				<!-- <span class="text-sm">{title}</span> -->
 			</Tab>
 		{/each}
+		<button class="btn-icon naked" on:click={close}>
+			<svg>
+				<use href="{SVG}#x" />
+			</svg>
+		</button>
 	</TabGroup>
 
 	<!-- Tab Panels --->
 	<div
-		class="tab-panel flex-grow w-full p-2 overflow-x-hidden overflow-y-scroll"
+		class="tab-panel flex-grow w-full p-2 overflow-x-hidden overflow-y-scroll [&>div>h3]:mt-4 [&>div>h3]:mb-2"
 	>
 		<svelte:component this={components[tabSet].component} />
 	</div>

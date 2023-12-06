@@ -49,9 +49,10 @@
 	</p>
 	<p>
 		<label
-			class="inline-flex py-2 pl-2 rounded-r-none rounded-l-lg break-inside-avoid"
-			><input
-				class="input font-mono bg-transparent border-0 ring-0 focus:ring-0 focus:border-0 outline-none w-12"
+			class="inline-flex rounded-r-none rounded-l-lg break-inside-avoid"
+		>
+			<input
+				class="input font-mono bg-transparent border-0 ring-0 focus:ring-0 focus:border-0 outline-none w-16 h-8 text-center"
 				title="Change width of Cells Table"
 				value={$gridEmphasis}
 				on:input={gEmValidator}
@@ -64,7 +65,8 @@
 							break
 					}
 				}}
-			/><span class=" break-inside-avoid">Emphasis Line</span>
+			/>
+			<span class="break-inside-avoid ml-3">Emphasis Line</span>
 		</label>
 	</p>
 	<p>
