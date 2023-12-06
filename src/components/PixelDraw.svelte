@@ -201,6 +201,8 @@
 	function enphasisIndexes(colrow: number) {
 		const enphasises = []
 
+		const odd = colrow % 2
+
 		// center line
 		if (!(colrow % 2)) {
 			enphasises.push(-(colrow / 2))
@@ -219,15 +221,25 @@
 			enphasises.push(-(colrow / 6))
 			enphasises.push(-colrow + colrow / 6)
 		}
-		if (!(colrow % 5)) {
-			for (let i = 1; i < colrow / 5; i++) {
-				enphasises.push(i * 5)
-			}
-		} else if (!(colrow % 4)) {
-			for (let i = 1; i < colrow / 4; i++) {
-				enphasises.push(i * 4)
-			}
+
+		const enphasis = !((colrow - odd) % 4) ? 4 : 5
+
+		// Draw a line every n cells from the central line
+		// 中心線からnマスおきに線を引く
+		for (let i = 1; i < colrow / enphasis / 2; i++) {
+			enphasises.push(Math.ceil(colrow / 2) - odd - i * enphasis)
+			enphasises.push(Math.floor(colrow / 2) + odd + i * enphasis)
 		}
+
+		// if (!(colrow % 5)) {
+		// 	for (let i = 1; i < colrow / 5; i++) {
+		// 		enphasises.push(i * 5)
+		// 	}
+		// } else if (!(colrow % 4)) {
+		// 	for (let i = 1; i < colrow / 4; i++) {
+		// 		enphasises.push(i * 4)
+		// 	}
+		// }
 		return enphasises
 	}
 
