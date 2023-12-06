@@ -135,8 +135,11 @@
 	let enphasises: number[][] = [[], []]
 
 	// setCanvasSize
-	$: if (canvas_wapper) {
-		console.log('setCanvasSize')
+	$: if (
+		canvas_wapper &&
+		(columns !== $cells[0].length || rows !== $cells.length)
+	) {
+		// console.log('setCanvasSize')
 		columns = $cells[0].length
 		rows = $cells.length
 		enphasises = [enphasisIndexes(columns), enphasisIndexes(rows)]
@@ -177,9 +180,15 @@
 
 	// Runs after setCanvasSize
 	$: if (canvasResize) {
-		console.log('resize')
+		// console.log('resize')
 		getRects()
 		gridDraw()
+		pxDraw()
+	}
+
+	// cellsUpdate: draw image
+	$: if ($cells) {
+		// console.log('cellsUpdate')
 		pxDraw()
 	}
 
