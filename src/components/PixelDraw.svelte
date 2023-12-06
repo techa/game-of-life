@@ -225,19 +225,82 @@
 		return enphasises
 	}
 
-	function getXY(e: MouseEvent): [number, number] {
-		const { x: boxPositionX, y: boxPositionY, width, height } = canvasRect
+	// from mouse position (float) to cell position (int)
+	const toX = (x: number) => (x * (columns / width)) | 0
+	const toY = (y: number) => (y * (rows / height)) | 0
 
-		const x = (((e.clientX - boxPositionX) * columns) / width) | 0
-		const y = (((e.clientY - boxPositionY) * rows) / height) | 0
-		return [x, y]
+	// from cell position (int) to mouse position (float)
+	const fromX = (x: number) => x * (width / columns)
+	const fromY = (y: number) => y * (height / rows)
+
+	function getXY(e: MouseEvent): [number, number] {
+		const { x: boxPositionX, y: boxPositionY } = canvasRect
+
+		return [toX(e.clientX - boxPositionX), toY(e.clientY - boxPositionY)]
 	}
 
+	// vector origin
+	let beginning: null | [number, number] = null
 	function setValue(e: DrawEvent) {
-		const [x, y] = getXY(e)
 		if (isPress) {
-			dispatch('setValue', { ctx: dots, x, y, mouseEvent: e })
-			drawDot([x, y], true)
+			const { x: boxPositionX, y: boxPositionY } = canvasRect
+
+			const mouseXinBox = e.clientX - boxPositionX
+			const mouseYinBox = e.clientY - boxPositionY
+
+			const draw = ([x, y]: [number, number]) => {
+				dispatch('setValue', { ctx: dots, x, y, mouseEvent: e })
+				drawDot([x, y], true)
+			}
+
+			if (beginning) {
+				// penCross
+				const minX = toX(Math.min(beginning[0], mouseXinBox))
+				const minY = toX(Math.min(beginning[1], mouseYinBox))
+				const maxX = toY(Math.max(beginning[0], mouseXinBox))
+				const maxY = toY(Math.max(beginning[1], mouseYinBox))
+				for (let y = minY; y <= maxY; y++) {
+					for (let x = minX; x <= maxX; x++) {
+						// cell vertexes
+						const cellRectPoints = [
+							[fromX(x), fromY(y)],
+							[fromX(x + 1), fromY(y)],
+							[fromX(x), fromY(y + 1)],
+							[fromX(x + 1), fromY(y + 1)],
+						]
+
+						const vector1 = [
+							mouseXinBox - beginning[0],
+							mouseYinBox - beginning[1],
+						]
+
+						let sign = 0
+						for (let i = 0; i < cellRectPoints.length; i++) {
+							const [px, py] = cellRectPoints[i]
+							const vector2 = [
+								px - beginning[0],
+								py - beginning[1],
+							]
+
+							// cross product
+							// vec1.x * vec2.y - vec1.y * vec2.x
+							const cross =
+								vector1[0] * vector2[1] -
+								vector1[1] * vector2[0]
+
+							if (i === 0) {
+								sign = Math.sign(cross)
+							} else if (sign !== Math.sign(cross)) {
+								draw([x, y])
+								break
+							}
+						}
+					}
+				}
+			} else {
+				draw(getXY(e))
+			}
+			beginning = [mouseXinBox, mouseYinBox]
 		}
 	}
 
@@ -344,6 +407,8 @@
 	}}
 	on:mouseup={(e) => {
 		if (isPress) {
+			beginning = null
+
 			scDraw()
 			const [x, y] = getXY(e)
 			dispatch('mouseup', { mouseEvent: e, x, y })
