@@ -132,17 +132,11 @@
 		canvasRect = canvas_wapper.getBoundingClientRect()
 	}
 
-	$: if (canvasResize) {
-		console.log('resize')
-		getRects()
-		gridDraw()
-		pxDraw()
-	}
-
 	let enphasises: number[][] = [[], []]
 
+	// setCanvasSize
 	$: if (canvas_wapper) {
-		console.log('cells update')
+		console.log('setCanvasSize')
 		columns = $cells[0].length
 		rows = $cells.length
 		enphasises = [enphasisIndexes(columns), enphasisIndexes(rows)]
@@ -179,6 +173,14 @@
 				}
 				break
 		}
+	}
+
+	// Runs after setCanvasSize
+	$: if (canvasResize) {
+		console.log('resize')
+		getRects()
+		gridDraw()
+		pxDraw()
 	}
 
 	/**
@@ -315,7 +317,7 @@
 				}
 			}
 		}
-		console.log('pxDraw')
+		// console.log('pxDraw')
 	}
 
 	function drawGridLine(axis: number, i: number) {
