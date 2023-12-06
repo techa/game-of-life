@@ -12,6 +12,7 @@ const enum SaveKeys {
 	gridShow = 'gS',
 	gridCentral = 'gC',
 	gridCursor = 'gCur',
+	gridEmphasis = 'gEm',
 	tooltipShow = 'ttS',
 	templateLoaded = 'tL',
 	tableViewMode = 'tVM',
@@ -92,6 +93,8 @@ export const gridShow = stores.create(SaveKeys.gridShow, true)
 export const gridCentral = stores.create(SaveKeys.gridCentral, true)
 
 export const gridCursor = stores.create(SaveKeys.gridCursor, true)
+
+export const gridEmphasis = stores.create(SaveKeys.gridEmphasis, [1, 1])
 
 export const tooltipShow = stores.create(SaveKeys.tooltipShow, true)
 

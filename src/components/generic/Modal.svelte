@@ -8,6 +8,8 @@
 
 	import Random from '../modal/Random.svelte'
 	import Tools from '../modal/Tools.svelte'
+	import Save from '../modal/Save.svelte'
+	import Other from '../modal/Other.svelte'
 
 	const dispatch = createEventDispatcher()
 
@@ -23,6 +25,8 @@
 	const components = [
 		{ title: 'Cells', component: Tools },
 		{ title: 'Random', component: Random },
+		{ title: 'Save', component: Save },
+		{ title: 'Other', component: Other },
 	]
 
 	$: if (dialog && $modal) dialog.showModal()

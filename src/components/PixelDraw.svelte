@@ -78,6 +78,13 @@
 	export let gridColorEmphasis = readable('#555')
 	export let gridColorCentral = readable('#188')
 
+	/**
+	 * 0: off
+	 * 1: auto (4 or 5)
+	 * 2~: value
+	 */
+	export let gridEmphasis = readable([1, 1])
+
 	export let viewMode = readable<'full' | 'fit'>('fit')
 
 	/**
@@ -222,7 +229,17 @@
 			emphasises.push(-colrow + colrow / 6)
 		}
 
-		const emphasis = !((colrow - odd) % 4) ? 4 : 5
+		const colrowIndex = colrow === columns ? 0 : 1
+		const emphasis =
+			$gridEmphasis[colrowIndex] === 1
+				? !((colrow - odd) % 4)
+					? 4
+					: 5
+				: $gridEmphasis[colrowIndex]
+
+		if (emphasis < 2) {
+			return emphasises
+		}
 
 		// Draw a line every n cells from the central line
 		// 中心線からnマスおきに線を引く
