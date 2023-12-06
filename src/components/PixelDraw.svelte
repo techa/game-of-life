@@ -134,7 +134,7 @@
 	$: if (canvasResize) {
 		// console.log('resize')
 		getRects()
-		scDraw()
+		gridDraw()
 	}
 
 	$: if (canvas_wapper) {
@@ -339,10 +339,10 @@
 		grid.stroke()
 	}
 
-	gridShow.subscribe(() => scDraw())
-	gridCentral.subscribe(() => scDraw())
-	gridCursor.subscribe(() => scDraw())
-	function scDraw(coordinate: [number, number] = [-2, -2]) {
+	gridShow.subscribe(() => gridDraw())
+	gridCentral.subscribe(() => gridDraw())
+	gridCursor.subscribe(() => gridDraw())
+	function gridDraw(coordinate: [number, number] = [-2, -2]) {
 		if (!grid) {
 			return
 		}
@@ -401,15 +401,14 @@
 	}}
 	on:mousemove={(e) => {
 		if (isHover || isPress) {
-			const xy = getXY(e)
-			scDraw(xy)
+			gridDraw(getXY(e))
 		}
 	}}
 	on:mouseup={(e) => {
 		if (isPress) {
 			beginning = null
 
-			scDraw()
+			gridDraw()
 			const [x, y] = getXY(e)
 			dispatch('mouseup', { mouseEvent: e, x, y })
 
@@ -444,7 +443,7 @@
 			{height}
 			on:mouseleave|preventDefault={() => {
 				isHover = false
-				scDraw()
+				gridDraw()
 			}}
 			on:mouseenter|preventDefault={() => {
 				isHover = true
