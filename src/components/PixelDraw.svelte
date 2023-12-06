@@ -141,7 +141,7 @@
 
 	let emphasises: number[][] = [[], []]
 
-	// setCanvasSize
+	// setCanvasSize:
 	$: if (
 		canvas_wapper &&
 		(columns !== $cells[0].length || rows !== $cells.length)
@@ -150,6 +150,11 @@
 		columns = $cells[0].length
 		rows = $cells.length
 		emphasises = [emphasisIndexes(columns), emphasisIndexes(rows)]
+	}
+
+	// setViewMode: Runs after setCanvasSize or $viewMode switched
+	$: if (pixel_draw) {
+		// console.log('setViewMode')
 		const boxRect = pixel_draw.getBoundingClientRect()
 		switch ($viewMode) {
 			case 'full':
@@ -185,7 +190,7 @@
 		}
 	}
 
-	// Runs after setCanvasSize
+	// resize: Runs after setViewMode or resize
 	$: if (canvasResize) {
 		// console.log('resize')
 		getRects()
