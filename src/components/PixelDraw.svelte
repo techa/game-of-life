@@ -105,11 +105,13 @@
 	let grid: CanvasRenderingContext2D
 
 	let pixel_draw: HTMLDivElement
-	let boxRect: DOMRect
 
 	let canvas_wapper: HTMLDivElement
 	let canvasRect: DOMRect
 	let canvasResize: DOMRect
+
+	let isPress = false
+	let isHover = false
 
 	onMount(() => {
 		const dots_ctx = dots_canvas.getContext('2d')
@@ -127,17 +129,24 @@
 
 	function getRects() {
 		// console.log('getRects')
-		boxRect = pixel_draw.getBoundingClientRect()
 		canvasRect = canvas_wapper.getBoundingClientRect()
 	}
 
 	$: if (canvasResize) {
-		// console.log('resize')
+		console.log('resize')
 		getRects()
 		gridDraw()
+		pxDraw()
 	}
 
+	let enphasises: number[][] = [[], []]
+
 	$: if (canvas_wapper) {
+		console.log('cells update')
+		columns = $cells[0].length
+		rows = $cells.length
+		enphasises = [enphasisIndexes(columns), enphasisIndexes(rows)]
+		const boxRect = pixel_draw.getBoundingClientRect()
 		switch ($viewMode) {
 			case 'full':
 				width = boxRect.width
@@ -170,21 +179,7 @@
 				}
 				break
 		}
-
-		pxDraw()
 	}
-
-	let isPress = false
-	let isHover = false
-
-	let enphasises: number[][] = [[], []]
-
-	cells.subscribe(() => {
-		columns = $cells[0].length
-		rows = $cells.length
-		pxDraw()
-		enphasises = [enphasisIndexes(columns), enphasisIndexes(rows)]
-	})
 
 	/**
 	 * create Grid enphasis & Central line indexs
@@ -320,6 +315,7 @@
 				}
 			}
 		}
+		console.log('pxDraw')
 	}
 
 	function drawGridLine(axis: number, i: number) {

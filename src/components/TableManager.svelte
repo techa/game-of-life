@@ -36,7 +36,11 @@
 			if (val < 1 && e.currentTarget) {
 				e.currentTarget.value = life[axis] + ''
 			}
-			life.tableSizing($columns, $rows)
+
+			life.tableSizing(
+				axis === 'rows' ? $columns : val,
+				axis === 'rows' ? val : $rows,
+			)
 		}
 	}
 
@@ -265,7 +269,7 @@
 			title="Change width of Cells Table"
 			type="number"
 			min="1"
-			bind:value={$columns}
+			value={$columns}
 			on:input={validateResize('columns')}
 			on:blur={validateResize('columns')}
 			on:keydown={(e) => {
@@ -285,7 +289,7 @@
 			title="Change height of Cells Table"
 			type="number"
 			min="1"
-			bind:value={$rows}
+			value={$rows}
 			on:input={validateResize('rows')}
 			on:blur={validateResize('rows')}
 			on:keydown={(e) => {

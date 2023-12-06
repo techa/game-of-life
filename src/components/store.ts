@@ -52,12 +52,10 @@ life.on(LifeEvent.UPDATE, () => {
 	table.set(life.cells.get2d())
 	// console.log('UPDATE')
 })
+export const columns = derived(table, () => life.columns)
+export const rows = derived(table, () => life.rows)
 
-export const columns = writable(life.columns)
-export const rows = writable(life.rows)
 life.on(LifeEvent.TABLE_UPDATE, () => {
-	columns.set(life.columns)
-	rows.set(life.rows)
 	life.emit(LifeEvent.UPDATE)
 	// console.log('TABLE_UPDATE')
 })
