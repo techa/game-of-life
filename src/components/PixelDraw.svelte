@@ -48,9 +48,9 @@
 		//  * ```
 		//  * on:setGridStyle={(e) => {
 		// 	const { ctx, x, y } = e.detail
-		// 	const enphasis = 3
+		// 	const emphasis = 3
 		// 	ctx.strokeStyle
-		// 	ctx.lineWidth = enphasis ? 2 : 1
+		// 	ctx.lineWidth = emphasis ? 2 : 1
 		// }}
 		// ```
 		//  * @param x focus cell coordinates x
@@ -132,7 +132,7 @@
 		canvasRect = canvas_wapper.getBoundingClientRect()
 	}
 
-	let enphasises: number[][] = [[], []]
+	let emphasises: number[][] = [[], []]
 
 	// setCanvasSize
 	$: if (
@@ -142,7 +142,7 @@
 		// console.log('setCanvasSize')
 		columns = $cells[0].length
 		rows = $cells.length
-		enphasises = [enphasisIndexes(columns), enphasisIndexes(rows)]
+		emphasises = [emphasisIndexes(columns), emphasisIndexes(rows)]
 		const boxRect = pixel_draw.getBoundingClientRect()
 		switch ($viewMode) {
 			case 'full':
@@ -193,54 +193,54 @@
 	}
 
 	/**
-	 * create Grid enphasis & Central line indexs
-	 * * enphasis is positive value
+	 * create Grid emphasis & Central line indexs
+	 * * emphasis is positive value
 	 * * central is negative value
 	 * @param colrow columns or rows
 	 */
-	function enphasisIndexes(colrow: number) {
-		const enphasises = []
+	function emphasisIndexes(colrow: number) {
+		const emphasises = []
 
 		const odd = colrow % 2
 
 		// center line
 		if (!(colrow % 2)) {
-			enphasises.push(-(colrow / 2))
+			emphasises.push(-(colrow / 2))
 		} else {
 			// 2 lines when odd size
-			enphasises.push(-Math.floor(colrow / 2))
-			enphasises.push(-Math.ceil(colrow / 2))
+			emphasises.push(-Math.floor(colrow / 2))
+			emphasises.push(-Math.ceil(colrow / 2))
 		}
 
 		if (!(colrow % 3)) {
-			enphasises.push(-(colrow / 3))
-			enphasises.push(-colrow + colrow / 3)
+			emphasises.push(-(colrow / 3))
+			emphasises.push(-colrow + colrow / 3)
 		}
 
 		if (!(colrow % 6)) {
-			enphasises.push(-(colrow / 6))
-			enphasises.push(-colrow + colrow / 6)
+			emphasises.push(-(colrow / 6))
+			emphasises.push(-colrow + colrow / 6)
 		}
 
-		const enphasis = !((colrow - odd) % 4) ? 4 : 5
+		const emphasis = !((colrow - odd) % 4) ? 4 : 5
 
 		// Draw a line every n cells from the central line
 		// 中心線からnマスおきに線を引く
-		for (let i = 1; i < colrow / enphasis / 2; i++) {
-			enphasises.push(Math.ceil(colrow / 2) - odd - i * enphasis)
-			enphasises.push(Math.floor(colrow / 2) + odd + i * enphasis)
+		for (let i = 1; i < colrow / emphasis / 2; i++) {
+			emphasises.push(Math.ceil(colrow / 2) - odd - i * emphasis)
+			emphasises.push(Math.floor(colrow / 2) + odd + i * emphasis)
 		}
 
 		// if (!(colrow % 5)) {
 		// 	for (let i = 1; i < colrow / 5; i++) {
-		// 		enphasises.push(i * 5)
+		// 		emphasises.push(i * 5)
 		// 	}
 		// } else if (!(colrow % 4)) {
 		// 	for (let i = 1; i < colrow / 4; i++) {
-		// 		enphasises.push(i * 4)
+		// 		emphasises.push(i * 4)
 		// 	}
 		// }
-		return enphasises
+		return emphasises
 	}
 
 	// from mouse position (float) to cell position (int)
@@ -382,7 +382,7 @@
 			}
 			// draw emphasis line
 			for (const axis of bit) {
-				for (const emphasis of enphasises[axis])
+				for (const emphasis of emphasises[axis])
 					if (emphasis > 0) {
 						grid.strokeStyle = $gridColorEmphasis
 						grid.lineWidth = 2
@@ -393,7 +393,7 @@
 			if ($gridCentral) {
 				// draw central line
 				for (const axis of bit) {
-					for (const central of enphasises[axis])
+					for (const central of emphasises[axis])
 						if (central < 0) {
 							grid.strokeStyle = $gridColorCentral
 							grid.lineWidth = 2
