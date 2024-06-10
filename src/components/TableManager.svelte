@@ -354,20 +354,6 @@
 		</svg>
 	</button>
 
-	<label class="btn-icon naked" title="Toggle Grid">
-		<svg class:unactive={!$gridCursor}>
-			<use href="{SVG}#search" />
-		</svg>
-		<input type="checkbox" class="hidden" bind:checked={$gridCursor} />
-	</label>
-
-	<label class="btn-icon naked" title="Toggle Grid">
-		<svg class:unactive={!$gridShow}>
-			<use href="{SVG}#grid" />
-		</svg>
-		<input type="checkbox" class="hidden" bind:checked={$gridShow} />
-	</label>
-
 	<button
 		class="btn-icon naked"
 		title="Randomize Config"

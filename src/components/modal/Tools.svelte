@@ -5,6 +5,8 @@
 		gridCentral,
 		tooltipShow,
 		gridEmphasis,
+		gridShow,
+		gridCursor,
 	} from '../store.js'
 
 	let tableFull = false
@@ -42,9 +44,19 @@
 	<p>
 		<SlideToggle
 			name="grid-central-line"
+			bind:checked={$gridShow}
+			active="bg-primary-500"
+			><strong>Grid Show:</strong>
+			{$gridShow ? '' : 'in'}visible</SlideToggle
+		>
+	</p>
+	<p>
+		<SlideToggle
+			name="grid-central-line"
 			bind:checked={$gridCentral}
 			active="bg-primary-500"
-			>Central Line {$gridCentral ? '' : 'in'}visible</SlideToggle
+			><strong>Central Line:</strong>
+			{$gridCentral ? '' : 'in'}visible</SlideToggle
 		>
 	</p>
 	<p>
@@ -66,15 +78,29 @@
 					}
 				}}
 			/>
-			<span class="break-inside-avoid ml-3">Emphasis Line</span>
+			<span class="break-inside-avoid ml-3"
+				><strong>Emphasis Line</strong></span
+			>
 		</label>
+	</p>
+
+	<h3 class="h3">Cursor</h3>
+	<p>
+		<SlideToggle
+			name="tooltip-show"
+			bind:checked={$gridCursor}
+			active="bg-primary-500"
+			><strong>Grid Cursor:</strong>
+			{$gridCursor ? 'Show' : 'Hide'}</SlideToggle
+		>
 	</p>
 	<p>
 		<SlideToggle
 			name="tooltip-show"
 			bind:checked={$tooltipShow}
 			active="bg-primary-500"
-			>Cursor Tooltip {$tooltipShow ? 'Show' : 'Hide'}</SlideToggle
+			><strong>Cursor Tooltip:</strong>
+			{$tooltipShow ? 'Show' : 'Hide'}</SlideToggle
 		>
 	</p>
 </div>
