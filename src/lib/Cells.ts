@@ -90,4 +90,13 @@ export class Cells extends Array2d<Cell | number> {
 
 		// return this
 	}
+
+	isEmpty() {
+		for (const cell of this.values) {
+			if (cell !== Cell.DEATH) {
+				return false
+			}
+		}
+		return true
+	}
 }

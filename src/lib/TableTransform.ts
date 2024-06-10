@@ -10,6 +10,9 @@ export function TableTransform<T extends { new (...args: any[]): LifeGame }>(
 ) {
 	return class extends target implements TableTransform {
 		rotate(): void {
+			if (this.cells.isEmpty()) {
+				return
+			}
 			this.cells.rotate()
 			this.emit(LifeEvent.TABLE_UPDATE)
 		}
