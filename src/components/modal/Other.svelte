@@ -9,7 +9,8 @@
 		<SlideToggle
 			name="auto-conway"
 			bind:checked={$autoConway}
-			active="bg-primary-500">Auto set Conway's life</SlideToggle
-		>
+			active="bg-primary-500"
+			>Auto set "Conway's life" when a template is selected
+		</SlideToggle>
 	</p>
 </div>
