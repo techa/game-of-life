@@ -7,7 +7,7 @@
 	import { modal } from '../store.js'
 
 	import Random from '../modal/Random.svelte'
-	import Tools from '../modal/Tools.svelte'
+	import Grid from '../modal/Grid.svelte'
 	import Save from '../modal/Save.svelte'
 	import Other from '../modal/Other.svelte'
 
@@ -23,7 +23,7 @@
 
 	let tabSet = 0
 	const components = [
-		{ title: 'Cells', component: Tools, icon: 'grid' },
+		{ title: 'Cells', component: Grid, icon: 'grid' },
 		{ title: 'Random', component: Random, icon: 'dice' },
 		{ title: 'Save', component: Save, icon: 'save' },
 		{ title: 'Other', component: Other, icon: 'settings' },
