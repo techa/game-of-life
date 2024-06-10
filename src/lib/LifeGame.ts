@@ -284,7 +284,7 @@ export class LifeGame {
 	}
 
 	/**
-	 * @returns true is step success, false is step failed
+	 * @returns canStep
 	 */
 	step() {
 		if (this.autoStop && !this.canStep) {
@@ -294,6 +294,7 @@ export class LifeGame {
 			this.cells = new Cells(this.nextCells, 0)
 			this.update(this.#nextTable)
 		}
+		return this.canStep
 	}
 
 	ticker!: Ticker
