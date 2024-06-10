@@ -128,8 +128,9 @@
 			if (cell_state >= 0) {
 				screen.clearRect(scX, scY, w, h)
 			} else {
-				screen.strokeStyle = $penMode === -1 ? '#2d1e33' : 'white'
+				screen.strokeStyle = cell_state === -1 ? '#2d1e33' : 'white'
 
+				// draw cross symbol ✖
 				screen.beginPath()
 				screen.moveTo(scX, scY)
 				screen.lineTo(scX + w, scY + h)
