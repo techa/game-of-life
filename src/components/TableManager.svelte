@@ -54,13 +54,22 @@
 		},
 	}
 
+	// for pen tool
+	const cellStates = ['LIVE', 'UNDEAD', 'TOMB']
+	let popupPenChooseInvisible = true
+	const popupPenChoose: PopupSettings = {
+		event: 'click',
+		target: 'popupPenChoose',
+		placement: 'bottom-start',
+		state(e) {
+			popupPenChooseInvisible = !e.state
+		},
+	}
+
 	/**
 	 * for scrollIntoView()
 	 */
 	let lexiconFirstOpen = true
-
-	// for pen tool tile-attribute
-	const cellStates = ['disabled', 'LIVE', 'UNDEAD', 'TOMB']
 
 	// Lexicon
 	let lexiconIndex = (Math.random() * lexicon.length) | 0
@@ -143,11 +152,7 @@
 		</div>
 	</div>
 
-	<button
-		class="btn-icon naked"
-		title="Pen Tool ({cellStates[$penMode]})"
-		on:click={() => penMode.next()}
-	>
+	<button class="btn-icon naked" title="Pen Tool" use:popup={popupPenChoose}>
 		<svg class:unactive={!$penMode} class:active={Math.abs($penMode) === 1}>
 			<use href="{SVG}#pencil" />
 			{#if $penMode < 0}
@@ -162,6 +167,42 @@
 			{/if}
 		</svg>
 	</button>
+	<div
+		class="pen-choose card shadow-xl -mt-2 p-2 z-10 bg-surface-900 rounded-sm"
+		class:invisible={popupPenChooseInvisible}
+		data-popup="popupPenChoose"
+	>
+		<div class="flex flex-col">
+			{#each [1, -1, -2] as penmode, i}
+				<button
+					class="w-full text-left"
+					on:click={() => ($penMode = penmode)}
+				>
+					<div
+						class="cell-sample w-3 h-3 inline-block"
+						style:background-color={penmode > -2
+							? $selectedColor
+							: ''}
+					>
+						<svg>
+							{#if penmode < 0}
+								<use
+									href="{SVG}#x"
+									x="0"
+									y="0"
+									width="12px"
+									height="12px"
+									stroke-width="4px"
+									stroke={penmode < -1 ? 'white' : '#2d1e33'}
+								/>
+							{/if}
+						</svg>
+					</div>
+					{cellStates[i]}</button
+				>
+			{/each}
+		</div>
+	</div>
 
 	<button
 		class="btn-icon naked hidden md:inline-flex"
