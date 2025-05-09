@@ -77,6 +77,7 @@ export class LifeGame {
 		try {
 			rules = ruleParser(rule)
 		} catch (error) {
+			console.error(error)
 			return this.ruleString
 		}
 
@@ -171,7 +172,7 @@ export class LifeGame {
 			sw = ((this.columns - cells[0].length) / 2) | 0
 		}
 
-		this.cells.each((cell, { x, y }) => {
+		this.cells.each((_cell, { x, y }) => {
 			return cells[y - sh]?.[x - sw] ?? Cell.DEATH
 		})
 

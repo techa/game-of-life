@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { life, columns, rows, selectedColor } from './store'
+	import { life, columns, rows } from './store'
 </script>
 
 <div class="x_edge">

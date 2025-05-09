@@ -64,7 +64,7 @@
 
 <div class="wrapper">
 	<div class="left-column">
-		{#each randomSaves.data as savedata, i}
+		{#each randomSaves.data as _savedata, i}
 			<div class="savedata">
 				<button
 					class="btn bg-initial"

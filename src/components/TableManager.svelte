@@ -7,8 +7,6 @@
 		rows,
 		edgeCell,
 		colorHue,
-		gridShow,
-		gridCursor,
 		penMode,
 		modal,
 		autoConway,
