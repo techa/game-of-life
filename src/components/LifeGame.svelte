@@ -31,6 +31,7 @@
 	let cursor_position_y = 0
 	let tooltip: HTMLDivElement
 	let tooltipVisible = false
+	let tooltip_cellstate = 0
 
 	onMount(() => {
 		$table = $table
@@ -80,6 +81,8 @@
 					}
 				},
 			}
+
+			tooltip_cellstate = life.cells.get(x, y)
 
 			computePosition(virtualEl, tooltip, {
 				placement: 'right-start',
@@ -153,6 +156,8 @@
 				$templateLoaded = false
 
 				life.cells.setValue(e.detail, cell_state)
+
+				tooltip_cellstate = cell_state
 			}
 		}}
 	/>
@@ -166,7 +171,7 @@
 		>
 			<span>
 				state:
-				<span class="font-mono px-1 py-0">{cell_state}</span>
+				<span class="font-mono px-1 py-0">{tooltip_cellstate}</span>
 			</span>
 			<span>
 				x:
