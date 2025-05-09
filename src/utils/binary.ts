@@ -34,15 +34,13 @@ export function base64DecToArr(sBase64: string, nBlocksSize?: number) {
 		: (nInLen * 3 + 1) >> 2
 	const taBytes = new Uint8Array(nOutLen)
 
-	let nMod3
-	let nMod4
 	let nUint24 = 0
 	let nOutIdx = 0
 	for (let nInIdx = 0; nInIdx < nInLen; nInIdx++) {
-		nMod4 = nInIdx & 3
+		const nMod4 = nInIdx & 3
 		nUint24 |= b64ToUint6(sB64Enc.charCodeAt(nInIdx)) << (6 * (3 - nMod4))
 		if (nMod4 === 3 || nInLen - nInIdx === 1) {
-			nMod3 = 0
+			let nMod3 = 0
 			while (nMod3 < 3 && nOutIdx < nOutLen) {
 				taBytes[nOutIdx] = (nUint24 >>> ((16 >>> nMod3) & 24)) & 255
 				nMod3++
@@ -103,14 +101,13 @@ export function arrEncToBase64(bytes: Uint8Array) {
  * UTF-8 array to JS string and vice versa
  * @link https://developer.mozilla.org/ja/docs/Glossary/Base64#テスト
  */
-export function base64ToStr(base64:string) {
+export function base64ToStr(base64: string) {
 	const aBytes: Uint8Array = base64DecToArr(base64)
 
 	let sView = ''
-	let nPart
 	const nLen = aBytes.length
 	for (let nIdx = 0; nIdx < nLen; nIdx++) {
-		nPart = aBytes[nIdx]
+		const nPart = aBytes[nIdx]
 		sView += String.fromCodePoint(
 			nPart > 251 && nPart < 254 && nIdx + 5 < nLen /* six bytes */
 				? /* (nPart - 252 << 30) may be not so safe in ECMAScript! So…: */
@@ -151,7 +148,6 @@ export function base64ToStr(base64:string) {
 }
 
 export function strToBase64(sDOMStr: string) {
-	let aBytes
 	let nChr: number
 	const nStrLen = sDOMStr.length
 	let nArrLen = 0
@@ -178,7 +174,7 @@ export function strToBase64(sDOMStr: string) {
 				: 6
 	}
 
-	aBytes = new Uint8Array(nArrLen)
+	const aBytes = new Uint8Array(nArrLen)
 
 	/* transcription… */
 	let nIdx = 0
