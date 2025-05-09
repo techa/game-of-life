@@ -334,8 +334,11 @@
 	}
 	.point > input {
 		display: block;
-		width: 3rem;
-		height: 1rem;
+		width: 3.5rem;
+		height: 1.5rem;
+		padding: 6px;
+		border-radius: 2px;
+		color: black;
 	}
 
 	.savedata button.active,
