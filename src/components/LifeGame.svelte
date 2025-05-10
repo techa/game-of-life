@@ -151,7 +151,8 @@
 			const { x, y, mouseEvent } = e.detail
 			if ($penMode && /^mouse/.test(mouseEvent.type)) {
 				if (mouseEvent.type === 'mousedown') {
-					cell_state = life.cells.get(x, y) ? 0 : $penMode
+					cell_state =
+						life.cells.get(x, y) === $penMode ? 0 : $penMode
 				}
 				$templateLoaded = false
 
