@@ -10,6 +10,7 @@
 	import Grid from '../modal/Grid.svelte'
 	import Save from '../modal/Save.svelte'
 	import Other from '../modal/Other.svelte'
+	import Share from '../modal/Share.svelte'
 
 	const dispatch = createEventDispatcher()
 
@@ -27,6 +28,7 @@
 		{ title: 'Random', component: Random, icon: 'dice' },
 		{ title: 'Save', component: Save, icon: 'save' },
 		{ title: 'Other', component: Other, icon: 'settings' },
+		{ title: 'Share', component: Share, icon: 'share' },
 	]
 
 	$: if (dialog && $modal) dialog.showModal()
@@ -63,18 +65,6 @@
 		class="tab-panel flex-grow w-full p-2 overflow-x-hidden overflow-y-scroll [&>div>h3]:mt-4 [&>div>h3]:mb-2"
 	>
 		<svelte:component this={components[tabSet].component} />
-	</div>
-
-	<div class="footer">
-		<a
-			class="btn-icon"
-			title="Link to Github"
-			href="https://github.com/techa/game-of-life"
-		>
-			<svg>
-				<use href="{SVG}#github" />
-			</svg>
-		</a>
 	</div>
 </dialog>
 
