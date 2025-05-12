@@ -122,7 +122,8 @@ export function toBase64(
 	return (
 		btoa(String.fromCharCode(...new Uint8Array(bytes))) +
 		// && minValue !== -1 は`(-1)[]`のときの判断に必要
-		(bitSize === 1 && minValue !== -1 ? '' : `.${bitSize}`)
+		(bitSize === 1 && minValue !== -1 ? '' : `.${bitSize}`) +
+		(bitSize === 1 || !minValue ? '' : `${-minValue}`)
 	)
 }
 
@@ -130,13 +131,17 @@ export function toBase64(
  * Base64 から `cells` に復元（特殊な負の値を `-1`, `-2` に変換）
  */
 export function fromBase64(base64Str: string) {
-	const [encoded, bitSizeStr] = base64Str.split('.')
-	const bitSize = parseInt(bitSizeStr ?? '1', 10)
+	const [encoded, bitmin] = base64Str.split('.')
+	const bitSize = parseInt((bitmin || '1')[0], 10)
 
 	const bytes = [...atob(encoded)].map((char) => char.charCodeAt(0))
 
 	// bitSizeStr ? -1 : は`(-1)[]`のときの判断に必要
-	return fromBinary(bytes, bitSize, bitSize > 1 ? -2 : bitSizeStr ? -1 : 0)
+	return fromBinary(
+		bytes,
+		bitSize,
+		bitSize > 1 ? -bitmin.slice(1) : bitmin ? -1 : 0,
+	)
 }
 
 /**

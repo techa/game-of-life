@@ -221,7 +221,7 @@ describe(`Base64`, () => {
 		expect(fromBase64(baseStr))
 			//              2   1  2  2  12  2   0  3
 			.toStrictEqual([0, -1, 0, 0, 10, 0, -2, 1])
-		expect(baseStr).toBe('DwCg4Q==.4')
+		expect(baseStr).toBe('DwCg4Q==.42')
 	})
 	it(`none binary 7`, () => {
 		const baseStr = toBase64([0, -1, 0, 0, 10, 0, -2])
@@ -231,33 +231,33 @@ describe(`Base64`, () => {
 			// 余り
 			0,
 		])
-		expect(baseStr).toBe('DwCg4A==.4')
+		expect(baseStr).toBe('DwCg4A==.42')
 	})
 
 	it(`compress`, () => {
 		const baseStr = toBase64([0, -1, 10, 0, 0, 0, 0])
-		expect(baseStr).toBe('D6A=.4')
+		expect(baseStr).toBe('D6A=.41')
 	})
 
 	test(`0, -1, 1, -2`, () => {
 		const baseStr = toBase64([0, -1, 1, -2])
 		expect(fromBase64(baseStr)).toStrictEqual([0, -1, 1, -2])
-		expect(baseStr).toBe('Ng==.2')
+		expect(baseStr).toBe('Ng==.22')
 	})
 	test(`-2, -1, 3, 0`, () => {
 		const baseStr = toBase64([-2, -1, 3, 0])
 		expect(fromBase64(baseStr)).toStrictEqual([-2, -1, 3, 0, 0])
-		expect(baseStr).toBe('3YA=.3')
+		expect(baseStr).toBe('3YA=.32')
 	})
 	test(`2, 1, 3, 0`, () => {
 		const baseStr = toBase64([2, 1, 3, 0])
-		expect(fromBase64(baseStr)).toStrictEqual([2, 1, 3, 0])
 		expect(baseStr).toBe('nA==.2')
+		expect(fromBase64(baseStr)).toStrictEqual([2, 1, 3, 0])
 	})
 	test(`7, -1, 5, 0`, () => {
 		const baseStr = toBase64([7, -1, 5, 0])
 		expect(fromBase64(baseStr)).toStrictEqual([7, -1, 5, 0])
-		expect(baseStr).toBe('f1A=.4')
+		expect(baseStr).toBe('f1A=.41')
 	})
 	test(`10, -1, 15, 0`, () => {
 		const baseStr = toBase64([10, -1, 15, 0])
@@ -297,20 +297,27 @@ describe(`Base64`, () => {
 		expect(fromBase64(baseStr)).toStrictEqual([
 			-2, -2, -2, -2, -2, -2, -2, -2,
 		])
-		expect(baseStr).toBe('qqo=.2')
+		expect(baseStr).toBe('qqo=.22')
 	})
 	test(`-2, -2, -2, -2, -2, -2, -2, 1`, () => {
 		const baseStr = toBase64([-2, -2, -2, -2, -2, -2, -2, 1])
 		expect(fromBase64(baseStr)).toStrictEqual([
 			-2, -2, -2, -2, -2, -2, -2, 1,
 		])
-		expect(baseStr).toBe('qqk=.2')
+		expect(baseStr).toBe('qqk=.22')
 	})
 	test(`-2, -2, -2, -2, -2, -2, -2, 2`, () => {
 		const baseStr = toBase64([-2, -2, -2, -2, -2, -2, -2, 2])
 		expect(fromBase64(baseStr)).toStrictEqual([
 			-2, -2, -2, -2, -2, -2, -2, 2,
 		])
-		expect(baseStr).toBe('222y.3')
+		expect(baseStr).toBe('222y.32')
+	})
+	test(`-2, -2, -2, -2, -2, -2, -20, 2`, () => {
+		const baseStr = toBase64([-2, -2, -2, -2, -2, -2, -20, 2])
+		expect(fromBase64(baseStr)).toStrictEqual([
+			-2, -2, -2, -2, -2, -2, -20, 2,
+		])
+		expect(baseStr).toBe('973veYI=.520')
 	})
 })
