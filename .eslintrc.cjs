@@ -33,9 +33,12 @@ module.exports = {
 			'warn',
 			{ ignoreRestArgs: true },
 		],
-		'@typescript-eslint/no-redeclare': [
-			'error',
-			{ ignoreDeclarationMerge: true },
+		'prefer-const': [
+			'warn',
+			{
+				destructuring: 'any',
+				ignoreReadBeforeAssign: false,
+			},
 		],
 	},
 	parserOptions: {
