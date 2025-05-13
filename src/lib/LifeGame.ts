@@ -34,7 +34,7 @@ export class LifeGame {
 	 * @param cell default = Cell.LIVE
 	 */
 	getColor(cell = Cell.LIVE) {
-		return this.colorManager.get(cell)
+		return this.colorManager.getColorHex(cell)
 	}
 
 	#events = new EventDispatcher()
