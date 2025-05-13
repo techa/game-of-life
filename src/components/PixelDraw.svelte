@@ -411,17 +411,17 @@
 						drawGridLine(axis, emphasis)
 					}
 			}
+		}
 
-			if ($gridCentral) {
-				// draw central line
-				for (const axis of bit) {
-					for (const central of emphasises[axis])
-						if (central < 0) {
-							grid.strokeStyle = $gridColorCentral
-							grid.lineWidth = 2
-							drawGridLine(axis, -central)
-						}
-				}
+		if ($gridCentral) {
+			// draw central line
+			for (const axis of bit) {
+				for (const central of emphasises[axis])
+					if (central < 0) {
+						grid.strokeStyle = $gridColorCentral
+						grid.lineWidth = 2
+						drawGridLine(axis, -central)
+					}
 			}
 		}
 
