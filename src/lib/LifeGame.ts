@@ -270,13 +270,12 @@ export class LifeGame {
 				(cell === Cell.DEATH && this.#born.includes(count)) ||
 				(cell === Cell.LIVE && this.#survival.includes(count))
 			) {
-				nextCells[y][x] = Cell.LIVE
-				return
-			} else if (cell >= 1) {
-				nextCells[y][x] = (cell + 1) % this.#cycle
-				return
+				nextCells[y][x] = Cell.LIVE // 誕生・生存
+			} else if (cell >= 1 && cell < this.#cycle - 1) {
+				nextCells[y][x] = cell + 1 // 老化を進める
+			} else {
+				nextCells[y][x] = Cell.DEATH // 死に戻る
 			}
-			nextCells[y][x] = Cell.DEATH
 		})
 
 		this.#nextTable = JSON.stringify(nextCells)

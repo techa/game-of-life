@@ -404,12 +404,18 @@
 			}
 			// draw emphasis line
 			for (const axis of bit) {
-				for (const emphasis of emphasises[axis])
+				for (const emphasis of emphasises[axis]) {
 					if (emphasis > 0) {
 						grid.strokeStyle = $gridColorEmphasis
 						grid.lineWidth = 2
 						drawGridLine(axis, emphasis)
 					}
+					if (!$gridCentral && emphasis < 0) {
+						grid.strokeStyle = $gridColorEmphasis
+						grid.lineWidth = 2
+						drawGridLine(axis, -emphasis)
+					}
+				}
 			}
 		}
 

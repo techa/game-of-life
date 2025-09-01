@@ -53,8 +53,8 @@ export class ColorManager {
 
 	setByHue(hue: number): RGB_HEX {
 		this.hue = this._hue = hue
-		this.reset()
 		this.selectedColor = lch2rgb(this.L, this.C, hue)
+		this.reload()
 		return this.selectedColor
 	}
 
@@ -63,7 +63,7 @@ export class ColorManager {
 	 * * `setByHue()` で `hue` が更新されたとき
 	 * @see setByHue
 	 */
-	reset() {
+	reload() {
 		return (this.colors = [
 			'transparent', // DEATH, TOMB
 			this.selectedColor, // LIVE, UNDEAD
