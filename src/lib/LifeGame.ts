@@ -250,7 +250,7 @@ export class LifeGame {
 						this.cells.getValue(
 							{ x: x + _x, y: y + _y },
 							!this.edgeCell,
-						) || 0
+						) ?? this.edgeCell
 
 					if (
 						(_y || _x) &&
