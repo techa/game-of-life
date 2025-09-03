@@ -9,6 +9,7 @@ import { StrageStores } from '../utils/SavesStrage.js'
 const enum SaveKeys {
 	ruleString = 'rS',
 	colorHue = 'cH',
+	tonePattern = 'tP',
 	gridShow = 'gS',
 	gridCentral = 'gC',
 	gridCursor = 'gCur',
@@ -82,9 +83,19 @@ export const canStep = derived([table, ruleString], () => life.canStep)
 export const colorHue = stores.create(SaveKeys.colorHue, life.colorManager.hue)
 export const selectedColor = derived(colorHue, (hue) => {
 	const color = life.colorManager.setByHue(hue)
-	table.update((v) => v)
+	life.emit(LifeEvent.UPDATE)
 	return color
 })
+
+export const tonePattern = stores.create(
+	SaveKeys.tonePattern,
+	life.colorManager.tonePattern,
+)
+tonePattern.subscribe((patt) => {
+	life.colorManager.setTonePattern(patt)
+	life.emit(LifeEvent.UPDATE)
+})
+
 export const gridColorCentral = derived(selectedColor, () => {
 	return life.colorManager.getIncHue(120)
 })

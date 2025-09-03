@@ -12,6 +12,7 @@
 		autoConway,
 		templateLoaded,
 		selectedColor,
+		tonePattern,
 	} from './store'
 
 	import Slider from './generic/Slider.svelte'
@@ -23,6 +24,7 @@
 	import { popup } from '@skeletonlabs/skeleton'
 	import Table from './generic/Table.svelte'
 	import type { PopupSettings, TableSource } from '@skeletonlabs/skeleton'
+	import { TonePatterns } from '$lib/ColorManager.js'
 
 	function validateResize(axis: 'rows' | 'columns') {
 		return (
@@ -115,7 +117,7 @@
 		</svg>
 	</button>
 	<div
-		class="color-choose card w-48 shadow-xl -mt-2 p-2 z-10 bg-surface-900 rounded-sm"
+		class="color-choose card w-auto shadow-xl -mt-2 p-2 z-10 bg-surface-900 rounded-sm flex gap-2"
 		class:invisible={popupHueSliderInvisible}
 		data-popup="popupHueSlider"
 	>
@@ -147,6 +149,19 @@
 					'#ffa6e6',
 				]}
 			/>
+		</div>
+
+		<div class="flex gap-2">
+			{#each TonePatterns as [num, name] (name)}
+				<button
+					class={`chip capitalize ${$tonePattern === num ? 'bg-primary-500 text-black' : 'bg-surface-900'}`}
+					on:click={() => {
+						$tonePattern = num
+					}}
+				>
+					<span>{name}</span>
+				</button>
+			{/each}
 		</div>
 	</div>
 

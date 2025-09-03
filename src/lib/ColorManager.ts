@@ -10,13 +10,13 @@ export const enum TonePattern {
 	Trace,
 }
 
-// export const TonePatternsStr ={
-// 	[TonePattern.Gradation]: 'Gradation',
-// 	[TonePattern.Trace]: 'Trace',
-// 	[TonePattern.Rainbow]: 'Rainbow',
-// 	[TonePattern.Stairs]: 'Stairs',
-// }
-export const TonePatternsStr = ['Stairs', 'Rainbow', 'Gradation', 'Trace']
+export const TonePatterns = [
+	[TonePattern.Trace, 'Trace'],
+	[TonePattern.Gradation, 'Gradation'],
+	[TonePattern.Rainbow, 'Rainbow'],
+	[TonePattern.Stairs, 'Stairs'],
+] as const satisfies ReadonlyArray<[TonePattern, string]>
+// export const TonePatternsStr = ['Stairs', 'Rainbow', 'Gradation', 'Trace']
 
 export class ColorManager {
 	life: LifeGame
@@ -88,12 +88,23 @@ export class ColorManager {
 		return color
 	}
 
-	tonePattern: TonePattern = TonePattern.Rainbow
+	tonePattern: TonePattern = TonePattern.Trace
+
+	setTonePattern(patt: TonePattern) {
+		if (this.tonePattern === patt) return
+
+		this.tonePattern = patt
+		const len = this.colors.length
+		this.reload()
+		while (this.colors.length < len) {
+			this.colors.push(this.next())
+		}
+	}
+
 	next(): RGB_HEX {
 		const count = this.colors.length - 1
 
 		switch (this.tonePattern) {
-			default:
 			case TonePattern.Stairs: {
 				const cycle = 5
 				const toneRule = count % cycle
@@ -118,6 +129,7 @@ export class ColorManager {
 					this.C - 1 * count,
 					(this._hue = (this._hue + 1) % 360),
 				)
+			default:
 			case TonePattern.Trace:
 				return lch2rgb(
 					this.L - 25,
