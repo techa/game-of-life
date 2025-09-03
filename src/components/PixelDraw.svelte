@@ -224,12 +224,12 @@
 			emphasises.push(-Math.ceil(colrow / 2))
 		}
 
-		if (!(colrow % 3)) {
+		if ($gridCentral && !(colrow % 3)) {
 			emphasises.push(-(colrow / 3))
 			emphasises.push(-colrow + colrow / 3)
 		}
 
-		if (!(colrow % 6)) {
+		if ($gridCentral && !(colrow % 6)) {
 			emphasises.push(-(colrow / 6))
 			emphasises.push(-colrow + colrow / 6)
 		}
